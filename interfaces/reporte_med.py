@@ -11,7 +11,7 @@ from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 
 
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path(r"assets/reporte_med")
+ASSETS_PATH = OUTPUT_PATH / Path(r"C:\Users\Angel\Monitor-Fisiologico\interfaces\assets\reporte_med")
 
 
 def relative_to_assets(path: str) -> Path:
@@ -35,38 +35,410 @@ canvas = Canvas(
 )
 
 canvas.place(x = 0, y = 0)
-button_image_1 = PhotoImage(
+img_regresar = PhotoImage(
     file=relative_to_assets("button_1.png"))
-button_1 = Button(
-    image=button_image_1,
+btn_regresar = Button(
+    image=img_regresar,
     borderwidth=0,
     highlightthickness=0,
     command=lambda: print("button_1 clicked"),
     relief="flat",
-    bg="white"
+    bg ="white"
 )
-button_1.place(
-    x=21.0,
-    y=26.0,
+btn_regresar.place(
+    x=50.0,
+    y=16.0,
     width=61.0,
     height=60.0
 )
-
-image_image_1 = PhotoImage(
-    file=relative_to_assets("image_1.png"))
-image_1 = canvas.create_image(
-    640.0,
-    61.0,
-    image=image_image_1
-)
-
+ #LINEA DIVISORIA ENTRE LOGO Y TITULO INFORME
 canvas.create_rectangle(
-    812.0,
-    141.0,
-    814.0,
-    709.0,
+    49.0,
+    95.93429565429688,
+    1196.0,
+    97.0,
+    fill="gray",
+    outline="")
+# LINEA DIVISORIA ENTRE DATOS SUJETO Y MEDIDAS PARAMETROS
+canvas.create_rectangle(
+    47.0,
+    322.0,
+    1196.0,
+    325.0,
     fill="#000000",
     outline="")
+
+img_logo = PhotoImage(
+    file=relative_to_assets("logo1.png"))
+logo1 = canvas.create_image(
+    1070.0,
+    70.0,
+    image=img_logo
+)
+
+canvas.create_text(
+    50.0,
+    120.0,
+    anchor="nw",
+    text="INFORME DE MEDICIÓN",
+    fill="#000000",
+    font=("RobotoRoman Regular", 30 * -1)
+)
+
+canvas.create_text(
+    50.0,
+    195.0,
+    anchor="nw",
+    text="Nombre : ",
+    fill="#000000",
+    font=("RobotoRoman Regular", 25 * -1)
+)
+
+canvas.create_text(
+    900.0,
+    198.0,
+    anchor="nw",
+    text="Sexo :",
+    fill="#000000",
+    font=("RobotoRoman Regular", 25 * -1)
+)
+
+canvas.create_text(
+    600,
+    198.0,
+    anchor="nw",
+    text="Edad : ",
+    fill="#000000",
+    font=("RobotoRoman Regular", 25 * -1)
+)
+
+canvas.create_text(
+    600,
+    242.60400390625,
+    anchor="nw",
+    text="Peso :",
+    fill="#000000",
+    font=("RobotoRoman Regular", 25 * -1)
+)
+
+canvas.create_text(
+    862.0,
+    247.0,
+    anchor="nw",
+    text="Estatura :",
+    fill="#000000",
+    font=("RobotoRoman Regular", 25 * -1)
+)
+
+canvas.create_text(
+    685.0,
+    122.0,
+    anchor="nw",
+    text="Fecha de emisión :",
+    fill="#000000",
+    font=("RobotoRoman Regular", 25 * -1)
+)
+
+
+txb_nombre = Entry(
+    bd=0,
+    bg="white",
+    fg="#000716",
+    state="disabled",
+    highlightthickness=0
+)
+txb_nombre.place(
+    x=177.0,
+    y=198.0,
+    width=388.0,
+    height=34.0
+)
+
+
+txb_cod_doc = Entry(
+    bd=0,
+    bg="white",
+    fg="#000716",
+    state="disabled",
+    highlightthickness=0
+)
+txb_cod_doc.place(
+    x=50.0,
+    y=247.0,
+    width=515.0,
+    height=34.0
+)
+
+
+txb_fecha = Entry(
+    bd=0,
+    bg="white",
+    fg="#000716",
+    state="disabled",
+    highlightthickness=0
+)
+txb_fecha.place(
+    x=946.0,
+    y=122.0,
+    width=250.0,
+    height=34.0
+)
+
+txb_peso = Entry(
+    bd=0,
+    bg="white",
+    fg="#000716",
+    state="disabled",
+    highlightthickness=0
+)
+txb_peso.place(
+    x=707.6485595703125,
+    y=247.0,
+    width=108.0,
+    height=34.0
+)
+
+txb_edad = Entry(
+    bd=0,
+    bg="white",
+    fg="#000716",
+    state="disabled",
+    highlightthickness=0
+)
+txb_edad.place(
+    x=707.6485595703125,
+    y=198.0,
+    width=108.0,
+    height=34.0
+)
+
+
+txb_sexo = Entry(
+    bd=0,
+    bg="white",
+    fg="#000716",
+    state="disabled",
+    highlightthickness=0
+)
+txb_sexo.place(
+    x=985.0,
+    y=198.0,
+    width=108.0,
+    height=34.0
+)
+
+
+txb_estatura = Entry(
+    bd=0,
+    bg="white",
+    fg="#000716",
+    state="disabled",
+    highlightthickness=0
+)
+txb_estatura.place(
+    x=985.0,
+    y=247.0,
+    width=108.0,
+    height=34.0
+)
+
+
+#Aqui se colocara el progress bar para la escala de saturacion de oxigeno
+txb_escala_saturacion_oxigeno = Entry(
+    bd=0,
+    bg="white",
+    fg="#000716",
+    state="disabled",
+    highlightthickness=0
+)
+txb_escala_saturacion_oxigeno.place(
+    x=527.0,
+    y=478.0,
+    width=224.0,
+    height=34.0
+)
+
+#aqui se colocara el textbox que contiene el valor de la saturacion de oxigeno
+txb_valor_saturacion_oxigeno = Entry(
+    bd=0,
+    bg="white",
+    fg="#000716",
+    state="disabled",
+    highlightthickness=0
+)
+txb_valor_saturacion_oxigeno.place(
+    x=379.0,
+    y=480.0,
+    width=96.0,
+    height=34.0
+)
+
+canvas.create_text(
+    56.0,
+    489.0,
+    anchor="nw",
+    text="Saturación de Oxígeno",
+    fill="#000000",
+    font=("RobotoRoman Regular", 25 * -1)
+)
+
+#Aqui se colora el progress bar para la escala de la temperatura
+txb_escala_temp = Entry(
+    bd=0,
+    bg="white",
+    fg="#000716",
+    state="disabled",
+    highlightthickness=0
+)
+txb_escala_temp.place(
+    x=527.0,
+    y=415.0,
+    width=224.0,
+    height=34.0
+)
+
+#Aqui debe ir el textbox con el valor de la nota aclaratoria
+txb_nota = Entry(
+    bd=0,
+    bg="white",
+    fg="#000716",
+    state="disabled",
+    highlightthickness=0
+)
+txb_nota.place(
+    x=840.0,
+    y=417.0,
+    width=356.0,
+    height=214.0
+)
+
+#aqui se colocara el textbox con el valor de la temperatura
+txb_valor_temp = Entry(
+    bd=0,
+    bg="white",
+    fg="#000716",
+    state="disabled",
+    highlightthickness=0
+)
+txb_valor_temp.place(
+    x=379.0,
+    y=417.0,
+    width=96.0,
+    height=34.0
+)
+
+canvas.create_text(
+    162.0,
+    424.0,
+    anchor="nw",
+    text="Temperatura",
+    fill="#000000",
+    font=("RobotoRoman Regular", 25 * -1)
+)
+
+canvas.create_text(
+    50.0,
+    359.0,
+    anchor="nw",
+    text="Parámetro Fisiológico",
+    fill="#000000",
+    font=("RobotoRoman Regular", 25 * -1)
+)
+
+canvas.create_text(
+    600.0,
+    361.0,
+    anchor="nw",
+    text="Escala",
+    fill="#000000",
+    font=("RobotoRoman Regular", 25 * -1)
+)
+
+canvas.create_text(
+    400.0,
+    359.0,
+    anchor="nw",
+    text="Valor",
+    fill="#000000",
+    font=("RobotoRoman Regular", 25 * -1)
+)
+
+#aqui debe ir el progress bar para colocar la frecuencia cardiaca
+txb_escala_frecuencia_cardiaca = Entry(
+    bd=0,
+    bg="white",
+    fg="#000716",
+    state="disabled",
+    highlightthickness=0
+)
+txb_escala_frecuencia_cardiaca.place(
+    x=527.0,
+    y=597.0,
+    width=224.0,
+    height=34.0,
+)
+
+#aqui va el valor correspondiente a la medicion de la frecuencia cardiaca
+txb_valor_frecuencia_cardiaca = Entry(
+    bd=0,
+    bg="white",
+    fg="#000716",
+    state="disabled",
+    highlightthickness=0
+)
+txb_valor_frecuencia_cardiaca.place(
+    x=379.0,
+    y=597.0,
+    width=96.0,
+    height=34.0
+)
+
+canvas.create_text(
+    70.0,
+    608.0,
+    anchor="nw",
+    text="Frecuencia Cardiaca ",
+    fill="#000000",
+    font=("RobotoRoman Regular", 25 * -1)
+)
+
+#aqui va el progress bar de la presion arterial
+txb_escala_presion_arterial = Entry(
+    bd=0,
+    bg="white",
+    state="disabled",
+    highlightthickness=0
+)
+txb_escala_presion_arterial.place(
+    x=527.0,
+    y=538.0,
+    width=224.0,
+    height=34.0
+)
+
+#aqui va el textbox del valor correspondiente a la presion arterial
+txb_valor_presion_arterial = Entry(
+    bd=0,
+    bg="white",
+    fg="#000716",
+    state="disabled",
+    highlightthickness=0
+)
+txb_valor_presion_arterial.place(
+    x=379.0,
+    y=540.0,
+    width=96.0,
+    height=34.0
+)
+
+canvas.create_text(
+    137.0,
+    549.0,
+    anchor="nw",
+    text="Presión Arterial ",
+    fill="#000000",
+    font=("RobotoRoman Regular", 25 * -1)
+)
 
 button_image_2 = PhotoImage(
     file=relative_to_assets("button_2.png"))
@@ -75,407 +447,22 @@ button_2 = Button(
     borderwidth=0,
     highlightthickness=0,
     command=lambda: print("button_2 clicked"),
-    relief="flat",
-    bg="white"
+    relief="flat"
 )
 button_2.place(
-    x=860.0,
+    x=840.0,
     y=657.0,
-    width=411.851318359375,
+    width=431.851318359375,
     height=68.0
 )
 
 canvas.create_text(
-    35.0,
-    332.0,
+    837.0,
+    359.0,
     anchor="nw",
-    text="Nombre",
+    text="Nota aclaratoria : ",
     fill="#000000",
-    font=("RobotoRoman Regular", 25 * -1),
-    justify = 'center'
-)
-
-canvas.create_text(
-    440.0,
-    421.0,
-    anchor="nw",
-    text="Sexo",
-    fill="#000000",
-    font=("RobotoRoman Regular", 25 * -1),
-    justify = 'center'
-)
-
-
-entry_1 = Entry(
-    bd=1,
-    bg="#FFFFFF",
-    fg="#000716",
-    highlightthickness=0
-)
-entry_1.place(
-    x=224.0,
-    y=334.0,
-    width=165.0,
-    height=34.0
-)
-
-
-entry_2 = Entry(
-    bd=1,
-    bg="#FFFFFF",
-    fg="#000716",
-    highlightthickness=0
-)
-entry_2.place(
-    x=574.0,
-    y=332.0,
-    width=178.0,
-    height=34.0
-)
-
-
-entry_3 = Entry(
-    bd=1,
-    bg="#FFFFFF",
-    fg="#000716",
-    highlightthickness=0
-)
-entry_3.place(
-    x=574.0,
-    y=251.0,
-    width=178.0,
-    height=34.0
-)
-
-
-entry_4 = Entry(
-    bd=1,
-    bg="#FFFFFF",
-    fg="#000716",
-    highlightthickness=0
-)
-entry_4.place(
-    x=954.0,
-    y=159.0,
-    width=224.0,
-    height=34.0
-)
-
-entry_5 = Entry(
-    bd=1,
-    bg="#FFFFFF",
-    fg="#000716",
-    highlightthickness=0
-)
-entry_5.place(
-    x=575.0,
-    y=421.0,
-    width=178.0,
-    height=34.0
-)
-
-
-entry_6 = Entry(
-    bd=1,
-    bg="#FFFFFF",
-    fg="#000716",
-    highlightthickness=0
-)
-entry_6.place(
-    x=225.0,
-    y=414.0,
-    width=165.0,
-    height=34.0
-)
-
-
-entry_7 = Entry(
-    bd=1,
-    bg="#FFFFFF",
-    fg="#000716",
-    highlightthickness=0
-)
-entry_7.place(
-    x=224.0,
-    y=252.0,
-    width=165.0,
-    height=34.0
-)
-
-canvas.create_text(
-    410.0,
-    239.0,
-    anchor="nw",
-    text="Tipo de\n Documento",
-    fill="#000000",
-    font=("RobotoRoman Regular", 25 * -1),
-    justify = 'center'
-)
-
-canvas.create_text(
-    25.0,
-    241.0,
-    anchor="nw",
-    text="Código de\n Documento",
-    fill="#000000",
-    font=("RobotoRoman Regular", 25 * -1),
-    justify = 'center'
-)
-
-canvas.create_text(
-    38.0,
-    564.0,
-    anchor="nw",
-    text="NOTA:",
-    fill="#000000",
-    font=("RobotoRoman Regular", 25 * -1),
-    justify = 'center'
-)
-
-canvas.create_text(
-    27.0,
-    613.0,
-    anchor="nw",
-    text="Texto por defecto...",
-    fill="#000000",
-    font=("RobotoRoman Regular", 25 * -1)
-)
-
-canvas.create_text(
-    70.0,
-    146.0,
-    anchor="nw",
-    text="INFORME DE MEDICIÓN",
-    fill="#000000",
-    font=("RobotoRoman Regular", 59 * -1),
-    justify = 'center'
-)
-
-canvas.create_text(
-    430.0,
-    336.0,
-    anchor="nw",
-    text="Apellido",
-    fill="#000000",
-    font=("RobotoRoman Regular", 25 * -1),
-    justify = 'center'
-)
-
-canvas.create_text(
-    25.0,
-    397.0,
-    anchor="nw",
-    text="Fecha de\n Nacimiento",
-    fill="#000000",
-    font=("RobotoRoman Regular", 25 * -1),
-    justify = 'center'
-)
-
-canvas.create_text(
-    440.0,
-    500.0,
-    anchor="nw",
-    text="Peso",
-    fill="#000000",
-    font=("RobotoRoman Regular", 25 * -1),
-    justify = 'center'
-)
-
-
-entry_8 = Entry(
-    bd=1,
-    bg="#FFFFFF",
-    fg="#000716",
-    highlightthickness=0
-)
-entry_8.place(
-    x=574.0,
-    y=500.0,
-    width=178.0,
-    height=34.0
-)
-
-
-entry_9 = Entry(
-    bd=1,
-    bg="#FFFFFF",
-    fg="#000716",
-    highlightthickness=0
-)
-entry_9.place(
-    x=224.0,
-    y=493.0,
-    width=165.0,
-    height=34.0
-)
-
-canvas.create_text(
-    35.0,
-    500.0,
-    anchor="nw",
-    text="Estatura",
-    fill="#000000",
-    font=("RobotoRoman Regular", 25 * -1),
-    justify = 'center'
-)
-
-canvas.create_text(
-    860.0,
-    159.0,
-    anchor="nw",
-    text="Fecha:",
-    fill="#000000",
-    font=("RobotoRoman Regular", 25 * -1),
-    justify = 'center'
-)
-
-
-entry_10 = Entry(
-    bd=1,
-    bg="#FFFFFF",
-    fg="#000716",
-    highlightthickness=0
-)
-entry_10.place(
-    x=993.0,
-    y=386.0,
-    width=224.0,
-    height=34.0
-)
-
-entry_11 = Entry(
-    bd=1,
-    bg="#FFFFFF",
-    fg="#000716",
-    highlightthickness=0
-)
-entry_11.place(
-    x=881.0,
-    y=386.0,
-    width=96.0,
-    height=34.0
-)
-
-canvas.create_text(
-    894.0,
-    337.0,
-    anchor="nw",
-    text="Saturación de Oxígeno",
-    fill="#000000",
-    font=("RobotoRoman Regular", 25 * -1),
-    justify = 'center'
-)
-
-
-entry_12 = Entry(
-    bd=1,
-    bg="#FFFFFF",
-    fg="#000716",
-    highlightthickness=0
-)
-entry_12.place(
-    x=993.0,
-    y=276.0,
-    width=224.0,
-    height=34.0
-)
-
-entry_13 = Entry(
-    bd=1,
-    bg="#FFFFFF",
-    fg="#000716",
-    highlightthickness=0
-)
-entry_13.place(
-    x=881.0,
-    y=276.0,
-    width=96.0,
-    height=34.0
-)
-
-canvas.create_text(
-    933.0,
-    233.0,
-    anchor="nw",
-    text="Temperatura",
-    fill="#000000",
-    font=("RobotoRoman Regular", 25 * -1),
-    justify = 'center'
-)
-
-
-entry_14 = Entry(
-    bd=1,
-    bg="#FFFFFF",
-    fg="#000716",
-    highlightthickness=0
-)
-entry_14.place(
-    x=993.0,
-    y=580.0,
-    width=224.0,
-    height=34.0
-)
-
-entry_15 = Entry(
-    bd=1,
-    bg="#FFFFFF",
-    fg="#000716",
-    highlightthickness=0
-)
-entry_15.place(
-    x=881.0,
-    y=580.0,
-    width=96.0,
-    height=34.0
-)
-
-canvas.create_text(
-    910.0,
-    535.0,
-    anchor="nw",
-    text="Frecuencia Cardiaca ",
-    fill="#000000",
-    font=("RobotoRoman Regular", 25 * -1),
-    justify = 'center'
-)
-
-
-entry_16 = Entry(
-    bd=1,
-    bg="#FFFFFF",
-    fg="#000716",
-    highlightthickness=0
-)
-entry_16.place(
-    x=993.0,
-    y=477.0,
-    width=224.0,
-    height=34.0
-)
-
-
-entry_17 = Entry(
-    bd=1,
-    bg="#FFFFFF",
-    fg="#000716",
-    highlightthickness=0
-)
-entry_17.place(
-    x=881.0,
-    y=477.0,
-    width=96.0,
-    height=34.0
-)
-
-canvas.create_text(
-    933.0,
-    445.0,
-    anchor="nw",
-    text="Presión Arterial ",
-    fill="#000000",
-    font=("RobotoRoman Regular", 25 * -1),
-    justify = 'center'
+    font=("RobotoRoman Regular", 30 * -1)
 )
 window.resizable(False, False)
 window.mainloop()
