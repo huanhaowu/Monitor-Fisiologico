@@ -8,7 +8,7 @@ from pathlib import Path
 # from tkinter import *
 # Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, ttk
-
+import os
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"assets/registro_suj")
@@ -17,414 +17,462 @@ ASSETS_PATH = OUTPUT_PATH / Path(r"assets/registro_suj")
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
+class RegistroSujeto():
+    def __init__(self):
+        self.window = Tk()
+        self.window.geometry("1260x725")
+        self.window.configure(bg = "#FFFFFF")
+        self.window.title("Registro de Sujeto")
 
-window = Tk()
+        #-------------------- Ventana Principal -------------------
+        #Canvas de la ventana principal
+        #Dimensiones del canva
+        self.canvas = Canvas(
+            self.window,
+            bg = "#FFFFFF",
+            height = 725,
+            width = 1260,
+            bd = 0,
+            highlightthickness = 0,
+            relief = "ridge"
+        )
+        #Localización del canvas principal
+        self.canvas.place(x = 0, y = 0)
+        self.canvas.create_rectangle(
+            0.0,
+            0.0,
+            1335.0,
+            91.0,
+            fill="#39A9E9",
+            outline="")
+        #Titulo de la canva principal
+        self.canvas.create_text(
+            350.0,
+            25.0,
+            anchor="nw",
+            text="FORMULARIO DE INFORMACIÓN PERSONAL",
+            fill="#FFFFFF",
+            font=("RobotoRoman Bold", 30 * -1),
+            justify = 'center'
+        )
 
-window.geometry("1260x725")
-window.configure(bg = "#FFFFFF")
+        #Background de la seccion de datos personales
+        self.canvas.create_rectangle(
+            781.0,
+            118.0,
+            783.0,
+            694.0,
+            fill="#000000",
+            outline="")
 
+        #-------------------- Botón Regresar -------------------
+        #Imagen del botón regresar
+        button_img_regresar = PhotoImage(
+            file=relative_to_assets("button_1.png"))
+        #Propiedades del botón regresar
+        button_regresar = Button(
+            image=button_img_regresar,
+            borderwidth=0,
+            highlightthickness=0,
+            command=lambda: print("button_1 clicked"),
+            relief="flat",
+            bg = "#39A9E9"
+        )
+        #Localización del botón regresar
+        button_regresar.place(
+            x=30.0,
+            y=22.0,
+            width=48.0,
+            height=47.0
+        )
+
+        #-------------------- Botón Siguiente -------------------
+        #imagen del botón siguiente
+        btn_imagen_siguiente = PhotoImage(
+            file=relative_to_assets("button_2.png"))
+        #Propiedades del botón siguiente
+        btn_siguiente = Button(
+            image=btn_imagen_siguiente,
+            borderwidth=0,
+            highlightthickness=0,
+            command=lambda: self.ejecutar_Script(),
+            relief="flat"
+        )
+        #Localización del botón siguiente
+        btn_siguiente.place(
+            x=857.0,
+            y=656.0,
+            width=411.851318359375,
+            height=68.0
+        )
+
+        """
+        ------------------ LABELS Y CAMPOS ------------------
+        """
+
+        #-------------------- COD DOCUMENTO -------------------
+        #Label del Codigo de Documento
+        self.canvas.create_text(
+            25.0,
+            171.0,
+            anchor="nw",
+            text="Código de\n Documento",
+            fill="#000000",
+            font=("RobotoRoman Regular", 25 * -1),
+            justify = 'center'
+        )
+        #Textbox del Codigo de Documento
+        txb_codigo_doc = Entry(
+            bd=1,
+            bg="#FFFFFF",
+            fg="#000716",
+            highlightthickness=0
+        )
+        #Loacalización del textbox del codigo de documento
+        txb_codigo_doc.place(
+            x=204.0,
+            y=184.0,
+            width=165.0,
+            height=34.0
+        )
+
+        #-------------------- TIPO DOCUMENTO -------------------
+        #Label del Tipo de Documento
+        self.canvas.create_text(
+            400.0,
+            169.0,
+            anchor="nw",
+            text="Tipo de\n Documento",
+            fill="#000000",
+            font=("RobotoRoman Regular", 25 * -1),
+            justify = 'center'
+        )
+        #Combobox del Tipo de Documento
+        cb_tipo_doc = ttk.Combobox(
+            state = "readonly",
+            value = ["Cédula","Pasaporte"]
+        )
+        #Localización del combobox del tipo de documento
+        cb_tipo_doc.place(
+            x=561.0,
+            y=184.0,
+            width=178.0,
+            height=34.0
+        )
+        #-------------------- NOMBRE -------------------
+        #Label del Nombre
+        self.canvas.create_text(
+            25.0,
+            276.0,
+            anchor="nw",
+            text="Nombre",
+            fill="#000000",
+            font=("RobotoRoman Regular", 25 * -1),
+            justify = 'center'
+        )
+
+        #Texbox del nombre
+        txb_nombre = Entry(
+            bd=1,
+            bg="#FFFFFF",
+            fg="#000716",
+            highlightthickness=0
+        )
+        #Localización del textbox del nombre
+        txb_nombre.place(
+            x=204.0,
+            y=274.0,
+            width=165.0,
+            height=34.0
+        )
+
+        #-------------------- APELLIDO -------------------
+        #Label del Apellido
+        self.canvas.create_text(
+            420.0,
+            276.0,
+            anchor="nw",
+            text="Apellido",
+            fill="#000000",
+            font=("RobotoRoman Regular", 25 * -1),
+            justify = 'center'
+        )
+
+        #Textbox del Apellido
+        txb_apellido = Entry(
+            bd=1,
+            bg="#FFFFFF",
+            fg="#000716",
+            highlightthickness=0
+        )
+        #Localización del textbox del apellido
+        txb_apellido.place(
+            x=561.0,
+            y=276.0,
+            width=178.0,
+            height=34.0
+        )
+        #-------------------- FECHA NACIMIENTO -------------------
+        #Label de la Fecha de Nacimiento
+        self.canvas.create_text(
+            25.0,
+            358.0,
+            anchor="nw",
+            text="Fecha de\n Nacimiento",
+            fill="#000000",
+            font=("RobotoRoman Regular", 25 * -1),
+            justify = 'center'
+        )
+        
+        #Datetimepicker de la Fecha de Nacimiento  
+        dt_fecha_nac = ttk.Combobox(
+            state = "readonly",
+            values = ["1","2"]
+        )
+        #localización del datetimepicker de la fecha de nacimiento
+        dt_fecha_nac.place(
+            x=204.0,
+            y=374.0,
+            width=165.0,
+            height=34.0
+        )
+        #-------------------- SEXO -------------------
+        #Label del Sexo
+        self.canvas.create_text(
+            430.0,
+            374.0,
+            anchor="nw",
+            text="Sexo",
+            fill="#000000",
+            font=("RobotoRoman Regular", 25 * -1),
+            justify = 'center'
+        )
+
+        #Combobox de Sexo 
+        cb_sexo = ttk.Combobox(
+            state = "readonly",
+            value = ["Masculino","Femenino","Intersexual"]
+        )
+        #Localización del combobox de sexo
+        cb_sexo.place(
+            x=561.0,
+            y=374.0,
+            width=178.0,
+            height=34.0
+        )
+
+        #-------------------- NACIONALIDAD -------------------
+        #Label de la Nacionalidad
+        self.canvas.create_text(
+            25.0,
+            489.0,
+            anchor="nw",
+            text="Nacionalidad",
+            fill="#000000",
+            font=("RobotoRoman Regular", 25 * -1),
+            justify = 'center'
+        )
+        
+        #ComboBox de nacionalidad
+        txb_nacionalidad = ttk.Combobox(
+            state = "readonly",
+            values = ["Dominicano/a","Venezolano/a"]
+        )
+        #Localización del combobox de nacionalidad
+        txb_nacionalidad.place(
+            x=204.0,
+            y=485.0,
+            width=165.0,
+            height=35.0
+        )
+
+        #-------------------- PROVINCIA -------------------
+        #Label de la Provincia
+        self.canvas.create_text(
+            410.0,
+            488.0,
+            anchor="nw",
+            text="Provincia",
+            fill="#000000",
+            font=("RobotoRoman Regular", 25 * -1)
+        )
+        
+        #ComboBox para las provincias
+        cb_provincia = ttk.Combobox(
+            state = "readonly",
+            values = ["1","2"]
+        )
+        #Localización del combobox de provincia
+        cb_provincia.place(
+            x=561.0,
+            y=481.0,
+            width=178.0,
+            height=35.0
+        )
+
+        #-------------------- GENERO -------------------
+        #Label del Genero
+        self.canvas.create_text(
+            30.0,
+            582.0,
+            anchor="nw",
+            text="Genero",
+            fill="#000000",
+            font=("RobotoRoman Regular", 25 * -1) ,
+            justify = 'center'
+        )
+        
+        #ComboBox de genero
+        cb_genero = ttk.Combobox(
+            state = "readonly",
+            values = ["Masculino","Femenino","No Bionario","Otros"]
+        )
+        #Localización del combobox de genero
+        cb_genero.place(
+            x=204.0,
+            y=582.0,
+            width=165.0,
+            height=35.0
+        )
+
+        #-------------------- ORIENTACION SEXUAL -------------------
+        #Label de la Orientacion Sexual
+        self.canvas.create_text(
+            400.0,
+            573.0,
+            anchor="nw",
+            text="Orientacion\n Sexual",
+            fill="#000000",
+            font=("RobotoRoman Regular", 25 * -1),
+            justify = 'center'
+        )
+        
+        #ComboBox de Orientacion Sexual
+        cb_orientacion_sexual = ttk.Combobox(
+        state = "readonly",
+        values = ["Heterosexual","Homosexual","Bisexual","Pansexual","Asexual","Otros"] 
+        )
+        #Localización del combobox de orientacion sexual
+        cb_orientacion_sexual.place(
+            x=561.0,
+            y=583.0,
+            width=178.0,
+            height=34.0
+        )
+        
+        """
+        #-------------------- ESTADOS DE SALUD -------------------
+        """
+        #Label principal de la sección de Estado de Salud
+        self.canvas.create_text(
+            910.0,
+            126.0,
+            anchor="nw",
+            text="ESTADO DE SALUD",
+            fill="#000000",
+            font=("RobotoRoman Regular", 25 * -1),
+            justify = 'center'
+        )
+
+        #Label de las opciones de los habitos de consumo
+        self.canvas.create_text(
+            850.0,
+            168.0,
+            anchor="nw",
+            text="Seleccione las opciones que se adecuen \na sus hábitos de consumo:",
+            fill="#000000",
+            font=("RobotoRoman Regular", 20 * -1),
+            justify = 'center'
+        )
+
+        #-------------------- ALCOHOL -------------------
+        #Label de Alcohol
+        self.canvas.create_text(
+            830.0,
+            230.0,
+            anchor="nw",
+            text="Ingerir\n alcohol",
+            fill="#000000",
+            font=("RobotoRoman Regular", 25 * -1),
+            justify = 'center'
+        )
+
+        #CheckBox de Alcohol
+        ck_alcohol = ttk.Combobox(
+        state = "readonly",
+        values = ["Si","No"]
+        )
+        #Localización del checkbox de alcohol
+        ck_alcohol.place(
+            x=940.0,
+            y=247.0,
+            width=59.0,
+            height=35.0
+        )
+
+        #-------------------- FUMA -------------------
+        #Label de Fumar
+        self.canvas.create_text(
+            1020.0,
+            247.0,
+            anchor="nw",
+            text="Fumar",
+            fill="#000000",
+            font=("RobotoRoman Regular", 25 * -1),
+            justify = 'center'
+        )
+
+        #checkbox de Fumar
+        ck_fumar = ttk.Combobox(
+        state = "readonly",
+        values = ["Si","No"]
+        )
+        #Localización del checkbox de fumar
+        ck_fumar.place(
+            x= 1110.0,
+            y= 244.0,
+            width= 59.0,
+            height=35.0
+        )
+
+        #-------------------- Condiciones DE SALUD -------------------
+        #Label de Condiciones de Salud
+        self.canvas.create_text(
+            850.0,
+            311.0,
+            anchor="nw",
+            text="¿Posee alguna condición de salud?",
+            fill="#000000",
+            font=("RobotoRoman Regular", 20 * -1),
+            justify = 'center'
+        )
+        #Label de los ejemplos de condiciones de salud
+        self.canvas.create_text(
+            860.0,
+            350.0,
+            anchor="nw",
+            text="Algunos ejemplos son:  \nDiabetes, asma, hipertensión, anemia, etc...",
+            fill="#000000",
+            font=("RobotoRoman Regular", 16 * -1),
+            justify = 'center'
+        )
+
+        #Rectangulo de llenado para las condiciones de salud que tenga el usuario
+        self.canvas.create_rectangle(
+            850.0,
+            400.0,
+            1200.0,
+            630.0,
+            fill="#EEF8FF",
+            outline=""
+        )
+
+        self.window.resizable(False, False)
+        self.window.mainloop()
 
 #Funcion para abrir otro formulario
-import os
-def ejecutar_Script():  
-    os.system('menu.py')
-    print('Abriendo menu...')
+    def ejecutar_Script():  
+        os.system('menu.py')
+        print('Abriendo menu...')
 
-canvas = Canvas(
-    window,
-    bg = "#FFFFFF",
-    height = 725,
-    width = 1260,
-    bd = 0,
-    highlightthickness = 0,
-    relief = "ridge"
-)
-
-canvas.place(x = 0, y = 0)
-canvas.create_rectangle(
-    0.0,
-    0.0,
-    1335.0,
-    91.0,
-    fill="#39A9E9",
-    outline="")
-
-canvas.create_text(
-    350.0,
-    25.0,
-    anchor="nw",
-    text="FORMULARIO DE INFORMACIÓN PERSONAL",
-    fill="#FFFFFF",
-    font=("RobotoRoman Bold", 30 * -1),
-    justify = 'center'
-)
-
-button_image_1 = PhotoImage(
-    file=relative_to_assets("button_1.png"))
-button_1 = Button(
-    image=button_image_1,
-    borderwidth=0,
-    highlightthickness=0,
-    command=lambda: print("button_1 clicked"),
-    relief="flat",
-    bg = "#39A9E9"
-)
-button_1.place(
-    x=30.0,
-    y=22.0,
-    width=48.0,
-    height=47.0
-)
-
-canvas.create_text(
-    25.0,
-    276.0,
-    anchor="nw",
-    text="Nombre",
-    fill="#000000",
-    font=("RobotoRoman Regular", 25 * -1),
-    justify = 'center'
-)
-
-canvas.create_text(
-    430.0,
-    374.0,
-    anchor="nw",
-    text="Sexo",
-    fill="#000000",
-    font=("RobotoRoman Regular", 25 * -1),
-    justify = 'center'
-)
-
-canvas.create_text(
-    400.0,
-    573.0,
-    anchor="nw",
-    text="Orientacion\n Sexual",
-    fill="#000000",
-    font=("RobotoRoman Regular", 25 * -1),
-    justify = 'center'
-)
-
-canvas.create_text(
-    25.0,
-    489.0,
-    anchor="nw",
-    text="Nacionalidad",
-    fill="#000000",
-    font=("RobotoRoman Regular", 25 * -1),
-    justify = 'center'
-)
-
-canvas.create_text(
-    850.0,
-    311.0,
-    anchor="nw",
-    text="¿Posee alguna condición de salud?",
-    fill="#000000",
-    font=("RobotoRoman Regular", 20 * -1),
-    justify = 'center'
-)
-
-canvas.create_text(
-    830.0,
-    230.0,
-    anchor="nw",
-    text="Ingerir\n alcohol",
-    fill="#000000",
-    font=("RobotoRoman Regular", 25 * -1),
-    justify = 'center'
-)
-
-canvas.create_text(
-    850.0,
-    168.0,
-    anchor="nw",
-    text="Seleccione las opciones que se adecuen \na sus hábitos de consumo:",
-    fill="#000000",
-    font=("RobotoRoman Regular", 20 * -1),
-    justify = 'center'
-)
-
-
-canvas.create_text(
-    860.0,
-    350.0,
-    anchor="nw",
-    text="Algunos ejemplos son:  \nDiabetes, asma, hipertensión, anemia, etc...",
-    fill="#000000",
-    font=("RobotoRoman Regular", 16 * -1),
-    justify = 'center'
-)
-
-#Aqui va el combobox de Tipo de Documento
-cb_tipo_doc = ttk.Combobox(
-    state = "readonly",
-    value = ["Cédula","Pasaporte"]
-)
-cb_tipo_doc.place(
-    x=561.0,
-    y=184.0,
-    width=178.0,
-    height=34.0
-)
-#Aqui va el Textbox de Codigo de Documento
-txb_codigo_doc = Entry(
-    bd=1,
-    bg="#FFFFFF",
-    fg="#000716",
-    highlightthickness=0
-)
-txb_codigo_doc.place(
-    x=204.0,
-    y=184.0,
-    width=165.0,
-    height=34.0
-)
-
-#Aqui va el texbox para el nombre
-txb_nombre = Entry(
-    bd=1,
-    bg="#FFFFFF",
-    fg="#000716",
-    highlightthickness=0
-)
-txb_nombre.place(
-    x=204.0,
-    y=274.0,
-    width=165.0,
-    height=34.0
-)
-
-#Aqui va el textbox para Apellido
-txb_apellido = Entry(
-    bd=1,
-    bg="#FFFFFF",
-    fg="#000716",
-    highlightthickness=0
-)
-txb_apellido.place(
-    x=561.0,
-    y=276.0,
-    width=178.0,
-    height=34.0
-)
-
-
-
-#Aqui va el combobox de Sexo 
-cb_sexo = ttk.Combobox(
-    state = "readonly",
-    value = ["Masculino","Femenino","Intersexual"]
-)
-cb_sexo.place(
-    x=561.0,
-    y=374.0,
-    width=178.0,
-    height=34.0
-)
-
-#Aqui va el ComboBox para las provincias
-cb_provincia = ttk.Combobox(
-    state = "readonly",
-    values = ["1","2"]
-)
-cb_provincia.place(
-    x=561.0,
-    y=481.0,
-    width=178.0,
-    height=35.0
-)
-
-#Aqui va el datetimepicker de Fecha de Nacimietno
-dt_fecha_nac = ttk.Combobox(
-     state = "readonly",
-    values = ["1","2"]
-)
-dt_fecha_nac.place(
-    x=204.0,
-    y=374.0,
-    width=165.0,
-    height=34.0
-)
-
-#Aqui va el ComboBox de nacionalidad
-txb_nacionalidad = ttk.Combobox(
-    state = "readonly",
-    values = ["Dominicano/a","Venezolano/a"]
-)
-txb_nacionalidad.place(
-    x=204.0,
-    y=485.0,
-    width=165.0,
-    height=35.0
-)
-
-#Aqui va el ComboBox de genero
-cb_genero = ttk.Combobox(
-    state = "readonly",
-    values = ["Masculino","Femenino","No Bionario","Otros"]
-)
-cb_genero.place(
-    x=204.0,
-    y=582.0,
-    width=165.0,
-    height=35.0
-)
-
-
-canvas.create_text(
-    410.0,
-    488.0,
-    anchor="nw",
-    text="Provincia",
-    fill="#000000",
-    font=("RobotoRoman Regular", 25 * -1)
-)
-
-canvas.create_rectangle(
-    781.0,
-    118.0,
-    783.0,
-    694.0,
-    fill="#000000",
-    outline="")
-
-canvas.create_text(
-    1020.0,
-    247.0,
-    anchor="nw",
-    text="Fumar",
-    fill="#000000",
-    font=("RobotoRoman Regular", 25 * -1),
-    justify = 'center'
-)
-
-#Aqui va el checkbox de Fumar
-ck_fumar = ttk.Combobox(
-  state = "readonly",
-  values = ["Si","No"]
-)
-ck_fumar.place(
-    x= 1110.0,
-    y= 244.0,
-    width= 59.0,
-    height=35.0
-)
-
-canvas.create_text(
-    910.0,
-    126.0,
-    anchor="nw",
-    text="ESTADO DE SALUD",
-    fill="#000000",
-    font=("RobotoRoman Regular", 25 * -1),
-    justify = 'center'
-)
-
-#Aqui va el CheckBox de Alcohol
-ck_alcohol = ttk.Combobox(
-  state = "readonly",
-  values = ["Si","No"]
-)
-ck_alcohol.place(
-    x=940.0,
-    y=247.0,
-    width=59.0,
-    height=35.0
-)
-
-
-#Aqui va el ComboBox de Orientacion Sexual
-cb_orientacion_sexual = ttk.Combobox(
-  state = "readonly",
-  values = ["Heterosexual","Homosexual","Bisexual","Pansexual","Asexual","Otros"] 
-)
-cb_orientacion_sexual.place(
-    x=561.0,
-    y=583.0,
-    width=178.0,
-    height=34.0
-)
-
-canvas.create_text(
-    30.0,
-    582.0,
-    anchor="nw",
-    text="Genero",
-    fill="#000000",
-    font=("RobotoRoman Regular", 25 * -1) ,
-    justify = 'center'
-)
-
-canvas.create_text(
-    400.0,
-    169.0,
-    anchor="nw",
-    text="Tipo de\n Documento",
-    fill="#000000",
-    font=("RobotoRoman Regular", 25 * -1),
-    justify = 'center'
-)
-
-canvas.create_text(
-    25.0,
-    171.0,
-    anchor="nw",
-    text="Código de\n Documento",
-    fill="#000000",
-    font=("RobotoRoman Regular", 25 * -1),
-    justify = 'center'
-)
-
-
-#Aqui va el boton para seguir
-bt_imagen_siguiente = PhotoImage(
-    file=relative_to_assets("button_2.png"))
-bt_siguiente = Button(
-    image=bt_imagen_siguiente,
-    borderwidth=0,
-    highlightthickness=0,
-    command=lambda: ejecutar_Script(),
-    relief="flat"
-)
-bt_siguiente.place(
-    x=857.0,
-    y=656.0,
-    width=411.851318359375,
-    height=68.0
-)
-
-canvas.create_text(
-    420.0,
-    276.0,
-    anchor="nw",
-    text="Apellido",
-    fill="#000000",
-    font=("RobotoRoman Regular", 25 * -1),
-    justify = 'center'
-)
-
-canvas.create_text(
-    25.0,
-    358.0,
-    anchor="nw",
-    text="Fecha de\n Nacimiento",
-    fill="#000000",
-    font=("RobotoRoman Regular", 25 * -1),
-    justify = 'center'
-)
-
-canvas.create_rectangle(
-    850.0,
-    400.0,
-    1200.0,
-    630.0,
-    fill="#EEF8FF",
-    outline=""
-)
-
-
-
-window.resizable(False, False)
-window.mainloop()
+registro = RegistroSujeto()
