@@ -76,7 +76,7 @@ class LoginSujEstadio():
             image=imagen_btn_acceder,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: ejecutar_Script(),
+            command=lambda: self.ejecutar_Script(),
             relief="flat",
             bg = "white"
         )
