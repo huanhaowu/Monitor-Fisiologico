@@ -67,11 +67,11 @@ class RegistroSujeto():
 
         #-------------------- Botón Regresar -------------------
         #Imagen del botón regresar
-        button_img_regresar = PhotoImage(
+        self.btn_img_regresar = PhotoImage(
             file=relative_to_assets("button_1.png"))
         #Propiedades del botón regresar
-        button_regresar = Button(
-            image=button_img_regresar,
+        self.btn_regresar = Button(
+            image=btn_img_regresar,
             borderwidth=0,
             highlightthickness=0,
             command=lambda: print("button_1 clicked"),
@@ -79,7 +79,7 @@ class RegistroSujeto():
             bg = "#39A9E9"
         )
         #Localización del botón regresar
-        button_regresar.place(
+        self.btn_regresar.place(
             x=30.0,
             y=22.0,
             width=48.0,
@@ -88,10 +88,10 @@ class RegistroSujeto():
 
         #-------------------- Botón Siguiente -------------------
         #imagen del botón siguiente
-        btn_imagen_siguiente = PhotoImage(
+        self.btn_imagen_siguiente = PhotoImage(
             file=relative_to_assets("button_2.png"))
         #Propiedades del botón siguiente
-        btn_siguiente = Button(
+        self.btn_siguiente = Button(
             image=btn_imagen_siguiente,
             borderwidth=0,
             highlightthickness=0,
@@ -99,7 +99,7 @@ class RegistroSujeto():
             relief="flat"
         )
         #Localización del botón siguiente
-        btn_siguiente.place(
+        self.btn_siguiente.place(
             x=857.0,
             y=656.0,
             width=411.851318359375,
@@ -122,14 +122,14 @@ class RegistroSujeto():
             justify = 'center'
         )
         #Textbox del Codigo de Documento
-        txb_codigo_doc = Entry(
+        self.txb_codigo_doc = Entry(
             bd=1,
             bg="#FFFFFF",
             fg="#000716",
             highlightthickness=0
         )
         #Loacalización del textbox del codigo de documento
-        txb_codigo_doc.place(
+        self.txb_codigo_doc.place(
             x=204.0,
             y=184.0,
             width=165.0,
@@ -148,12 +148,12 @@ class RegistroSujeto():
             justify = 'center'
         )
         #Combobox del Tipo de Documento
-        cb_tipo_doc = ttk.Combobox(
+        self.cb_tipo_doc = ttk.Combobox(
             state = "readonly",
             value = ["Cédula","Pasaporte"]
         )
         #Localización del combobox del tipo de documento
-        cb_tipo_doc.place(
+        self.cb_tipo_doc.place(
             x=561.0,
             y=184.0,
             width=178.0,
@@ -172,14 +172,14 @@ class RegistroSujeto():
         )
 
         #Texbox del nombre
-        txb_nombre = Entry(
+        self.txb_nombre = Entry(
             bd=1,
             bg="#FFFFFF",
             fg="#000716",
             highlightthickness=0
         )
         #Localización del textbox del nombre
-        txb_nombre.place(
+        self.txb_nombre.place(
             x=204.0,
             y=274.0,
             width=165.0,
@@ -199,14 +199,14 @@ class RegistroSujeto():
         )
 
         #Textbox del Apellido
-        txb_apellido = Entry(
+        self.txb_apellido = Entry(
             bd=1,
             bg="#FFFFFF",
             fg="#000716",
             highlightthickness=0
         )
         #Localización del textbox del apellido
-        txb_apellido.place(
+        self.txb_apellido.place(
             x=561.0,
             y=276.0,
             width=178.0,
@@ -230,7 +230,7 @@ class RegistroSujeto():
             values = ["1","2"]
         )
         #localización del datetimepicker de la fecha de nacimiento
-        dt_fecha_nac.place(
+        self.dt_fecha_nac.place(
             x=204.0,
             y=374.0,
             width=165.0,
@@ -238,7 +238,7 @@ class RegistroSujeto():
         )
         #-------------------- SEXO -------------------
         #Label del Sexo
-        self.canvas.create_text(
+        self.self.canvas.create_text(
             430.0,
             374.0,
             anchor="nw",
@@ -249,12 +249,12 @@ class RegistroSujeto():
         )
 
         #Combobox de Sexo 
-        cb_sexo = ttk.Combobox(
+        self.cb_sexo = ttk.Combobox(
             state = "readonly",
             value = ["Masculino","Femenino","Intersexual"]
         )
         #Localización del combobox de sexo
-        cb_sexo.place(
+        self.cb_sexo.place(
             x=561.0,
             y=374.0,
             width=178.0,
@@ -274,12 +274,12 @@ class RegistroSujeto():
         )
         
         #ComboBox de nacionalidad
-        txb_nacionalidad = ttk.Combobox(
+        self.txb_nacionalidad = ttk.Combobox(
             state = "readonly",
             values = ["Dominicano/a","Venezolano/a"]
         )
         #Localización del combobox de nacionalidad
-        txb_nacionalidad.place(
+        self.txb_nacionalidad.place(
             x=204.0,
             y=485.0,
             width=165.0,
@@ -298,12 +298,12 @@ class RegistroSujeto():
         )
         
         #ComboBox para las provincias
-        cb_provincia = ttk.Combobox(
+        self.cb_provincia = ttk.Combobox(
             state = "readonly",
             values = ["1","2"]
         )
         #Localización del combobox de provincia
-        cb_provincia.place(
+        self.cb_provincia.place(
             x=561.0,
             y=481.0,
             width=178.0,
@@ -323,12 +323,12 @@ class RegistroSujeto():
         )
         
         #ComboBox de genero
-        cb_genero = ttk.Combobox(
+        self.cb_genero = ttk.Combobox(
             state = "readonly",
             values = ["Masculino","Femenino","No Bionario","Otros"]
         )
         #Localización del combobox de genero
-        cb_genero.place(
+        self.cb_genero.place(
             x=204.0,
             y=582.0,
             width=165.0,
@@ -348,12 +348,12 @@ class RegistroSujeto():
         )
         
         #ComboBox de Orientacion Sexual
-        cb_orientacion_sexual = ttk.Combobox(
+        self.cb_orientacion_sexual = ttk.Combobox(
         state = "readonly",
         values = ["Heterosexual","Homosexual","Bisexual","Pansexual","Asexual","Otros"] 
         )
         #Localización del combobox de orientacion sexual
-        cb_orientacion_sexual.place(
+        self.cb_orientacion_sexual.place(
             x=561.0,
             y=583.0,
             width=178.0,
@@ -398,12 +398,12 @@ class RegistroSujeto():
         )
 
         #CheckBox de Alcohol
-        ck_alcohol = ttk.Combobox(
+        self.ck_alcohol = ttk.Combobox(
         state = "readonly",
         values = ["Si","No"]
         )
         #Localización del checkbox de alcohol
-        ck_alcohol.place(
+        self.ck_alcohol.place(
             x=940.0,
             y=247.0,
             width=59.0,
@@ -412,7 +412,7 @@ class RegistroSujeto():
 
         #-------------------- FUMA -------------------
         #Label de Fumar
-        self.canvas.create_text(
+        self.self.canvas.create_text(
             1020.0,
             247.0,
             anchor="nw",
@@ -423,12 +423,12 @@ class RegistroSujeto():
         )
 
         #checkbox de Fumar
-        ck_fumar = ttk.Combobox(
+        self.ck_fumar = ttk.Combobox(
         state = "readonly",
         values = ["Si","No"]
         )
         #Localización del checkbox de fumar
-        ck_fumar.place(
+        self.ck_fumar.place(
             x= 1110.0,
             y= 244.0,
             width= 59.0,
