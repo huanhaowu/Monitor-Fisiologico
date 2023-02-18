@@ -71,7 +71,7 @@ class RegistroSujeto():
             file=relative_to_assets("button_1.png"))
         #Propiedades del botón regresar
         self.btn_regresar = Button(
-            image=btn_img_regresar,
+            image=self.btn_img_regresar,
             borderwidth=0,
             highlightthickness=0,
             command=lambda: print("button_1 clicked"),
