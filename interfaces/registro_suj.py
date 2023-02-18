@@ -475,4 +475,5 @@ class RegistroSujeto():
         os.system('menu.py')
         print('Abriendo menu...')
 
-registro = RegistroSujeto()
+if __name__ == '__main__':
+    registro = RegistroSujeto()

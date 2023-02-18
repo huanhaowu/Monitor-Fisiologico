@@ -135,5 +135,5 @@ class LoginSujEstudio():
         #print('Abriendo registro...')
         
         
-
-registro = LoginSujEstudio()
+if __name__ == '__main__':
+    registro = LoginSujEstudio()
