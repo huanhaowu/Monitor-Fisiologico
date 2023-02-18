@@ -92,7 +92,7 @@ class RegistroSujeto():
             file=relative_to_assets("button_2.png"))
         #Propiedades del botón siguiente
         self.btn_siguiente = Button(
-            image=btn_imagen_siguiente,
+            image=self.btn_imagen_siguiente,
             borderwidth=0,
             highlightthickness=0,
             command=lambda: self.ejecutar_Script(),
