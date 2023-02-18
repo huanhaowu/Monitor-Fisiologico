@@ -71,7 +71,7 @@ class RegistroSujeto():
             file=relative_to_assets("button_1.png"))
         #Propiedades del botón regresar
         self.btn_regresar = Button(
-            image=btn_img_regresar,
+            image=self.btn_img_regresar,
             borderwidth=0,
             highlightthickness=0,
             command=lambda: print("button_1 clicked"),
@@ -92,7 +92,7 @@ class RegistroSujeto():
             file=relative_to_assets("button_2.png"))
         #Propiedades del botón siguiente
         self.btn_siguiente = Button(
-            image=btn_imagen_siguiente,
+            image=self.btn_imagen_siguiente,
             borderwidth=0,
             highlightthickness=0,
             command=lambda: self.ejecutar_Script(),
@@ -225,7 +225,7 @@ class RegistroSujeto():
         )
         
         #Datetimepicker de la Fecha de Nacimiento  
-        dt_fecha_nac = ttk.Combobox(
+        self.dt_fecha_nac = ttk.Combobox(
             state = "readonly",
             values = ["1","2"]
         )
@@ -238,7 +238,7 @@ class RegistroSujeto():
         )
         #-------------------- SEXO -------------------
         #Label del Sexo
-        self.self.canvas.create_text(
+        self.canvas.create_text(
             430.0,
             374.0,
             anchor="nw",
@@ -412,7 +412,7 @@ class RegistroSujeto():
 
         #-------------------- FUMA -------------------
         #Label de Fumar
-        self.self.canvas.create_text(
+        self.canvas.create_text(
             1020.0,
             247.0,
             anchor="nw",
