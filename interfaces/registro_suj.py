@@ -225,7 +225,7 @@ class RegistroSujeto():
         )
         
         #Datetimepicker de la Fecha de Nacimiento  
-        dt_fecha_nac = ttk.Combobox(
+        self.dt_fecha_nac = ttk.Combobox(
             state = "readonly",
             values = ["1","2"]
         )
@@ -238,7 +238,7 @@ class RegistroSujeto():
         )
         #-------------------- SEXO -------------------
         #Label del Sexo
-        self.self.canvas.create_text(
+        self.canvas.create_text(
             430.0,
             374.0,
             anchor="nw",
@@ -412,7 +412,7 @@ class RegistroSujeto():
 
         #-------------------- FUMA -------------------
         #Label de Fumar
-        self.self.canvas.create_text(
+        self.canvas.create_text(
             1020.0,
             247.0,
             anchor="nw",

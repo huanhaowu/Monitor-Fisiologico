@@ -15,7 +15,7 @@ ASSETS_PATH = OUTPUT_PATH / Path(r"assets/login_suj")
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
-class LoginSujEstadio():
+class LoginSujEstudio():
     def __init__(self):
         self.window = Tk()
         self.window.geometry("1260x725")
@@ -129,9 +129,11 @@ class LoginSujEstadio():
         self.window.resizable(False, False)
         self.window.mainloop()
 #Funcion para abrir otro formulario
-    def ejecutar_Script():  
-        os.system('registro.py')
-        print('Abriendo registro...')
+    def ejecutar_Script(self):  
+        pass
+        #os.system('registro.py')
+        #print('Abriendo registro...')
         
         
-registro = LoginSujEstadio()
+
+registro = LoginSujEstudio()
