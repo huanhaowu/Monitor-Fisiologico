@@ -70,10 +70,10 @@ class LoginSujEstadio():
         )
 
         #Imagen Boton Acceder
-        imagen_btn_acceder = PhotoImage(file=relative_to_assets("button_1.png"))
+        self.imagen_btn_acceder = PhotoImage(file=relative_to_assets("button_1.png"))
         #Prppieades del boton acceder
-        btn_acceder = Button(
-            image=imagen_btn_acceder,
+        self.btn_acceder = Button(
+            image=self.imagen_btn_acceder,
             borderwidth=0,
             highlightthickness=0,
             command=lambda: self.ejecutar_Script(),
@@ -81,29 +81,29 @@ class LoginSujEstadio():
             bg = "white"
         )
         #Localización del boton acceder
-        btn_acceder.place(
+        self.btn_acceder.place(
                 x=376.0,
                 y=517.0,
                 width=493.0,
                 height=59.0
             )
         #Imagen Logo de la Aplicación
-        imagen_logo_app = PhotoImage(file=relative_to_assets("image_1.png"))
+        self.imagen_logo_app = PhotoImage(file=relative_to_assets("image_1.png"))
         #Localización del logo de la aplicación
         logo_app = self.canvas.create_image(
             656.0,
             113.0,
-            image=imagen_logo_app
+            image=self.imagen_logo_app
         )
 
         #Aqui va el ComboBox para el tipo de documento
-        cb_tipo_doc = ttk.Combobox(
+        self.cb_tipo_doc = ttk.Combobox(
             state = "readonly",
             value = ["Cédula","Pasaporte"],
             font = ("RobotoRoman Regular", 25 * -1)
         )
         #Locación del ComboBox para el tipo de documento
-        cb_tipo_doc.place(
+        self.cb_tipo_doc.place(
             x=421.0,
             y=298.0,
             width=404.0,
@@ -111,7 +111,7 @@ class LoginSujEstadio():
         )
 
         #Aqui va el textbox para el codigo de documetno
-        txb_codigo_doc = Entry(
+        self.txb_codigo_doc = Entry(
             bd=1,
             bg="#FFFFFF",
             fg="#000716",
@@ -119,7 +119,7 @@ class LoginSujEstadio():
             font = ("RobotoRoman Regular", 25 * -1)
         )
         #Localización del textbox para el codigo de documento
-        txb_codigo_doc.place(
+        self.txb_codigo_doc.place(
             x=420.0,
             y=416.0,
             width=404.0,
