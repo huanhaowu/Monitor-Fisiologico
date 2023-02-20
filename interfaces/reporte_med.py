@@ -306,7 +306,6 @@ lbl_temperatura.place(
     height=34.0
 )
 #Aqui se colora el progress bar para la escala de la temperatura
-
 TROUGH_COLOR = '#F5F5F5'
 BAR_COLOR = 'red'
 sty = ttk.Style()
@@ -354,20 +353,32 @@ lbl_saturacion_oxigeno.place(
     width=96.0,
     height=34.0
 )
+
+
 #Aqui se colocara el progress bar para la escala de saturacion de oxigeno
-txb_escala_saturacion_oxigeno = Entry(
-    bd=0,
-    bg="white",
-    fg="#000716",
-    state="disabled",
-    highlightthickness=0
-)
-txb_escala_saturacion_oxigeno.place(
+TROUGH_COLOR = '#F5F5F5'
+BAR_COLOR = 'red'
+sty = ttk.Style()
+sty.theme_use('clam')
+sty.configure("bar.Horizontal.TProgressbar", troughcolor=TROUGH_COLOR,
+                bordercolor=TROUGH_COLOR, background=BAR_COLOR, lightcolor=BAR_COLOR,
+                darkcolor=BAR_COLOR)
+
+
+pb_saturacion_oxigeno = ttk.Progressbar(window, orient=HORIZONTAL, mode='determinate', style="bar.Horizontal.TProgressbar")
+pb_saturacion_oxigeno.place(
     x=527.0,
     y=478.0,
     width=224.0,
     height=34.0
 )
+def fill_progress_temp():
+    return 50
+pb_saturacion_oxigeno['value'] =  fill_progress_temp()
+
+
+
+
 #endregion
 
 #region PRESION ARTERIAL
