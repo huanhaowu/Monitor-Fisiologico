@@ -7,34 +7,37 @@ from pathlib import Path
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
+from tkinter import Tk, ttk, Canvas, Entry, Text, Button, PhotoImage, HORIZONTAL, StringVar, Label
 
+import style as style
+import tk as tk
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"C:\Users\Angel\Monitor-Fisiologico\interfaces\assets\reporte_med")
 
-
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
+# class ReporteMed():
+#     def __init__(self, medicion, sujeto):
+
 
 window = Tk()
-
 window.geometry("1260x725")
-window.configure(bg = "#FFFFFF")
-
+window.configure(bg="#FFFFFF")
 
 canvas = Canvas(
     window,
-    bg = "#FFFFFF",
-    height = 725,
-    width = 1260,
-    bd = 0,
-    highlightthickness = 0,
-    relief = "ridge"
+    bg="#FFFFFF",
+    height=725,
+    width=1260,
+    bd=0,
+    highlightthickness=0,
+    relief="ridge"
 )
 
-canvas.place(x = 0, y = 0)
+canvas.place(x=0, y=0)
+
 img_regresar = PhotoImage(
     file=relative_to_assets("button_1.png"))
 btn_regresar = Button(
@@ -43,7 +46,7 @@ btn_regresar = Button(
     highlightthickness=0,
     command=lambda: print("button_1 clicked"),
     relief="flat",
-    bg ="white"
+    bg="white"
 )
 btn_regresar.place(
     x=50.0,
@@ -51,7 +54,7 @@ btn_regresar.place(
     width=61.0,
     height=60.0
 )
- #LINEA DIVISORIA ENTRE LOGO Y TITULO INFORME
+# LINEA DIVISORIA ENTRE LOGO Y TITULO INFORME
 canvas.create_rectangle(
     49.0,
     95.93429565429688,
@@ -85,6 +88,12 @@ canvas.create_text(
     font=("RobotoRoman Regular", 30 * -1)
 )
 
+# -- CAMPOS DEL SUJETO --
+#Ordenados por label (Nombres:) y luego textbox (Ricardo Jose).
+
+#NOMBRES
+textito = StringVar()
+textito.set("This is the default text")
 canvas.create_text(
     50.0,
     195.0,
@@ -93,7 +102,23 @@ canvas.create_text(
     fill="#000000",
     font=("RobotoRoman Regular", 25 * -1)
 )
+txb_nombre = Entry(
+    bd=0,
+    bg="white",
+    fg="#000716",
+    state="disabled",
+    textvariable = textito,
+    highlightthickness=0
+)
 
+txb_nombre.place(
+    x=177.0,
+    y=198.0,
+    width=388.0,
+    height=34.0
+)
+
+#SEXO
 canvas.create_text(
     900.0,
     198.0,
@@ -102,16 +127,47 @@ canvas.create_text(
     fill="#000000",
     font=("RobotoRoman Regular", 25 * -1)
 )
+lbl_sexo = Label(
+    window,
+    text = "",
+    bd=0,
+    bg="#F5F5F5",
+    fg="#000716",
+    font=("RobotoRoman Regular", 25 * -1)
+    )
+lbl_sexo.place(
+    x= 985.0,
+    y= 198.0,
+    width=108.0,
+    height=34.0
+)
 
+#EDAD
 canvas.create_text(
     600,
-    198.0,
+    195.0,
     anchor="nw",
     text="Edad : ",
     fill="#000000",
     font=("RobotoRoman Regular", 25 * -1)
 )
 
+lbl_edad=Label(
+    window,
+    text="",
+    bd=0,
+    bg="#F5F5F5",
+    fg="#000716",
+    font=("RobotoRoman Regular", 25 * -1)
+)
+lbl_edad.place(
+    x=707.6485595703125,
+    y=198.0,
+    width=108.0,
+    height=34.0
+)
+
+#PESO
 canvas.create_text(
     600,
     242.60400390625,
@@ -120,7 +176,22 @@ canvas.create_text(
     fill="#000000",
     font=("RobotoRoman Regular", 25 * -1)
 )
+lbl_peso = Label(
+    window,
+    text="",
+    bd=0,
+    bg="#F5F5F5",
+    fg="#000716",
+    font=("RobotoRoman Regular", 25 * -1)
+)
+lbl_peso.place(
+    x=707.6485595703125,
+    y=247.0,
+    width=108.0,
+    height=34.0
+)
 
+#ESTATURA
 canvas.create_text(
     862.0,
     247.0,
@@ -130,6 +201,22 @@ canvas.create_text(
     font=("RobotoRoman Regular", 25 * -1)
 )
 
+lbl_estatura = Label(
+    window,
+    text="",
+    bd=0,
+    bg="#F5F5F5",
+    fg="#000716",
+    font=("RobotoRoman Regular", 25 * -1)
+)
+lbl_estatura.place(
+    x=985.0,
+    y=247.0,
+    width=108.0,
+    height=34.0
+)
+
+#FECHA DE EMISION
 canvas.create_text(
     685.0,
     122.0,
@@ -138,23 +225,22 @@ canvas.create_text(
     fill="#000000",
     font=("RobotoRoman Regular", 25 * -1)
 )
-
-
-txb_nombre = Entry(
+lbl_fecha = Label(
+    window,
+    text="",
     bd=0,
-    bg="white",
+    bg="#F5F5F5",
     fg="#000716",
-    state="disabled",
-    highlightthickness=0
+    font=("RobotoRoman Regular", 25 * -1)
 )
-txb_nombre.place(
-    x=177.0,
-    y=198.0,
-    width=388.0,
+lbl_fecha.place(
+    x=946.0,
+    y=122.0,
+    width=250.0,
     height=34.0
 )
 
-
+#CODIGO DOCUMENTO
 txb_cod_doc = Entry(
     bd=0,
     bg="white",
@@ -168,150 +254,43 @@ txb_cod_doc.place(
     width=515.0,
     height=34.0
 )
-
-
-txb_fecha = Entry(
-    bd=0,
-    bg="white",
-    fg="#000716",
-    state="disabled",
-    highlightthickness=0
-)
-txb_fecha.place(
-    x=946.0,
-    y=122.0,
-    width=250.0,
-    height=34.0
-)
-
-txb_peso = Entry(
-    bd=0,
-    bg="white",
-    fg="#000716",
-    state="disabled",
-    highlightthickness=0
-)
-txb_peso.place(
-    x=707.6485595703125,
-    y=247.0,
-    width=108.0,
-    height=34.0
-)
-
-txb_edad = Entry(
-    bd=0,
-    bg="white",
-    fg="#000716",
-    state="disabled",
-    highlightthickness=0
-)
-txb_edad.place(
-    x=707.6485595703125,
-    y=198.0,
-    width=108.0,
-    height=34.0
-)
-
-
-txb_sexo = Entry(
-    bd=0,
-    bg="white",
-    fg="#000716",
-    state="disabled",
-    highlightthickness=0
-)
-txb_sexo.place(
-    x=985.0,
-    y=198.0,
-    width=108.0,
-    height=34.0
-)
-
-
-txb_estatura = Entry(
-    bd=0,
-    bg="white",
-    fg="#000716",
-    state="disabled",
-    highlightthickness=0
-)
-txb_estatura.place(
-    x=985.0,
-    y=247.0,
-    width=108.0,
-    height=34.0
-)
-
-
-#Aqui se colocara el progress bar para la escala de saturacion de oxigeno
-txb_escala_saturacion_oxigeno = Entry(
-    bd=0,
-    bg="white",
-    fg="#000716",
-    state="disabled",
-    highlightthickness=0
-)
-txb_escala_saturacion_oxigeno.place(
-    x=527.0,
-    y=478.0,
-    width=224.0,
-    height=34.0
-)
-
-#aqui se colocara el textbox que contiene el valor de la saturacion de oxigeno
-txb_valor_saturacion_oxigeno = Entry(
-    bd=0,
-    bg="white",
-    fg="#000716",
-    state="disabled",
-    highlightthickness=0
-)
-txb_valor_saturacion_oxigeno.place(
-    x=379.0,
-    y=480.0,
-    width=96.0,
-    height=34.0
-)
-
+#-- PARAMETROS FISIOLOGICOS --
+#region TITULOS COLUMNAS
 canvas.create_text(
-    56.0,
-    489.0,
+    50.0,
+    359.0,
     anchor="nw",
-    text="Saturación de Oxígeno",
+    text="Parámetro Fisiológico",
     fill="#000000",
     font=("RobotoRoman Regular", 25 * -1)
 )
+canvas.create_text(
+    400.0,
+    359.0,
+    anchor="nw",
+    text="Valor",
+    fill="#000000",
+    font=("RobotoRoman Regular", 25 * -1)
+)
+canvas.create_text(
+    600.0,
+    361.0,
+    anchor="nw",
+    text="Escala",
+    fill="#000000",
+    font=("RobotoRoman Regular", 25 * -1)
+)
+#endregion
 
-#Aqui se colora el progress bar para la escala de la temperatura
-txb_escala_temp = Entry(
-    bd=0,
-    bg="white",
-    fg="#000716",
-    state="disabled",
-    highlightthickness=0
+#region TEMPERATURA
+canvas.create_text(
+    162.0,
+    424.0,
+    anchor="nw",
+    text="Temperatura",
+    fill="#000000",
+    font=("RobotoRoman Regular", 25 * -1)
 )
-txb_escala_temp.place(
-    x=527.0,
-    y=415.0,
-    width=224.0,
-    height=34.0
-)
-
-#Aqui debe ir el textbox con el valor de la nota aclaratoria
-txb_nota = Entry(
-    bd=0,
-    bg="white",
-    fg="#000716",
-    state="disabled",
-    highlightthickness=0
-)
-txb_nota.place(
-    x=840.0,
-    y=417.0,
-    width=356.0,
-    height=214.0
-)
-
 #aqui se colocara el textbox con el valor de la temperatura
 txb_valor_temp = Entry(
     bd=0,
@@ -326,56 +305,113 @@ txb_valor_temp.place(
     width=96.0,
     height=34.0
 )
+#Aqui se colora el progress bar para la escala de la temperatura
 
+TROUGH_COLOR = '#F5F5F5'
+BAR_COLOR = 'yellow'
+sty = ttk.Style()
+sty.theme_use('clam')
+sty.configure("bar.Horizontal.TProgressbar", troughcolor=TROUGH_COLOR,
+                bordercolor=TROUGH_COLOR, background=BAR_COLOR, lightcolor=BAR_COLOR,
+                darkcolor=BAR_COLOR)
+
+
+pb_temperatura = ttk.Progressbar(window, orient=HORIZONTAL, length=300, mode='determinate', style="bar.Horizontal.TProgressbar")
+pb_temperatura.place(
+    x=527.0,
+    y=415.0,
+    width=224.0,
+    height=34.0
+)
+pb_temperatura['value']=50
+
+#endregion
+
+#region SATURACION DE OXIGENO
 canvas.create_text(
-    162.0,
-    424.0,
+    56.0,
+    489.0,
     anchor="nw",
-    text="Temperatura",
+    text="Saturación de Oxígeno",
     fill="#000000",
     font=("RobotoRoman Regular", 25 * -1)
 )
-
-canvas.create_text(
-    50.0,
-    359.0,
-    anchor="nw",
-    text="Parámetro Fisiológico",
-    fill="#000000",
-    font=("RobotoRoman Regular", 25 * -1)
-)
-
-canvas.create_text(
-    600.0,
-    361.0,
-    anchor="nw",
-    text="Escala",
-    fill="#000000",
-    font=("RobotoRoman Regular", 25 * -1)
-)
-
-canvas.create_text(
-    400.0,
-    359.0,
-    anchor="nw",
-    text="Valor",
-    fill="#000000",
-    font=("RobotoRoman Regular", 25 * -1)
-)
-
-#aqui debe ir el progress bar para colocar la frecuencia cardiaca
-txb_escala_frecuencia_cardiaca = Entry(
+#aqui se colocara el textbox que contiene el valor de la saturacion de oxigeno
+txb_valor_saturacion_oxigeno = Entry(
     bd=0,
     bg="white",
     fg="#000716",
     state="disabled",
     highlightthickness=0
 )
-txb_escala_frecuencia_cardiaca.place(
+txb_valor_saturacion_oxigeno.place(
+    x=379.0,
+    y=480.0,
+    width=96.0,
+    height=34.0
+)
+#Aqui se colocara el progress bar para la escala de saturacion de oxigeno
+txb_escala_saturacion_oxigeno = Entry(
+    bd=0,
+    bg="white",
+    fg="#000716",
+    state="disabled",
+    highlightthickness=0
+)
+txb_escala_saturacion_oxigeno.place(
     x=527.0,
-    y=597.0,
+    y=478.0,
     width=224.0,
-    height=34.0,
+    height=34.0
+)
+#endregion
+
+#region PRESION ARTERIAL
+canvas.create_text(
+    137.0,
+    549.0,
+    anchor="nw",
+    text="Presión Arterial ",
+    fill="#000000",
+    font=("RobotoRoman Regular", 25 * -1)
+)
+#aqui va el textbox del valor correspondiente a la presion arterial
+txb_valor_presion_arterial = Entry(
+    bd=0,
+    bg="white",
+    fg="#000716",
+    state="disabled",
+    highlightthickness=0
+)
+txb_valor_presion_arterial.place(
+    x=379.0,
+    y=540.0,
+    width=96.0,
+    height=34.0
+)
+#aqui va el progress bar de la presion arterial
+txb_escala_presion_arterial = Entry(
+    bd=0,
+    bg="white",
+    state="disabled",
+    highlightthickness=0
+)
+txb_escala_presion_arterial.place(
+    x=527.0,
+    y=538.0,
+    width=224.0,
+    height=34.0
+)
+#endregion
+
+#region FRECUENCIA CARDIACA
+canvas.create_text(
+    70.0,
+    608.0,
+    anchor="nw",
+    text="Frecuencia Cardiaca ",
+    fill="#000000",
+    font=("RobotoRoman Regular", 25 * -1)
 )
 
 #aqui va el valor correspondiente a la medicion de la frecuencia cardiaca
@@ -392,70 +428,23 @@ txb_valor_frecuencia_cardiaca.place(
     width=96.0,
     height=34.0
 )
-
-canvas.create_text(
-    70.0,
-    608.0,
-    anchor="nw",
-    text="Frecuencia Cardiaca ",
-    fill="#000000",
-    font=("RobotoRoman Regular", 25 * -1)
-)
-
-#aqui va el progress bar de la presion arterial
-txb_escala_presion_arterial = Entry(
-    bd=0,
-    bg="white",
-    state="disabled",
-    highlightthickness=0
-)
-txb_escala_presion_arterial.place(
-    x=527.0,
-    y=538.0,
-    width=224.0,
-    height=34.0
-)
-
-#aqui va el textbox del valor correspondiente a la presion arterial
-txb_valor_presion_arterial = Entry(
+#aqui debe ir el progress bar para colocar la frecuencia cardiaca
+txb_escala_frecuencia_cardiaca = Entry(
     bd=0,
     bg="white",
     fg="#000716",
     state="disabled",
     highlightthickness=0
 )
-txb_valor_presion_arterial.place(
-    x=379.0,
-    y=540.0,
-    width=96.0,
-    height=34.0
+txb_escala_frecuencia_cardiaca.place(
+    x=527.0,
+    y=597.0,
+    width=224.0,
+    height=34.0,
 )
+#endregion
 
-canvas.create_text(
-    137.0,
-    549.0,
-    anchor="nw",
-    text="Presión Arterial ",
-    fill="#000000",
-    font=("RobotoRoman Regular", 25 * -1)
-)
-
-button_image_2 = PhotoImage(
-    file=relative_to_assets("button_2.png"))
-button_2 = Button(
-    image=button_image_2,
-    borderwidth=0,
-    highlightthickness=0,
-    command=lambda: print("button_2 clicked"),
-    relief="flat"
-)
-button_2.place(
-    x=840.0,
-    y=657.0,
-    width=431.851318359375,
-    height=68.0
-)
-
+#region NOTA ACLARATORIA
 canvas.create_text(
     837.0,
     359.0,
@@ -464,5 +453,39 @@ canvas.create_text(
     fill="#000000",
     font=("RobotoRoman Regular", 30 * -1)
 )
+#Aqui debe ir el textbox con el valor de la nota aclaratoria
+txb_nota = Entry(
+    bd=0,
+    bg="white",
+    fg="#000716",
+    state="disabled",
+    highlightthickness=0
+)
+txb_nota.place(
+    x=840.0,
+    y=417.0,
+    width=356.0,
+    height=214.0
+)
+#endregion
+
+#region BOTON GUARDAR
+img_guardar = PhotoImage(
+    file=relative_to_assets("button_2.png"))
+btn_guardar = Button(
+    image=img_guardar,
+    borderwidth=0,
+    highlightthickness=0,
+    command=lambda: print("button_2 clicked"),
+    relief="flat"
+)
+btn_guardar.place(
+    x=840.0,
+    y=657.0,
+    width=431.851318359375,
+    height=68.0
+)
+#endregion
+
 window.resizable(False, False)
 window.mainloop()
