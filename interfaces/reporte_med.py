@@ -11,7 +11,7 @@ from tkinter import Tk, ttk, Canvas, Entry, Text, Button, PhotoImage, HORIZONTAL
 
 
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path(r"C:\Users\Angel\Monitor-Fisiologico\interfaces\assets\reporte_med")
+ASSETS_PATH = OUTPUT_PATH / Path(r"C:\Users\Miguel Ángel Ramírez\OneDrive - INTEC\Escritorio\Monitor-Fisiologico\Monitor-Fisiologico\interfaces\assets\reporte_med")
 
 
 def relative_to_assets(path: str) -> Path:
@@ -372,9 +372,6 @@ def fill_progress_saturacion_oxigeno():
     return 50
 pb_saturacion_oxigeno['value'] =  fill_progress_saturacion_oxigeno()
 
-
-
-
 #endregion
 
 #region PRESION ARTERIAL
@@ -406,21 +403,6 @@ lbl_presion_arterial.place(
 
 #aqui va el progress bar de la presion arterial
 
-lbl_saturacion_oxigeno = Label(
-    window,
-    text = "",
-    bd=0,
-    bg="#F5F5F5",
-    fg="#000716",
-    font=("RobotoRoman Regular", 25 * -1)
-)
-lbl_saturacion_oxigeno.place(
-    x=379.0,
-    y=480.0,
-    width=96.0,
-    height=34.0
-)
-
 TROUGH_COLOR = '#F5F5F5'
 BAR_COLOR = 'red'
 sty = ttk.Style()
@@ -440,6 +422,8 @@ def fill_progress_presion_arterial():
     return 50
 pb_presion_arterial['value'] =  fill_progress_presion_arterial()
 #####################
+
+#endregion
 
 
 #region FRECUENCIA CARDIACA
@@ -468,19 +452,32 @@ lbl_frecuencia_cardiaca.place(
     height=34.0
 )
 #aqui debe ir el progress bar para colocar la frecuencia cardiaca
-txb_escala_frecuencia_cardiaca = Entry(
-    bd=0,
-    bg="white",
-    fg="#000716",
-    state="disabled",
-    highlightthickness=0
-)
-txb_escala_frecuencia_cardiaca.place(
+
+TROUGH_COLOR = '#F5F5F5'
+BAR_COLOR = 'red'
+sty = ttk.Style()
+sty.theme_use('clam')
+sty.configure("bar.Horizontal.TProgressbar", troughcolor=TROUGH_COLOR,
+                bordercolor=TROUGH_COLOR, background=BAR_COLOR, lightcolor=BAR_COLOR,
+                darkcolor=BAR_COLOR)
+
+
+pb_frecuencia_cardiaca = ttk.Progressbar(window, orient=HORIZONTAL, mode='determinate', style="bar.Horizontal.TProgressbar")
+pb_frecuencia_cardiaca.place(
     x=527.0,
     y=597.0,
     width=224.0,
     height=34.0,
 )
+def fill_progress_saturacion_oxigeno():
+    return 50
+pb_frecuencia_cardiaca['value'] =  fill_progress_saturacion_oxigeno()
+
+#####################################
+
+
+
+
 #endregion
 
 #region NOTA ACLARATORIA
