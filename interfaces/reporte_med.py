@@ -9,8 +9,6 @@ from pathlib import Path
 # Explicit imports to satisfy Flake8
 from tkinter import Tk, ttk, Canvas, Entry, Text, Button, PhotoImage, HORIZONTAL, StringVar, Label
 
-import style as style
-import tk as tk
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"C:\Users\Angel\Monitor-Fisiologico\interfaces\assets\reporte_med")
@@ -92,8 +90,6 @@ canvas.create_text(
 #Ordenados por label (Nombres:) y luego textbox (Ricardo Jose).
 
 #NOMBRES
-textito = StringVar()
-textito.set("This is the default text")
 canvas.create_text(
     50.0,
     195.0,
@@ -102,16 +98,15 @@ canvas.create_text(
     fill="#000000",
     font=("RobotoRoman Regular", 25 * -1)
 )
-txb_nombre = Entry(
+lbl_nombre = Label(
+    window,
+    text="",
     bd=0,
-    bg="white",
+    bg="#F5F5F5",
     fg="#000716",
-    state="disabled",
-    textvariable = textito,
-    highlightthickness=0
+    font=("RobotoRoman Regular", 25 * -1)
 )
-
-txb_nombre.place(
+lbl_nombre.place(
     x=177.0,
     y=198.0,
     width=388.0,
@@ -241,14 +236,15 @@ lbl_fecha.place(
 )
 
 #CODIGO DOCUMENTO
-txb_cod_doc = Entry(
+lbl_cod_doc = Label(
+    window,
+    text="",
     bd=0,
-    bg="white",
+    bg="#F5F5F5",
     fg="#000716",
-    state="disabled",
-    highlightthickness=0
+    font=("RobotoRoman Regular", 25 * -1)
 )
-txb_cod_doc.place(
+lbl_cod_doc.place(
     x=50.0,
     y=247.0,
     width=515.0,
@@ -454,14 +450,15 @@ canvas.create_text(
     font=("RobotoRoman Regular", 30 * -1)
 )
 #Aqui debe ir el textbox con el valor de la nota aclaratoria
-txb_nota = Entry(
+lbl_nota = Label(
+    window,
+    text="",
     bd=0,
-    bg="white",
+    bg="#F5F5F5",
     fg="#000716",
-    state="disabled",
-    highlightthickness=0
+    font=("RobotoRoman Regular", 25 * -1)
 )
-txb_nota.place(
+lbl_nota.place(
     x=840.0,
     y=417.0,
     width=356.0,
