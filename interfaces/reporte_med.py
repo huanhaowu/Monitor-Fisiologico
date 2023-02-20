@@ -13,6 +13,7 @@ from tkinter import Tk, ttk, Canvas, Entry, Text, Button, PhotoImage, HORIZONTAL
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"C:\Users\Angel\Monitor-Fisiologico\interfaces\assets\reporte_med")
 
+
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
@@ -288,23 +289,23 @@ canvas.create_text(
     font=("RobotoRoman Regular", 25 * -1)
 )
 #aqui se colocara el textbox con el valor de la temperatura
-txb_valor_temp = Entry(
+lbl_temperatura = Label(
+    window,
+    text = "",
     bd=0,
-    bg="white",
+    bg="#F5F5F5",
     fg="#000716",
-    state="disabled",
-    highlightthickness=0
+    font=("RobotoRoman Regular", 25 * -1)
 )
-txb_valor_temp.place(
+lbl_temperatura.place(
     x=379.0,
     y=417.0,
     width=96.0,
     height=34.0
 )
 #Aqui se colora el progress bar para la escala de la temperatura
-
 TROUGH_COLOR = '#F5F5F5'
-BAR_COLOR = 'yellow'
+BAR_COLOR = 'red'
 sty = ttk.Style()
 sty.theme_use('clam')
 sty.configure("bar.Horizontal.TProgressbar", troughcolor=TROUGH_COLOR,
@@ -312,14 +313,17 @@ sty.configure("bar.Horizontal.TProgressbar", troughcolor=TROUGH_COLOR,
                 darkcolor=BAR_COLOR)
 
 
-pb_temperatura = ttk.Progressbar(window, orient=HORIZONTAL, length=300, mode='determinate', style="bar.Horizontal.TProgressbar")
+pb_temperatura = ttk.Progressbar(window, orient=HORIZONTAL, mode='determinate', style="bar.Horizontal.TProgressbar")
 pb_temperatura.place(
     x=527.0,
     y=415.0,
     width=224.0,
     height=34.0
 )
-pb_temperatura['value']=50
+def fill_progress_temp():
+    return 50
+pb_temperatura['value'] =  fill_progress_temp()
+
 
 #endregion
 
@@ -333,33 +337,46 @@ canvas.create_text(
     font=("RobotoRoman Regular", 25 * -1)
 )
 #aqui se colocara el textbox que contiene el valor de la saturacion de oxigeno
-txb_valor_saturacion_oxigeno = Entry(
+lbl_saturacion_oxigeno = Label(
+    window,
+    text = "",
     bd=0,
-    bg="white",
+    bg="#F5F5F5",
     fg="#000716",
-    state="disabled",
-    highlightthickness=0
+    font=("RobotoRoman Regular", 25 * -1)
 )
-txb_valor_saturacion_oxigeno.place(
+lbl_saturacion_oxigeno.place(
     x=379.0,
     y=480.0,
     width=96.0,
     height=34.0
 )
+
+
 #Aqui se colocara el progress bar para la escala de saturacion de oxigeno
-txb_escala_saturacion_oxigeno = Entry(
-    bd=0,
-    bg="white",
-    fg="#000716",
-    state="disabled",
-    highlightthickness=0
-)
-txb_escala_saturacion_oxigeno.place(
+TROUGH_COLOR = '#F5F5F5'
+BAR_COLOR = 'red'
+sty = ttk.Style()
+sty.theme_use('clam')
+sty.configure("bar.Horizontal.TProgressbar", troughcolor=TROUGH_COLOR,
+                bordercolor=TROUGH_COLOR, background=BAR_COLOR, lightcolor=BAR_COLOR,
+                darkcolor=BAR_COLOR)
+
+
+pb_saturacion_oxigeno = ttk.Progressbar(window, orient=HORIZONTAL, mode='determinate', style="bar.Horizontal.TProgressbar")
+pb_saturacion_oxigeno.place(
     x=527.0,
     y=478.0,
     width=224.0,
     height=34.0
 )
+def fill_progress_temp():
+    return 50
+pb_saturacion_oxigeno['value'] =  fill_progress_temp()
+
+
+
+
 #endregion
 
 #region PRESION ARTERIAL
@@ -372,14 +389,16 @@ canvas.create_text(
     font=("RobotoRoman Regular", 25 * -1)
 )
 #aqui va el textbox del valor correspondiente a la presion arterial
-txb_valor_presion_arterial = Entry(
+lbl_presion_arterial = Label(
+    window,
+    text = "",
     bd=0,
-    bg="white",
+    bg="#F5F5F5",
     fg="#000716",
-    state="disabled",
-    highlightthickness=0
+    font=("RobotoRoman Regular", 25 * -1)
 )
-txb_valor_presion_arterial.place(
+
+lbl_presion_arterial.place(
     x=379.0,
     y=540.0,
     width=96.0,
@@ -411,14 +430,15 @@ canvas.create_text(
 )
 
 #aqui va el valor correspondiente a la medicion de la frecuencia cardiaca
-txb_valor_frecuencia_cardiaca = Entry(
+lbl_frecuencia_cardiaca = Label(
+    window,
+    text = "",
     bd=0,
-    bg="white",
+    bg="#F5F5F5",
     fg="#000716",
-    state="disabled",
-    highlightthickness=0
+    font=("RobotoRoman Regular", 25 * -1)
 )
-txb_valor_frecuencia_cardiaca.place(
+lbl_frecuencia_cardiaca.place(
     x=379.0,
     y=597.0,
     width=96.0,
@@ -473,7 +493,7 @@ btn_guardar = Button(
     image=img_guardar,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("button_2 clicked"),
+    command = lambda: print("button_2 clicked"),
     relief="flat"
 )
 btn_guardar.place(
