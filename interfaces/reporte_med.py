@@ -351,8 +351,6 @@ lbl_saturacion_oxigeno.place(
     width=96.0,
     height=34.0
 )
-
-
 #Aqui se colocara el progress bar para la escala de saturacion de oxigeno
 TROUGH_COLOR = '#F5F5F5'
 BAR_COLOR = 'red'
@@ -370,9 +368,9 @@ pb_saturacion_oxigeno.place(
     width=224.0,
     height=34.0
 )
-def fill_progress_temp():
+def fill_progress_saturacion_oxigeno():
     return 50
-pb_saturacion_oxigeno['value'] =  fill_progress_temp()
+pb_saturacion_oxigeno['value'] =  fill_progress_saturacion_oxigeno()
 
 
 
@@ -388,6 +386,7 @@ canvas.create_text(
     fill="#000000",
     font=("RobotoRoman Regular", 25 * -1)
 )
+
 #aqui va el textbox del valor correspondiente a la presion arterial
 lbl_presion_arterial = Label(
     window,
@@ -404,20 +403,44 @@ lbl_presion_arterial.place(
     width=96.0,
     height=34.0
 )
+
 #aqui va el progress bar de la presion arterial
-txb_escala_presion_arterial = Entry(
+
+lbl_saturacion_oxigeno = Label(
+    window,
+    text = "",
     bd=0,
-    bg="white",
-    state="disabled",
-    highlightthickness=0
+    bg="#F5F5F5",
+    fg="#000716",
+    font=("RobotoRoman Regular", 25 * -1)
 )
-txb_escala_presion_arterial.place(
+lbl_saturacion_oxigeno.place(
+    x=379.0,
+    y=480.0,
+    width=96.0,
+    height=34.0
+)
+
+TROUGH_COLOR = '#F5F5F5'
+BAR_COLOR = 'red'
+sty = ttk.Style()
+sty.theme_use('clam')
+sty.configure("bar.Horizontal.TProgressbar", troughcolor=TROUGH_COLOR,
+                bordercolor=TROUGH_COLOR, background=BAR_COLOR, lightcolor=BAR_COLOR,
+                darkcolor=BAR_COLOR)
+
+pb_presion_arterial = ttk.Progressbar(window, orient=HORIZONTAL, mode='determinate', style="bar.Horizontal.TProgressbar")
+pb_presion_arterial.place(
     x=527.0,
     y=538.0,
     width=224.0,
     height=34.0
 )
-#endregion
+def fill_progress_presion_arterial():
+    return 50
+pb_presion_arterial['value'] =  fill_progress_presion_arterial()
+#####################
+
 
 #region FRECUENCIA CARDIACA
 canvas.create_text(
