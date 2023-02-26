@@ -383,7 +383,8 @@ class ReporteMed():
             fill="#000000",
             font=("RobotoRoman Regular", 25 * -1)
         )
-
+        #endregion
+        
         # aqui va el textbox del valor correspondiente a la presion arterial
         self.lbl_presion_arterial = Label(
             self.window,
