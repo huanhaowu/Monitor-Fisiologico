@@ -128,11 +128,6 @@ class LoginSujEstudio():
 
         self.window.resizable(False, False)
         self.window.mainloop()
-#Funcion para abrir otro formulario
-    def ejecutar_Script(self):  
-        pass
-        #os.system('registro.py')
-        #print('Abriendo registro...')
         
         
 if __name__ == '__main__':

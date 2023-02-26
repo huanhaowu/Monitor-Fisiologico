@@ -1,4 +1,4 @@
-class Sujetos_Estudio:
+class SujetosEstudio:
      def __init__(self, id_sujeto, nombres, apellidos, fecha_nacimiento, tipo_documento, codigo_documento, sexo, genero, orientacion_sexual, nacionalidad, provincia, correo, fecha_creacion, condiciones_medicas):
         self.id_sujeto = id_sujeto
         self.nombres = nombres
