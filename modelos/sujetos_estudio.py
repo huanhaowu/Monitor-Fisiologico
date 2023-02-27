@@ -1,5 +1,5 @@
 class SujetosEstudio:
-     def __init__(self, id_sujeto, nombres, apellidos, fecha_nacimiento, tipo_documento, codigo_documento, sexo, genero, orientacion_sexual, nacionalidad, provincia, correo, fecha_creacion, condiciones_medicas):
+     def __init__(self, tipo_documento, codigo_documento, id_sujeto = 0, nombres = "", apellidos = "", fecha_nacimiento = None, sexo = None, genero = None, orientacion_sexual = None, nacionalidad = None, provincia = None, correo = "", fecha_creacion = None, condiciones_medicas = []):
         self.id_sujeto = id_sujeto
         self.nombres = nombres
         self.apellidos = apellidos

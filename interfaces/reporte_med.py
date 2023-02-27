@@ -13,14 +13,14 @@ def relative_to_assets(path: str) -> Path:
 
 # Clase del formulario
 class ReporteMed():
-     def __init__(self, sujeto, mediciones):
+    def __init__(self, sujeto, mediciones):
         # Datos a mostrar dentro del formulario
         self.sujeto = sujeto
         self.mediciones = mediciones
         
         # Iniciacion de la pantalla
         self.window = Tk()
-        self.window.geometry("1260x725")
+        self.window.geometry("1260x725+{}+{}".format(self.window.winfo_screenwidth() // 2 - 1260 // 2, self.window.winfo_screenheight() // 2 - 725 // 2))
         self.window.configure(bg="#FFFFFF")
 
         self.canvas = Canvas(
@@ -41,7 +41,7 @@ class ReporteMed():
             image=self.img_regresar,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_1 clicked"),
+            command=lambda: self.abrir_menu(),
             relief="flat",
             bg="white"
         )
@@ -531,5 +531,8 @@ class ReporteMed():
         # endregion
         self.window.resizable(False, False)
         self.window.mainloop()
-
-
+    
+    def abrir_menu(self):  
+        from interfaces.menu_med import MenuMed
+        self.window.destroy()
+        menu = MenuMed(self.sujeto, self.mediciones)
