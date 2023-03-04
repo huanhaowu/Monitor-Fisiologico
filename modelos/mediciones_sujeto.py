@@ -13,10 +13,21 @@ class MedicionesSujeto:
 
     def guardar_medicion(self, sujeto, peso_sujeto, altura_sujeto, fecha_medicion, parametros_medidos):
         bd = Conexion()
+        self.sujeto = sujeto
+        self.peso_sujeto = peso_sujeto
+        self.altura_sujeto = altura_sujeto
+        self.fecha_medicion = fecha_medicion
+        self.parametros_medidos = parametros_medidos
         bd.execute_command(
             "INSERT INTO Mediciones_Sujeto (id_sujeto, peso_sujeto, altura_sujeto, fecha_medicion) VALUES (?,?,?,?)", 
-            [sujeto.id_sujeto, peso_sujeto, altura_sujeto, fecha_medicion])
-        pass
+            [self.sujeto.id_sujeto, self.peso_sujeto, self.altura_sujeto, self.fecha_medicion])
+
+        self.id_medicion = int(bd.execute_query("SELECT MAX(id_medicion) FROM Mediciones_Sujeto")[0][0]) 
+        if self.id_medicion:
+            for parametro in parametros_medidos:
+                bd.execute_command(
+                    "INSERT INTO Medicion_Parametro (id_medicion, id_parametro_fisiologico, medida_parametro_fisiologico) VALUES (?,?,?)",
+                [self.id_medicion, parametro.parametro.id_parametro_fisiologico, parametro.medida_parametro_fisiologico])
 
     def cargar_datos_medicion(self, id_medicion):
         bd = Conexion()
@@ -53,7 +64,13 @@ class MedicionesSujeto:
             mp = MedicionParametro(parametro[0], p, parametro[10])
             self.parametros_medidos.append(mp)
 
-prueba = MedicionesSujeto()
-sujeto = SujetosEstudio(1,"0000000", id_sujeto=1)
-prueba.cargar_ultima_medicion_sujeto(sujeto)
-print(prueba)
+#prueba = MedicionesSujeto()
+#sujeto = SujetosEstudio(1,"0000000", id_sujeto=1)
+#prueba.guardar_medicion(
+#    sujeto,180,5.8,"2021-05-01", 
+#    [
+#        MedicionParametro(0, ParametrosFisiologicos(1, "Pulso", 60, 100, 0, 0, 0, 0, "Instrucciones"), 80), 
+#        MedicionParametro(0, ParametrosFisiologicos(2, "Temperatura", 36, 37, 0, 0, 0, 0, "Instrucciones"), 36.5)
+#    ]
+#)
+#print(prueba)

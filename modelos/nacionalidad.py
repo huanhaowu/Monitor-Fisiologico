@@ -9,3 +9,6 @@ class Nacionalidad:
         bd = Conexion()
         resultado = bd.execute_query("SELECT * FROM Nacionalidad")
         return resultado
+
+prueba = Nacionalidad()
+print(prueba.obtener_lista_nacionalidades())
