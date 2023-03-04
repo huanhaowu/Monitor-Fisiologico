@@ -1,3 +1,4 @@
+from conexion import Conexion
 class Nacionalidad:
     
     def __init__(self, id_nacionalidad = 0, descripcion = ""):
@@ -5,4 +6,6 @@ class Nacionalidad:
         self.descripcion = descripcion
 
     def obtener_lista_nacionalidades(self):
-        pass
+        bd = Conexion()
+        resultado = bd.execute_query("SELECT * FROM Nacionalidad")
+        return resultado
