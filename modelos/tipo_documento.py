@@ -1,3 +1,5 @@
+from conexion import Conexion
+
 class TipoDocumento:
     
     def __init__(self,id_TipoDocumento = 0,descripción = ""):
@@ -5,4 +7,6 @@ class TipoDocumento:
         self.descripcion = descripción
     
     def obtener_lista_tipo_documento(self):
-        pass
+        bd = Conexion()
+        resultado = bd.execute_query("SELECT * FROM Tipo_Documento")
+        return resultado

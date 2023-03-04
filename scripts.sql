@@ -131,7 +131,7 @@ CREATE TABLE Sujetos_Estudio (
     id_genero INTEGER NOT NULL,
     id_orientacion_sexual INTEGER NOT NULL,
     id_nacionalidad INTEGER NOT NULL,
-    provincia TEXT NOT NULL,
+    id_provincia INTEGER NOT NULL,
     correo_electronico TEXT NOT NULL,
     FOREIGN KEY (id_tipo_documento)
     REFERENCES Tipo_documento(id_tipo_documento),
@@ -143,6 +143,8 @@ CREATE TABLE Sujetos_Estudio (
     REFERENCES Orientacion_sexual(id_orientacion_sexual),
     FOREIGN KEY (id_nacionalidad)
     REFERENCES Nacionalidad(id_nacionalidad),
+    FOREIGN KEY (id_provincia)
+    REFERENCES Provincia(id_provincia),
     UNIQUE(id_tipo_documento, codigo_documento)
 );
 
