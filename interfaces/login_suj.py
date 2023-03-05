@@ -100,6 +100,9 @@ class LoginSujEstudio():
             font = ("RobotoRoman Regular", 25 * -1)
         )
 
+        #Provocando que el documento inicial sea la cedula
+        self.cb_tipo_doc.current(0)
+
         #Locación del ComboBox para el tipo de documento
         self.cb_tipo_doc.place(
             x=421.0,
