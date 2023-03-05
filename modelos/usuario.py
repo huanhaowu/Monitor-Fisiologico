@@ -19,20 +19,11 @@ class Usuario:
     
     def ingresar(self, usuario, clave):
        bd = Conexion()
-       resultado = bd.execute_query("SELECT * FROM Usuarios WHERE usuario = ? AND contrasena = ?", [self.usuario, self.clave])
+       resultado = bd.execute_query("SELECT usuario, contrasena FROM Usuarios WHERE usuario = ? AND contrasena = ?", [self.usuario, self.clave])
        
        if resultado:
-            self.id_usuario = resultado[0][0]
-            self.nombre = resultado[0][1]
-            self.apellido = resultado[0][2]
-            self.fecha_nacimiento = resultado[0][3]
-            self.clave = resultado[0][5]
-            self.id_creador = resultado[0][6]
-            self.correo_electronico = resultado[0][7]
-            self.telefono = resultado[0][8]
-            self.activo = resultado[0][9]
-            self.fecha_creacion = resultado[0][10]
-            
+            self.usuario = resultado[0][0]
+            self.clave = resultado[0][1]
             return True
        else:
             return False
