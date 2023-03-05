@@ -33,6 +33,9 @@ class SujetosEstudio:
         if resultado:
             self.tipo_documento = TipoDocumento(resultado[0][0])
             self.codigo_documento = resultado[0][1]
+            return True
+        else:
+            return False
      
      def registrar(self, nombres, apellidos, fecha_nacimiento, tipo_documento, codigo_documento, sexo, genero, orientacion_sexual, nacionalidad, provincia, correo, condiciones_medicas):
         bd = Conexion()
@@ -60,5 +63,5 @@ class SujetosEstudio:
                     [self.id_sujeto, parametro.parametro.id_condicion_medicas]
                 )
      
-     def agregar_condiciones(self, condicion):
-        return 0
+     #def agregar_condiciones(self, condicion):
+        #return 0
