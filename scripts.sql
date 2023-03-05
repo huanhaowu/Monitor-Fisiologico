@@ -250,7 +250,7 @@ INSERT INTO Condiciones_Medicas (descripcion) VALUES ('Enfermedad Pulmonar Obstr
 INSERT INTO Condiciones_Medicas (descripcion) VALUES ('Insuficiencia Cardiaca');
 
 -- Condicion_Parametro
-INSERT INTO Condicion_Parametro (id_condicion_medica, id_parametro_fisiologico) 
+INSERT INTO Condicion_Parametro (id_parametro_fisiologico, id_condicion_medica) 
 VALUES 
 (1, 3), (1, 6),
 (2, 1), (2, 2), (2, 3), (2, 5), (2, 6), (2, 7), (2, 8), (2, 9), (2, 10), (2, 11), (2, 12), (2, 14),
