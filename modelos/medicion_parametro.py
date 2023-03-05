@@ -1,4 +1,4 @@
-from parametros_fisiologicos import ParametrosFisiologicos
+from modelos.parametros_fisiologicos import ParametrosFisiologicos
 class MedicionParametro:
     def __init__(self, id_detalle_medicion = 0, parametro = None, medida_parametro_fisiologico = 0):
         self.id_detalle_medicion = id_detalle_medicion

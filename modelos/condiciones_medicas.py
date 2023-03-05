@@ -1,5 +1,5 @@
-from conexion import Conexion
-from parametros_fisiologicos import ParametrosFisiologicos
+from modelos.conexion import Conexion
+from modelos.parametros_fisiologicos import ParametrosFisiologicos
 class CondicionesMedicas:
     def __init__(self, id_condicion_medica = 0, descripcion = "", parametros = []):
         self.id_condicion_medica = id_condicion_medica

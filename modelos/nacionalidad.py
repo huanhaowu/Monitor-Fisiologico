@@ -1,4 +1,4 @@
-from conexion import Conexion
+from modelos.conexion import Conexion
 class Nacionalidad:
     
     def __init__(self, id_nacionalidad = 0, descripcion = ""):

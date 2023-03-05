@@ -1,7 +1,7 @@
-from conexion import Conexion
-from medicion_parametro import MedicionParametro
-from parametros_fisiologicos import ParametrosFisiologicos
-from sujetos_estudio import SujetosEstudio
+from modelos.conexion import Conexion
+from modelos.medicion_parametro import MedicionParametro
+from modelos.parametros_fisiologicos import ParametrosFisiologicos
+from modelos.sujetos_estudio import SujetosEstudio
 class MedicionesSujeto:
     def __init__(self, id_medicion = 0, sujeto = None, peso_sujeto = 0, altura_sujeto = 0, fecha_medicion = None, parametros_medidos = []):
         self.id_medicion = id_medicion
