@@ -1,5 +1,6 @@
 from pathlib import Path
-from tkinter import Tk, ttk, Canvas, Entry, Text, Button, PhotoImage
+from tkinter import Tk, ttk, Canvas, Entry, Text, Button, PhotoImage, StringVar
+from modelos.tipo_documento import TipoDocumento as td
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"assets/login_suj")
@@ -68,7 +69,7 @@ class LoginSujEstudio():
             image=self.imagen_btn_acceder,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: self.abrir_registro(),
+            command=lambda: self.abrir_registro(self.cb_tipo_doc.current(), self.txb_codigo_doc.get()),
             relief="flat",
             bg = "white"
         )
@@ -88,12 +89,17 @@ class LoginSujEstudio():
             image=self.imagen_logo_app
         )
 
+        #Inicializando variable para obtener lista de tipo_documento permitidos
+        tipo_documento = td()
+        lista_tipo_documento = tipo_documento.obtener_lista_tipo_documento()
+
         #Aqui va el ComboBox para el tipo de documento
         self.cb_tipo_doc = ttk.Combobox(
             state = "readonly",
-            value = ["Cédula","Pasaporte"],
+            value = lista_tipo_documento,
             font = ("RobotoRoman Regular", 25 * -1)
         )
+
         #Locación del ComboBox para el tipo de documento
         self.cb_tipo_doc.place(
             x=421.0,
@@ -101,7 +107,7 @@ class LoginSujEstudio():
             width=404.0,
             height=52.0
         )
-
+        
         #Aqui va el textbox para el codigo de documetno
         self.txb_codigo_doc = Entry(
             bd=1,
@@ -110,6 +116,7 @@ class LoginSujEstudio():
             highlightthickness=0,
             font = ("RobotoRoman Regular", 25 * -1)
         )
+        
         #Localización del textbox para el codigo de documento
         self.txb_codigo_doc.place(
             x=420.0,
@@ -120,11 +127,12 @@ class LoginSujEstudio():
 
         self.window.resizable(False, False)
         self.window.mainloop()
+
     
-    def abrir_registro(self):
-        from interfaces.registro_suj import RegistroSujeto
+    def abrir_registro(self, id_tipo_documento = 0, descripcion = ""):
+        from interfaces.registro_suj import RegistroSujeto as rs
         self.window.destroy()
-        from modelos.tipo_documento import TipoDocumento
-        tipo_documento = TipoDocumento(1, "Cédula")
-        registro = RegistroSujeto(tipo_documento,"Documento")
+        rs(id_tipo_documento,descripcion)
+        
+    
         

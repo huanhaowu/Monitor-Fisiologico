@@ -1,4 +1,4 @@
-from conexion import Conexion
+from modelos.conexion import Conexion
 
 class TipoDocumento:
     
@@ -8,5 +8,6 @@ class TipoDocumento:
     
     def obtener_lista_tipo_documento(self):
         bd = Conexion()
-        resultado = bd.execute_query("SELECT * FROM Tipo_Documento")
+        
+        resultado = bd.execute_query("SELECT descripcion FROM Tipo_Documento")
         return resultado
