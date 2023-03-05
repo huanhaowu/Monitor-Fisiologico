@@ -69,7 +69,7 @@ class LoginSujEstudio():
             image=self.imagen_btn_acceder,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: self.abrir_registro(self.cb_tipo_doc.current(), self.txb_codigo_doc.get()),
+            command=lambda: self.abrir_registro(self.cb_tipo_doc.get(), self.txb_codigo_doc.get()),
             relief="flat",
             bg = "white"
         )
