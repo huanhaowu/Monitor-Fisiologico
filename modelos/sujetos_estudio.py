@@ -30,7 +30,7 @@ class SujetosEstudio:
         bd = Conexion()
         resultado = bd.execute_query('''SELECT id_tipo_documento, codigo_documento
                             FROM Sujetos_Estudio
-                            WHERE id_tipo_documento = ? AND codigo_documento = ?''', [codigo_documento, tipo_documento])
+                            WHERE id_tipo_documento = ? AND codigo_documento = ?''', [self.codigo_documento, self.tipo_documento])
         if resultado:
             self.tipo_documento = TipoDocumento(resultado[0][0])
             self.codigo_documento = resultado[0][1]
