@@ -29,7 +29,7 @@ class SujetosEstudio:
         bd = Conexion()
         resultado = bd.execute_query('''SELECT id_tipo_documento, codigo_documento
                             FROM Sujetos_Estudio
-                            WHERE id_tipo_documento = ? AND codigo_documento = ?''', [self.tipo_documento, self.codigo_documento])
+                            WHERE id_tipo_documento = ? AND codigo_documento = ?''', [codigo_documento, tipo_documento])
         if resultado:
             self.tipo_documento = TipoDocumento(resultado[0][0])
             self.codigo_documento = resultado[0][1]
@@ -51,6 +51,7 @@ class SujetosEstudio:
         self.provincia = provincia
         self.correo = correo
         self.condiciones_medicas = condiciones_medicas 
+        
         resultado = bd.execute_command('''INSERT INTO Sujetos_Estudio(nombre, apellido, fecha_nacimiento, id_tipo_documento, codigo_documento, id_sexo, id_genero, id_orientacion_sexual, id_nacionalidad, id_provincia, correo_electronico) 
                                           VALUES (?,?,?,?,?,?,?,?,?,?,?)''',
                                           [self.nombres, self.apellidos, self.fecha_nacimiento, self.tipo_documento.id_tipo_documento, self.codigo_documento, self.sexo.id_sexo, self.genero.id_genero, self.orientacion_sexual.id_orientacion_sexual, self.nacionalidad.id_nacionalidad, self.provincia.id_provincia, self.correo])
