@@ -1,4 +1,4 @@
-from conexion import Conexion
+from modelos.conexion import Conexion
 
 class TipoUsuario:
     def __init__(self, id_tipo_usuario = 0, descripcion = ""):

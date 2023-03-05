@@ -1,5 +1,5 @@
-from conexion import Conexion
-from tipo_usuario import TipoUsuario
+from modelos.conexion import Conexion
+from modelos.tipo_usuario import TipoUsuario
 
 class Usuario:
     def __init__(self, usuario, clave, id_usuario = 0, tipo_usuario = None, nombre = "", apellido = "", fecha_nacimiento = None, id_creador = 0, correo_electronico = "", telefono = "", activo = True, fecha_creacion = None):
