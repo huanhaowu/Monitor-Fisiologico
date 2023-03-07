@@ -1,5 +1,4 @@
 from interfaces.login_suj import LoginSujEstudio
-
 def main():
     login = LoginSujEstudio()
     
