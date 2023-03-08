@@ -64,6 +64,7 @@ CREATE TABLE Sujetos_Estudio (
     id_nacionalidad INTEGER NOT NULL,
     id_provincia INTEGER NOT NULL,
     correo_electronico TEXT NOT NULL,
+    fecha_creacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_tipo_documento)
     REFERENCES Tipo_documento(id_tipo_documento),
     FOREIGN KEY (id_sexo)
@@ -90,10 +91,10 @@ CREATE TABLE Mediciones_Sujeto (
 );
 
 CREATE TABLE Medicion_Parametro (
-    id_detalle_medicion INTEGER PRIMARY KEY AUTOINCREMENT,
     id_medicion INTEGER NOT NULL,
     id_parametro_fisiologico INTEGER NOT NULL,
     medida_parametro_fisiologico REAL NOT NULL,
+    PRIMARY KEY(id_medicion, id_parametro_fisiologico),
     FOREIGN KEY (id_medicion)
     REFERENCES Mediciones_sujeto(id_medicion),
     FOREIGN KEY (id_parametro_fisiologico)
@@ -101,9 +102,9 @@ CREATE TABLE Medicion_Parametro (
 );
 
 CREATE TABLE Condiciones_Sujeto(
-    id_condiciones_sujeto INTEGER PRIMARY KEY AUTOINCREMENT,
     id_sujeto INTEGER NOT NULL,
     id_condicion_medica INTEGER NOT NULL,
+    PRIMARY KEY(id_sujeto, id_condicion_medica),
     FOREIGN KEY (id_sujeto)
     REFERENCES Sujetos_estudio(id_sujeto),
     FOREIGN KEY (id_condicion_medica)
@@ -111,9 +112,9 @@ CREATE TABLE Condiciones_Sujeto(
 );
 
 CREATE TABLE Condicion_Parametro(
-    id_condicion_parametro INTEGER PRIMARY KEY AUTOINCREMENT,
     id_condicion_medica INTEGER NOT NULL,
     id_parametro_fisiologico INTEGER NOT NULL,
+    PRIMARY KEY(id_condicion_medica, id_parametro_fisiologico),
     FOREIGN KEY (id_condicion_medica)
     REFERENCES Condiciones_Medicas(id_condicion_medica),
     FOREIGN KEY (id_parametro_fisiologico)
@@ -256,4 +257,4 @@ VALUES
 (2, 1), (2, 2), (2, 3), (2, 5), (2, 6), (2, 7), (2, 8), (2, 9), (2, 10), (2, 11), (2, 12), (2, 14),
 (3, 1), (3, 2), (3, 3), (3, 5), (3, 6), (3, 7), (3, 8), (3, 9), (3, 10), (3, 11), (3, 12), (3, 14),
 (4, 1), (4, 2), (4, 3), (4, 4), (4, 5), (4, 6), (4, 7), (4, 8), (4, 10), (4, 11), (4, 12), (4, 14),
-(5, 2), (5, 4), (4, 8), (4, 9), (4, 10), (4, 11), (4, 13), (4, 14)
+(5, 2), (5, 4), (5, 8), (5, 9), (5, 10), (5, 11), (5, 13), (5, 14)
