@@ -141,7 +141,7 @@ class RegistroSujeto():
             width=165.0,
             height=34.0
         )
-
+        self.txb_codigo_doc.insert(0, self.codigo_documento)
         #-------------------- TIPO DOCUMENTO -------------------
         #Label del Tipo de Documento
         self.canvas.create_text(
@@ -159,6 +159,9 @@ class RegistroSujeto():
             state = "readonly",
             values = td.obtener_lista_tipo_documento()
         )
+        td.descripcion = self.tipo_documento
+        td.cargar_id_tipo_documento()
+        self.cb_tipo_doc.current(td.id_tipo_documento-1)
         #Localización del combobox del tipo de documento
         self.cb_tipo_doc.place(
             x=561.0,
@@ -379,7 +382,7 @@ class RegistroSujeto():
             910.0,
             126.0,
             anchor="nw",
-            text="ESTADO DE SALUD",
+            text="Correo Electrónico",
             fill="#000000",
             font=("RobotoRoman Regular", 25 * -1),
             justify = 'center'
@@ -390,7 +393,7 @@ class RegistroSujeto():
             850.0,
             168.0,
             anchor="nw",
-            text="Seleccione las opciones que se adecuen \na sus hábitos de consumo:",
+            text="Ingrese el correo electrónico por defecto \nde su usuario:",
             fill="#000000",
             font=("RobotoRoman Regular", 20 * -1),
             justify = 'center'
@@ -516,13 +519,11 @@ class RegistroSujeto():
          self.cb_nacionalidad.current(int(self.sujetoexiste.nacionalidad.id_nacionalidad)-1)
          self.cb_provincia.current(int(self.sujetoexiste.provincia.id_provincia)-1)
          j = 0
-         for i in range(len(self.lista_condiciones)):
-             if(self.sujetoexiste.condiciones_medicas[j].id_condicion_medica == (i+1)):
+         if(len(self.sujetoexiste.condiciones_medicas)>0):
+            for i in range(len(self.lista_condiciones)):
+                if(self.sujetoexiste.condiciones_medicas[j].id_condicion_medica == (i+1)):
                     self.lista_valoresbool_checkbox[i].set(True)
-                    #print(self.sujetoexiste.condiciones_medicas[j].id_condicion_medica)
                     j+=1
-                    #print(len(self.sujetoexiste.condiciones_medicas))
-                    #hola = input()
                     if(j == len(self.sujetoexiste.condiciones_medicas)):
                         break
         

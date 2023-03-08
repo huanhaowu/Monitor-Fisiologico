@@ -96,6 +96,7 @@ class SujetosEstudio:
         self.provincia.cargar_descripcion_provincia()
 
         self.correo = correo
+        self.condiciones_medicas.clear()
         for condicion in condiciones:
             p = CondicionesMedicas(condicion)
             p.cargar_descripcion_condicion_medica()
