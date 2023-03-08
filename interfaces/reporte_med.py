@@ -1,23 +1,17 @@
+#Librerias para pruebas, aun no estan siendo utilizadas
+#import smtplib
+#import ssl
+#from pdf_mail import sendpdf
+
 from datetime import date, datetime
-import smtplib
-import ssl
-
 from pathlib import Path
-
-from fpdf import FPDF
-from pdf_mail import sendpdf
-
 from tkinter import Tk, ttk, Canvas, Button, PhotoImage, HORIZONTAL, Label
 
 # Bloque de codigo para trabajar con el path de los archivos
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path(r"assets\reporte_med")
-fecha_actual_str = date.today().strftime("%Y/%m/%d")
-
-
+ASSETS_PATH = OUTPUT_PATH / Path(r"assets/reporte_med")
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
-
 
 # Clase del formulario
 class ReporteMed():
@@ -26,10 +20,30 @@ class ReporteMed():
         # Datos a mostrar dentro del formulario
         self.sujeto = sujeto
         self.mediciones = mediciones
+
+        #Inicializamos todas las mediciones vacias
+        self.lista_temperatura = ["N/A", "", "N/A"]
+        self.lista_presion = ["N/A", "", "N/A"]
+        self.lista_oxigeno = ["N/A", "", "N/A"]
+        self.lista_frecuencia = ["N/A", "", "N/A"]
+
+        #Rellenamos los valores de las mediciones realizadas con la funcion buscar_parametro
+        self.lista_temperatura = self.buscar_parametro("Temperatura")
+        self.lista_presion = self.buscar_parametro("Presion Arterial")
+        self.lista_oxigeno = self.buscar_parametro("Oxigeno en sangre")
+        self.lista_frecuencia = self.buscar_parametro("Frecuencia Cardiaca")
+
+        #Definicion puerto, servidor, correo y contraseña de envio de reportes
         self.port = 465
         self.smtp_server_domain_name = "smtp.gmail.com"
         self.sender_mail = "heartbeatmonitorfisiologico@gmail.com"
         self.password = "!#MonitorHeartBeat2686"
+
+        #Campos calculados en cada reporte
+        self.fecha_actual_str = date.today().strftime("%Y/%m/%d")
+        self.edad = self.calcular_edad()
+        self.ruta_logo = relative_to_assets("logo1.png")
+        self.ruta_pdf = str(relative_to_assets("Reporte_HeartBeat.pdf"))
 
         # Iniciacion de la pantalla
         self.window = Tk()
@@ -163,7 +177,7 @@ class ReporteMed():
         )
         self.lbl_sexo = Label(
             self.window,
-            text=self.sujeto.sexo,
+            text=self.sujeto.sexo.descripcion,
             bd=0,
             bg="#F5F5F5",
             fg="#000716",
@@ -188,7 +202,7 @@ class ReporteMed():
 
         self.lbl_edad = Label(
             self.window,
-            text=self.calcular_edad(),
+            text=self.edad,
             bd=0,
             bg="#F5F5F5",
             fg="#000716",
@@ -261,7 +275,7 @@ class ReporteMed():
         )
         self.lbl_fecha = Label(
             self.window,
-            text=fecha_actual_str,
+            text=self.fecha_actual_str,
             bd=0,
             bg="#F5F5F5",
             fg="#000716",
@@ -536,10 +550,8 @@ class ReporteMed():
         self.window.mainloop()
 
     def calcular_edad(self):
-        fecha_actual_str = date.today().strftime("%Y/%m/%d")
-        fecha_actual_date = datetime.strptime(fecha_actual_str, '%Y/%m/%d')
-        fecha_sujeto_date = datetime.strptime(self.sujeto.fecha_nacimiento, '%Y/%m/%d')
-        edad = (fecha_actual_date - fecha_sujeto_date)
+        fecha_actual_date = datetime.strptime(self.fecha_actual_str, '%Y/%m/%d')
+        edad = (fecha_actual_date - self.sujeto.fecha_nacimiento)
         edad = (edad.days) // 365
         return edad
 
@@ -549,114 +561,27 @@ class ReporteMed():
                 return x.asignar_color()
 
     def crear_pdf(self):
-        class PDF(FPDF):
-            def header(self):
-                self.image(relative_to_assets("logo1.png"), 115, 25, 73)
+        from modelos.reporte_pdf import ReportePdf
+        self.ruta_logo = relative_to_assets("logo1.png")
+        self.ruta_pdf = str(relative_to_assets("Reporte_HeartBeat.pdf"))
+        pdf = ReportePdf(self)
 
-            def footer(self):
-                self.set_font('helvetica', 'I', 9)
-                pdf.text(20, 280,
-                         "Leyenda: símbolo (+) representa por encima del estándar, símbolo (-) representa por debajo del estándar")
-                pdf.text(20, 284,
-                         "Alerta: un poco alejado del estándar | Crítico: bastante alejado del estándar | N/A: valor no medido")
-                pdf.text(20, 288, "")
-                pdf.text(20, 292, "")
+    # def enviar_pdf2(self):
+    #     ssl_context = ssl.create_default_context()
+    #     service = smtplib.SMTP_SSL(self.smtp_server_domain_name, self.port, context=ssl_context)
+    #     service.login(self.sender_mail, self.password)
+    #     service.sendmail(self.sender_mail, "saldanaquezada@gmail.com", "Subject")
+    #     service.quit()
 
-        pdf = PDF()
-        pdf.add_page()
-
-        # width, height, text, ln = true moves cursor down to next line
-
-        pdf.set_font("helvetica", '', size=13)
-        fecha_actual_str = date.today().strftime("%Y/%m/%d")
-        pdf.text(162, 42, fecha_actual_str)
-
-        pdf.set_font("helvetica", 'B', size=13)
-        pdf.text(20, 52, "REPORTE DE MEDICIONES")
-
-        pdf.set_font("helvetica", '', size=13)
-        pdf.text(20, 58,
-                 "-------------------------------------------------------------------------------------------------------------")
-
-        pdf.set_font("helvetica", 'B', size=13)
-        pdf.text(20, 66, self.sujeto.nombres + " " + self.sujeto.apellidos)
-
-        pdf.set_font("helvetica", '', size=11)
-        pdf.text(20, 72, self.sujeto.tipo_documento.descripcion + ": " + self.sujeto.codigo_documento)
-
-        edad = self.calcular_edad()
-        pdf.set_font("helvetica", '', size=11)
-        pdf.text(20, 78, f"Edad: {edad}")
-
-        pdf.set_font("helvetica", '', size=11)
-        pdf.text(20, 84, f"Sexo: {self.sujeto.sexo}")
-
-        pdf.set_font("helvetica", '', size=11)
-        pdf.text(20, 90, f"Peso: {self.mediciones.peso_sujeto}")
-
-        pdf.set_font("helvetica", '', size=11)
-        pdf.text(20, 96, f"Estatura: {self.mediciones.altura_sujeto}")
-
-        pdf.set_font("helvetica", '', size=11)
-        pdf.text(20, 102,
-                 "---------------------------------------------------------------------------------------------------------------------------------")
-
-        pdf.set_font("helvetica", 'B', size=11)
-        pdf.text(30, 108, "PARAMETRO")
-        pdf.text(80, 108, "VALOR")
-        pdf.text(120, 108, "UNIDAD")
-        pdf.text(160, 108, "ESCALA")
-
-        pdf.set_font("helvetica", '', size=11)
-        pdf.text(20, 114,
-                 "---------------------------------------------------------------------------------------------------------------------------------")
-        pdf.text(20, 122, "Temperatura")
-        pdf.text(20, 140, "Presión Arterial")
-        pdf.text(20, 158, "Saturación de Oxígeno")
-        pdf.text(20, 176, "Frecuencia Cardíaca")
-        # VALORES
-        lista_temp = self.buscar_parametro("Temperatura")
-        pdf.text(85, 122, f"{lista_temp[2]}")
-        lista_presion = self.buscar_parametro("Presion Arterial")
-        pdf.text(20, 140, "Presión Arterial")
-        pdf.text(20, 158, "Saturación de Oxígeno")
-        pdf.text(20, 176, "Frecuencia Cardíaca")
-        # UNIDADES
-        pdf.text(127, 122, "C")
-        pdf.text(123, 140, "mmHg")
-        pdf.text(127, 158, "%")
-        pdf.text(125, 176, "lpm")
-        # ESCALAS
-        pdf.text(20, 122, "")
-        pdf.text(20, 140, "Presión Arterial")
-        pdf.text(20, 158, "Saturación de Oxígeno")
-        pdf.text(20, 176, "Frecuencia Cardíaca")
-
-        pdf.text(20, 183,
-                 "---------------------------------------------------------------------------------------------------------------------------------")
-
-        pdf.set_font("helvetica", 'B', size=11)
-        pdf.text(20, 189, "NOTA ACLARATORIA")
-
-        # save the pdf with name .pdf
-        pdf.output(str(relative_to_assets("Reporte_HeartBeat.pdf")))
-
-    def enviar_pdf2(self):
-        ssl_context = ssl.create_default_context()
-        service = smtplib.SMTP_SSL(self.smtp_server_domain_name, self.port, context=ssl_context)
-        service.login(self.sender_mail, self.password)
-        service.sendmail(self.sender_mail, "saldanaquezada@gmail.com", "Subject")
-        service.quit()
-
-    def enviar_pdf(self):
-        pdf_envio = sendpdf("heartbeatmonitorfisiologico@gmail.com",
-                            self.sujeto.correo,
-                            "!#MonitorHeartBeat2686",
-                            "Reporte de Medicion ",
-                            "Este es el reporte con las mediciones generadas en el sistema HeartBeat. Gracias por preferirnos!",
-                            "Reporte_HeartBeat",
-                            "C:/Users/Angel/Monitor-Fisiologico/interfaces")
-        pdf_envio.email_send()
+    # def enviar_pdf(self):
+    #     pdf_envio = sendpdf("heartbeatmonitorfisiologico@gmail.com",
+    #                         self.sujeto.correo,
+    #                         "!#MonitorHeartBeat2686",
+    #                         "Reporte de Medicion ",
+    #                         "Este es el reporte con las mediciones generadas en el sistema HeartBeat. Gracias por preferirnos!",
+    #                         "Reporte_HeartBeat",
+    #                         "C:/Users/Angel/Monitor-Fisiologico/interfaces")
+    #     pdf_envio.email_send()
 
     def abrir_menu(self):
         from interfaces.menu_med import MenuMed
@@ -692,11 +617,11 @@ if __name__ == "__main__":
     condicion2 = CondicionesMedicas(1, "Diabetes", lista_parametros)
     lista_condiciones = [condicion1, condicion2]
     tipo_documento = TipoDocumento(0, "Cedula")
+    fecha_nacimiento = datetime.strptime("1990/01/01", '%Y/%m/%d')
 
-    sujeto1 = SujetosEstudio(tipo_documento.descripcion, "1234532", 1, "Juan", "Perez", "1990/01/01",
-                             sexo.descripción, genero.descripcion, orientacion.descripcion,
-                             nacionalidad.descripcion, provincia.descripcion, "paolasaldanaquezada@gmail.com",
-                             date.today(), lista_condiciones)
+    sujeto1 = SujetosEstudio(tipo_documento.descripcion, "1234532", 1, "Juan", "Perez", fecha_nacimiento,
+                             sexo, genero, orientacion, nacionalidad, provincia, "paolasaldanaquezada@gmail.com",
+                             lista_condiciones)
 
     medicion_parametros1 = MedicionParametro(1, parametro1, 36)
     medicion_parametros2 = MedicionParametro(2, parametro2, 45)
@@ -704,7 +629,6 @@ if __name__ == "__main__":
     medicion1 = MedicionesSujeto(1, sujeto1, 70, 180, date.today(), listaMediciones)
     reporte = ReporteMed(sujeto1, medicion1)
     reporte.crear_pdf()
-    ##reporte.enviar_pdf2()
 
 
 

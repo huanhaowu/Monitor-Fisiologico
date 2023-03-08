@@ -73,7 +73,7 @@ class SujetosEstudio:
         else:
             return False
      
-    def registrar(self, nombres:str, apellidos:str, fecha_nacimiento:datetime.date, sexo:int, genero:int, orientacion_sexual:int, nacionalidad:int, provincia:int, correo:str, condiciones_medicas:list[int]):
+    def registrar(self, nombres:str, apellidos:str, fecha_nacimiento:datetime.date, sexo:int, genero:int, orientacion_sexual:int, nacionalidad:int, provincia:int, correo:str, condiciones:list[int]):
         bd = Conexion()
         self.nombres = nombres
         self.apellidos = apellidos
@@ -96,7 +96,7 @@ class SujetosEstudio:
         self.provincia.cargar_descripcion_provincia()
 
         self.correo = correo
-        for condicion in condiciones_medicas:
+        for condicion in condiciones:
             p = CondicionesMedicas(condicion)
             p.cargar_descripcion_condicion_medica()
             self.condiciones_medicas.append(p)
@@ -125,7 +125,7 @@ class SujetosEstudio:
         
             self.id_sujeto = int(bd.execute_query("SELECT MAX(id_sujeto) FROM Sujetos_Estudio")[0][0])
             if self.id_sujeto:
-                for condicion in condiciones_medicas:
+                for condicion in self.condiciones_medicas:
                     bd.execute_command(
                         '''INSERT INTO Condiciones_Sujeto (id_sujeto, id_condicion_medica) VALUES (?,?)''',
                         [self.id_sujeto, condicion.id_condicion_medica]
