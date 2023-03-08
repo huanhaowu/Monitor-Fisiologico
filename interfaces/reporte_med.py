@@ -1,28 +1,68 @@
-import datetime
+from datetime import date, datetime
+import smtplib
+import ssl
 
 from pathlib import Path
+
+from fpdf import FPDF
+from pdf_mail import sendpdf
 
 from tkinter import Tk, ttk, Canvas, Button, PhotoImage, HORIZONTAL, Label
 
 # Bloque de codigo para trabajar con el path de los archivos
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"assets\reporte_med")
+fecha_actual_str = date.today().strftime("%Y/%m/%d")
+
 
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
+
 # Clase del formulario
 class ReporteMed():
     def __init__(self, sujeto, mediciones):
+
         # Datos a mostrar dentro del formulario
         self.sujeto = sujeto
         self.mediciones = mediciones
-        
+        self.port = 465
+        self.smtp_server_domain_name = "smtp.gmail.com"
+        self.sender_mail = "heartbeatmonitorfisiologico@gmail.com"
+        self.password = "!#MonitorHeartBeat2686"
+
         # Iniciacion de la pantalla
         self.window = Tk()
-        self.window.geometry("1260x725+{}+{}".format(self.window.winfo_screenwidth() // 2 - 1260 // 2, self.window.winfo_screenheight() // 2 - 725 // 2))
+        self.window.geometry("1260x725+{}+{}".format(self.window.winfo_screenwidth() // 2 - 1260 // 2,
+                                                     self.window.winfo_screenheight() // 2 - 725 // 2))
         self.window.configure(bg="#FFFFFF")
 
+        # region ESTILOS DE PROGRESS BAR
+        TROUGH_COLOR = '#F5F5F5'
+        BAR_COLOR = '#FF0211'
+        sty_rojo = ttk.Style()
+        sty_rojo.theme_use('clam')
+        sty_rojo.configure("rojo.Horizontal.TProgressbar", troughcolor=TROUGH_COLOR,
+                           bordercolor=TROUGH_COLOR, background=BAR_COLOR, lightcolor=BAR_COLOR,
+                           darkcolor=BAR_COLOR)
+
+        TROUGH_COLOR = '#F5F5F5'
+        BAR_COLOR = '#FFD706'
+        sty_amarillo = ttk.Style()
+        sty_amarillo.theme_use('clam')
+        sty_amarillo.configure("amarillo.Horizontal.TProgressbar", troughcolor=TROUGH_COLOR,
+                               bordercolor=TROUGH_COLOR, background=BAR_COLOR, lightcolor=BAR_COLOR,
+                               darkcolor=BAR_COLOR)
+
+        TROUGH_COLOR = '#F5F5F5'
+        BAR_COLOR = '#00C040'
+        sty_verde = ttk.Style()
+        sty_verde.theme_use('clam')
+        sty_verde.configure("verde.Horizontal.TProgressbar", troughcolor=TROUGH_COLOR,
+                            bordercolor=TROUGH_COLOR, background=BAR_COLOR, lightcolor=BAR_COLOR,
+                            darkcolor=BAR_COLOR)
+
+        # endregion
         self.canvas = Canvas(
             self.window,
             bg="#FFFFFF",
@@ -99,7 +139,7 @@ class ReporteMed():
         )
         self.lbl_nombre = Label(
             self.window,
-            text=sujeto.nombres + " " + sujeto.apellidos,
+            text=self.sujeto.nombres + " " + self.sujeto.apellidos,
             bd=0,
             bg="#F5F5F5",
             fg="#000716",
@@ -123,7 +163,7 @@ class ReporteMed():
         )
         self.lbl_sexo = Label(
             self.window,
-            text=sujeto.sexo,
+            text=self.sujeto.sexo,
             bd=0,
             bg="#F5F5F5",
             fg="#000716",
@@ -148,7 +188,7 @@ class ReporteMed():
 
         self.lbl_edad = Label(
             self.window,
-            text=sujeto.fecha_nacimiento,
+            text=self.calcular_edad(),
             bd=0,
             bg="#F5F5F5",
             fg="#000716",
@@ -172,7 +212,7 @@ class ReporteMed():
         )
         self.lbl_peso = Label(
             self.window,
-            text="",
+            text=self.mediciones.peso_sujeto,
             bd=0,
             bg="#F5F5F5",
             fg="#000716",
@@ -197,7 +237,7 @@ class ReporteMed():
 
         self.lbl_estatura = Label(
             self.window,
-            text="",
+            text=self.mediciones.altura_sujeto,
             bd=0,
             bg="#F5F5F5",
             fg="#000716",
@@ -221,7 +261,7 @@ class ReporteMed():
         )
         self.lbl_fecha = Label(
             self.window,
-            text='datetime.date.today()',
+            text=fecha_actual_str,
             bd=0,
             bg="#F5F5F5",
             fg="#000716",
@@ -237,7 +277,7 @@ class ReporteMed():
         # CODIGO DOCUMENTO
         self.lbl_cod_doc = Label(
             self.window,
-            text=sujeto.tipo_documento + " " + sujeto.codigo_documento,
+            text=(self.sujeto.tipo_documento.descripcion) + " " + self.sujeto.codigo_documento,
             bd=0,
             bg="#F5F5F5",
             fg="#000716",
@@ -250,8 +290,7 @@ class ReporteMed():
             height=34.0
         )
         # -- PARAMETROS FISIOLOGICOS --
-        def fill_progress(self):
-            return 50
+
         # region TITULOS COLUMNAS
         self.canvas.create_text(
             50.0,
@@ -304,26 +343,16 @@ class ReporteMed():
             height=34.0
         )
         # Aqui se colora el progress bar para la escala de la temperatura
-        TROUGH_COLOR = '#F5F5F5'
-        BAR_COLOR = 'red'
-        sty_temp = ttk.Style()
-        sty_temp.theme_use('clam')
-        sty_temp.configure("bar.Horizontal.TProgressbar", troughcolor=TROUGH_COLOR,
-                      bordercolor=TROUGH_COLOR, background=BAR_COLOR, lightcolor=BAR_COLOR,
-                      darkcolor=BAR_COLOR)
 
         self.pb_temperatura = ttk.Progressbar(self.window, orient=HORIZONTAL, mode='determinate',
-                                         style="bar.Horizontal.TProgressbar")
+                                              style="rojo.Horizontal.TProgressbar")
         self.pb_temperatura.place(
             x=527.0,
             y=415.0,
             width=224.0,
             height=34.0
         )
-
-
-
-        self.pb_temperatura['value'] = fill_progress(self)
+        self.pb_temperatura['value'] = 75
 
         # endregion
 
@@ -352,16 +381,9 @@ class ReporteMed():
             height=34.0
         )
         # Aqui se colocara el progress bar para la escala de saturacion de oxigeno
-        TROUGH_COLOR = '#F5F5F5'
-        BAR_COLOR = 'red'
-        sty = ttk.Style()
-        sty.theme_use('clam')
-        sty.configure("bar.Horizontal.TProgressbar", troughcolor=TROUGH_COLOR,
-                      bordercolor=TROUGH_COLOR, background=BAR_COLOR, lightcolor=BAR_COLOR,
-                      darkcolor=BAR_COLOR)
 
         self.pb_saturacion_oxigeno = ttk.Progressbar(self.window, orient=HORIZONTAL, mode='determinate',
-                                                style="bar.Horizontal.TProgressbar")
+                                                     style="amarillo.Horizontal.TProgressbar")
         self.pb_saturacion_oxigeno.place(
             x=527.0,
             y=478.0,
@@ -369,8 +391,7 @@ class ReporteMed():
             height=34.0
         )
 
-
-        self.pb_saturacion_oxigeno['value'] = fill_progress(self)
+        self.pb_saturacion_oxigeno['value'] = 50
 
         # endregion
 
@@ -383,8 +404,7 @@ class ReporteMed():
             fill="#000000",
             font=("RobotoRoman Regular", 25 * -1)
         )
-        #endregion
-        
+
         # aqui va el textbox del valor correspondiente a la presion arterial
         self.lbl_presion_arterial = Label(
             self.window,
@@ -418,27 +438,16 @@ class ReporteMed():
             width=96.0,
             height=34.0
         )
-
-        TROUGH_COLOR = '#F5F5F5'
-        BAR_COLOR = 'red'
-        sty = ttk.Style()
-        sty.theme_use('clam')
-        sty.configure("bar.Horizontal.TProgressbar", troughcolor=TROUGH_COLOR,
-                      bordercolor=TROUGH_COLOR, background=BAR_COLOR, lightcolor=BAR_COLOR,
-                      darkcolor=BAR_COLOR)
-
         self.pb_presion_arterial = ttk.Progressbar(self.window, orient=HORIZONTAL, mode='determinate',
-                                              style="bar.Horizontal.TProgressbar")
+                                                   style="amarillo.Horizontal.TProgressbar")
         self.pb_presion_arterial.place(
             x=527.0,
             y=538.0,
             width=224.0,
             height=34.0
         )
-
-
-        self.pb_presion_arterial['value'] = fill_progress(self)
-        #####################
+        self.pb_presion_arterial['value'] = 100
+        # endregion
 
         # region FRECUENCIA CARDIACA
         self.canvas.create_text(
@@ -466,23 +475,16 @@ class ReporteMed():
             height=34.0
         )
         # aqui debe ir el progress bar para colocar la frecuencia cardiaca
-        TROUGH_COLOR = '#F5F5F5'
-        BAR_COLOR = 'red'
-        sty = ttk.Style()
-        sty.theme_use('clam')
-        sty.configure("bar.Horizontal.TProgressbar", troughcolor=TROUGH_COLOR,
-                      bordercolor=TROUGH_COLOR, background=BAR_COLOR, lightcolor=BAR_COLOR,
-                      darkcolor=BAR_COLOR)
 
         self.pb_frecuencia_cardiaca = ttk.Progressbar(self.window, orient=HORIZONTAL, mode='determinate',
-                                                   style="bar.Horizontal.TProgressbar")
+                                                      style="verde.Horizontal.TProgressbar")
         self.pb_frecuencia_cardiaca.place(
             x=527.0,
             y=597.0,
             width=224.0,
             height=34.0,
         )
-        self.pb_frecuencia_cardiaca['value']=fill_progress(self)
+        self.pb_frecuencia_cardiaca['value'] = 75
 
         # endregion
 
@@ -529,10 +531,181 @@ class ReporteMed():
             height=68.0
         )
         # endregion
+        self.crear_pdf()
         self.window.resizable(False, False)
         self.window.mainloop()
-    
-    def abrir_menu(self):  
+
+    def calcular_edad(self):
+        fecha_actual_str = date.today().strftime("%Y/%m/%d")
+        fecha_actual_date = datetime.strptime(fecha_actual_str, '%Y/%m/%d')
+        fecha_sujeto_date = datetime.strptime(self.sujeto.fecha_nacimiento, '%Y/%m/%d')
+        edad = (fecha_actual_date - fecha_sujeto_date)
+        edad = (edad.days) // 365
+        return edad
+
+    def buscar_parametro(self, parametro_fis):
+        for x in self.mediciones.parametros_medidos:
+            if x.parametro.descripcion == parametro_fis:
+                return x.asignar_color()
+
+    def crear_pdf(self):
+        class PDF(FPDF):
+            def header(self):
+                self.image(relative_to_assets("logo1.png"), 115, 25, 73)
+
+            def footer(self):
+                self.set_font('helvetica', 'I', 9)
+                pdf.text(20, 280,
+                         "Leyenda: símbolo (+) representa por encima del estándar, símbolo (-) representa por debajo del estándar")
+                pdf.text(20, 284,
+                         "Alerta: un poco alejado del estándar | Crítico: bastante alejado del estándar | N/A: valor no medido")
+                pdf.text(20, 288, "")
+                pdf.text(20, 292, "")
+
+        pdf = PDF()
+        pdf.add_page()
+
+        # width, height, text, ln = true moves cursor down to next line
+
+        pdf.set_font("helvetica", '', size=13)
+        fecha_actual_str = date.today().strftime("%Y/%m/%d")
+        pdf.text(162, 42, fecha_actual_str)
+
+        pdf.set_font("helvetica", 'B', size=13)
+        pdf.text(20, 52, "REPORTE DE MEDICIONES")
+
+        pdf.set_font("helvetica", '', size=13)
+        pdf.text(20, 58,
+                 "-------------------------------------------------------------------------------------------------------------")
+
+        pdf.set_font("helvetica", 'B', size=13)
+        pdf.text(20, 66, self.sujeto.nombres + " " + self.sujeto.apellidos)
+
+        pdf.set_font("helvetica", '', size=11)
+        pdf.text(20, 72, self.sujeto.tipo_documento.descripcion + ": " + self.sujeto.codigo_documento)
+
+        edad = self.calcular_edad()
+        pdf.set_font("helvetica", '', size=11)
+        pdf.text(20, 78, f"Edad: {edad}")
+
+        pdf.set_font("helvetica", '', size=11)
+        pdf.text(20, 84, f"Sexo: {self.sujeto.sexo}")
+
+        pdf.set_font("helvetica", '', size=11)
+        pdf.text(20, 90, f"Peso: {self.mediciones.peso_sujeto}")
+
+        pdf.set_font("helvetica", '', size=11)
+        pdf.text(20, 96, f"Estatura: {self.mediciones.altura_sujeto}")
+
+        pdf.set_font("helvetica", '', size=11)
+        pdf.text(20, 102,
+                 "---------------------------------------------------------------------------------------------------------------------------------")
+
+        pdf.set_font("helvetica", 'B', size=11)
+        pdf.text(30, 108, "PARAMETRO")
+        pdf.text(80, 108, "VALOR")
+        pdf.text(120, 108, "UNIDAD")
+        pdf.text(160, 108, "ESCALA")
+
+        pdf.set_font("helvetica", '', size=11)
+        pdf.text(20, 114,
+                 "---------------------------------------------------------------------------------------------------------------------------------")
+        pdf.text(20, 122, "Temperatura")
+        pdf.text(20, 140, "Presión Arterial")
+        pdf.text(20, 158, "Saturación de Oxígeno")
+        pdf.text(20, 176, "Frecuencia Cardíaca")
+        # VALORES
+        lista_temp = self.buscar_parametro("Temperatura")
+        pdf.text(85, 122, f"{lista_temp[2]}")
+        lista_presion = self.buscar_parametro("Presion Arterial")
+        pdf.text(20, 140, "Presión Arterial")
+        pdf.text(20, 158, "Saturación de Oxígeno")
+        pdf.text(20, 176, "Frecuencia Cardíaca")
+        # UNIDADES
+        pdf.text(127, 122, "C")
+        pdf.text(123, 140, "mmHg")
+        pdf.text(127, 158, "%")
+        pdf.text(125, 176, "lpm")
+        # ESCALAS
+        pdf.text(20, 122, "")
+        pdf.text(20, 140, "Presión Arterial")
+        pdf.text(20, 158, "Saturación de Oxígeno")
+        pdf.text(20, 176, "Frecuencia Cardíaca")
+
+        pdf.text(20, 183,
+                 "---------------------------------------------------------------------------------------------------------------------------------")
+
+        pdf.set_font("helvetica", 'B', size=11)
+        pdf.text(20, 189, "NOTA ACLARATORIA")
+
+        # save the pdf with name .pdf
+        pdf.output(str(relative_to_assets("Reporte_HeartBeat.pdf")))
+
+    def enviar_pdf2(self):
+        ssl_context = ssl.create_default_context()
+        service = smtplib.SMTP_SSL(self.smtp_server_domain_name, self.port, context=ssl_context)
+        service.login(self.sender_mail, self.password)
+        service.sendmail(self.sender_mail, "saldanaquezada@gmail.com", "Subject")
+        service.quit()
+
+    def enviar_pdf(self):
+        pdf_envio = sendpdf("heartbeatmonitorfisiologico@gmail.com",
+                            self.sujeto.correo,
+                            "!#MonitorHeartBeat2686",
+                            "Reporte de Medicion ",
+                            "Este es el reporte con las mediciones generadas en el sistema HeartBeat. Gracias por preferirnos!",
+                            "Reporte_HeartBeat",
+                            "C:/Users/Angel/Monitor-Fisiologico/interfaces")
+        pdf_envio.email_send()
+
+    def abrir_menu(self):
         from interfaces.menu_med import MenuMed
         self.window.destroy()
         menu = MenuMed(self.sujeto, self.mediciones)
+
+
+if __name__ == "__main__":
+    # region IMPORTS CLASES
+    from datetime import date, datetime
+    from modelos.sujetos_estudio import SujetosEstudio
+    from modelos.mediciones_sujeto import MedicionesSujeto
+    from modelos.medicion_parametro import MedicionParametro
+    from modelos.parametros_fisiologicos import ParametrosFisiologicos
+    from modelos.tipo_documento import TipoDocumento
+    from modelos.sexo import Sexo
+    from modelos.genero import Genero
+    from modelos.orientacion_sexual import OrientacionSexual
+    from modelos.nacionalidad import Nacionalidad
+    from modelos.provincia import Provincia
+    from modelos.condiciones_medicas import CondicionesMedicas
+
+    # endregion
+    sexo = Sexo(0, "Hombre")
+    genero = Genero(0, "Masculino")
+    orientacion = OrientacionSexual(0, "Heterosexual")
+    provincia = Provincia(0, "Santo Domingo")
+    nacionalidad = Nacionalidad(0, "Dominicano")
+    parametro1 = ParametrosFisiologicos(1, "Temperatura", 36, 37, 40, 34, 46, 29.99, "Instruccion")
+    parametro2 = ParametrosFisiologicos(2, "Presion Arterial", 36, 37, 40, 34, 46, 29.99, "Instruccion")
+    lista_parametros = [parametro1, parametro2]
+    condicion1 = CondicionesMedicas(0, "Asma", lista_parametros)
+    condicion2 = CondicionesMedicas(1, "Diabetes", lista_parametros)
+    lista_condiciones = [condicion1, condicion2]
+    tipo_documento = TipoDocumento(0, "Cedula")
+
+    sujeto1 = SujetosEstudio(tipo_documento.descripcion, "1234532", 1, "Juan", "Perez", "1990/01/01",
+                             sexo.descripción, genero.descripcion, orientacion.descripcion,
+                             nacionalidad.descripcion, provincia.descripcion, "paolasaldanaquezada@gmail.com",
+                             date.today(), lista_condiciones)
+
+    medicion_parametros1 = MedicionParametro(1, parametro1, 36)
+    medicion_parametros2 = MedicionParametro(2, parametro2, 45)
+    listaMediciones = [medicion_parametros1, medicion_parametros2]
+    medicion1 = MedicionesSujeto(1, sujeto1, 70, 180, date.today(), listaMediciones)
+    reporte = ReporteMed(sujeto1, medicion1)
+    reporte.crear_pdf()
+    ##reporte.enviar_pdf2()
+
+
+
+
