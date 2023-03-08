@@ -6,9 +6,10 @@ from modelos.orientacion_sexual import OrientacionSexual
 from modelos.nacionalidad import Nacionalidad
 from modelos.provincia import Provincia
 from modelos.condiciones_medicas import CondicionesMedicas
+import datetime
 class SujetosEstudio:
     
-    def __init__(self, tipo_documento, codigo_documento, id_sujeto = 0, nombres = "", apellidos = "", fecha_nacimiento = None, sexo = None, genero = None, orientacion_sexual = None, nacionalidad = None, provincia = None, correo = "", fecha_creacion = None, condiciones_medicas = []):
+    def __init__(self, tipo_documento:str, codigo_documento:str, id_sujeto:int = 0 , nombres:str = "", apellidos:str = "", fecha_nacimiento:datetime.date = None, sexo:Sexo = None, genero:Genero = None, orientacion_sexual:OrientacionSexual = None, nacionalidad:Nacionalidad = None, provincia:Provincia = None, correo:str = "", condiciones_medicas:list[CondicionesMedicas] = []):
         #Parametros obligatorios
         self.tipo_documento = TipoDocumento(descripcion = tipo_documento)
         self.tipo_documento.cargar_id_tipo_documento()
@@ -25,7 +26,6 @@ class SujetosEstudio:
         self.nacionalidad = nacionalidad
         self.provincia = provincia
         self.correo = correo
-        self.fecha_creacion = fecha_creacion
         self.condiciones_medicas = condiciones_medicas
         
     def ingresar(self):
@@ -62,7 +62,6 @@ class SujetosEstudio:
             self.provincia.cargar_descripcion_provincia()
             
             self.correo = resultado[0][11]
-            self.fecha_creacion = resultado[0][12]
 
             bd.execute_query('''SELECT id_condicion_medica FROM Condiciones_Sujeto WHERE id_sujeto = ?''', [self.id_sujeto])
             for condicion in resultado:
@@ -74,7 +73,7 @@ class SujetosEstudio:
         else:
             return False
      
-    def registrar(self, nombres, apellidos, fecha_nacimiento, sexo, genero, orientacion_sexual, nacionalidad, provincia, correo, condiciones_medicas):
+    def registrar(self, nombres:str, apellidos:str, fecha_nacimiento:datetime.date, sexo:Sexo, genero:Genero, orientacion_sexual:OrientacionSexual, nacionalidad:Nacionalidad, provincia:Provincia, correo:str, condiciones_medicas:list[CondicionesMedicas]):
         bd = Conexion()
         self.nombres = nombres
         self.apellidos = apellidos
@@ -110,5 +109,5 @@ class SujetosEstudio:
                 for condicion in condiciones_medicas:
                     bd.execute_command(
                         '''INSERT INTO Condiciones_Sujeto (id_sujeto, id_condicion_medica) VALUES (?,?)''',
-                        [self.id_sujeto, condicion.id_condicion_medicas]
+                        [self.id_sujeto, condicion.id_condicion_medica]
                     )
