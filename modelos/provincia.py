@@ -1,7 +1,7 @@
 from modelos.conexion import Conexion
 
 class Provincia:
-    def __init__(self, id_provincia = 0, descripcion = ""):
+    def __init__(self, id_provincia:int = 0, descripcion:str = ""):
         self.id_provincia = id_provincia
         self.descripcion = descripcion
     

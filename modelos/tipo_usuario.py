@@ -1,7 +1,7 @@
 from modelos.conexion import Conexion
 
 class TipoUsuario:
-    def __init__(self, id_tipo_usuario = 0, descripcion = ""):
+    def __init__(self, id_tipo_usuario:int = 0, descripcion:str = ""):
         self.id_tipo_usuario = id_tipo_usuario
         self.descripcion = descripcion
     
