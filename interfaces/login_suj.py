@@ -1,5 +1,5 @@
 from pathlib import Path
-from tkinter import Tk, ttk, Canvas, Entry, Text, Button, PhotoImage, StringVar
+from tkinter import Tk, ttk, Canvas, Entry, Text, Button, PhotoImage, messagebox
 from modelos.tipo_documento import TipoDocumento as td
 
 OUTPUT_PATH = Path(__file__).parent
@@ -130,12 +130,52 @@ class LoginSujEstudio():
 
         self.window.resizable(False, False)
         self.window.mainloop()
-
-    
-    def abrir_registro(self, id_tipo_documento = 0, descripcion = ""):
+        
+    def abrir_registro(self, id_tipo_documento, descripcion = None):
         from interfaces.registro_suj import RegistroSujeto as rs
-        self.window.destroy()
-        rs(id_tipo_documento,descripcion)
+        bol = comprobar_cod_documento(descripcion)
+        if bol == True:
+            self.window.destroy()
+            rs(id_tipo_documento,descripcion)
+        else:
+            #Creacion de canva cuando el codigo de documento esté vacío
+            self.txt_codigo_doc = Canvas(
+                self.window,
+                bg = "#FFFFFF",
+                height = 25,
+                width = 20,
+                bd = 0,
+                highlightthickness = 0,
+                relief = "ridge"
+            )
+            #Posicionando el canva
+            self.txt_codigo_doc.place(x = 400, y = 426)
+            self.txt_codigo_doc.create_rectangle(
+                0.0,
+                0.0,
+                20.0,
+                25.0,
+                fill = "#FFFFFF",
+                outline = ""
+            )
+            #Asterisco
+            self.txt_codigo_doc.create_text(
+                2.0,
+                0.0,
+                anchor = "nw",
+                fill = "red",
+                text = "*",
+                font = ("RobotoRoman Bold", 35 * -1),
+                justify= 'center',
+            )
+            messagebox.showwarning("Rellene el formulario", "Ingrese el código de su documento")
         
-    
         
+# Función para comprobar que se pase un codigo de documento antes de cambiar de pantalla
+def comprobar_cod_documento(codigo_documento):
+    if codigo_documento == "":
+        return False
+    else:
+        return True
+
+
