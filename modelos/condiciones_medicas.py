@@ -12,6 +12,12 @@ class CondicionesMedicas:
         resultado = bd.execute_query("SELECT * FROM Condiciones_Medicas")
         return resultado
     
+    def cargar_descripcion_condicion_medica(self):
+        bd = Conexion()
+        resultado = bd.execute_query("SELECT descripcion FROM Condiciones_Medicas WHERE id_condicion_medica = ?", [self.id_condicion_medica])
+        if resultado:
+            self.descripcion = resultado[0][0]
+
     def cargar_parametros(self):
         bd = Conexion()
         resultado = bd.execute_query(
@@ -23,6 +29,5 @@ class CondicionesMedicas:
             for parametro in resultado:
                 p = ParametrosFisiologicos(parametro[0], parametro[1], parametro[2], parametro[3], parametro[4], parametro[5], parametro[6], parametro[7], parametro[8])
                 self.parametros.append(p)
-    
 #prueba = CondicionesMedicas()
 #print(prueba.obtener_lista_condiciones_medicas())
