@@ -5,6 +5,7 @@ class TipoUsuario:
         self.id_tipo_usuario = id_tipo_usuario
         self.descripcion = descripcion
     
+    
     def obtener_lista_tipo_usuarios(self):
         bd = Conexion()
         resultado = bd.execute_query("SELECT * FROM Tipo_Usuario")

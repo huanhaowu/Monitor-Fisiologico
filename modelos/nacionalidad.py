@@ -9,6 +9,11 @@ class Nacionalidad:
         bd = Conexion()
         resultado = bd.execute_query("SELECT * FROM Nacionalidad")
         return resultado
+    
+    def cargar_descripcion_nacionalidad(self):
+        bd = Conexion()
+        resultado = bd.execute_query("SELECT descripcion FROM Nacionalidad WHERE id_nacionalidad = ?", [self.id_nacionalidad])
+        self.descripcion = resultado[0][0]
 
-prueba = Nacionalidad()
-print(prueba.obtener_lista_nacionalidades())
+#prueba = Nacionalidad()
+#print(prueba.obtener_lista_nacionalidades())

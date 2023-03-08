@@ -9,3 +9,8 @@ class Provincia:
         bd = Conexion()
         resultado = bd.execute_query("SELECT * FROM Provincia")
         return resultado
+    
+    def cargar_descripcion_provincia(self):
+        bd = Conexion()
+        resultado = bd.execute_query("SELECT descripcion FROM Provincia WHERE id_provincia = ?", [self.id_provincia])
+        self.descripcion = resultado[0][0]
