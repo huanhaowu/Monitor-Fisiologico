@@ -1,7 +1,7 @@
 from modelos.conexion import Conexion
 
 class OrientacionSexual:
-    def __init__(self, id_orientacion_sexual = 0, descripcion = ""):
+    def __init__(self, id_orientacion_sexual:int = 0, descripcion:str = ""):
         self.id_orientacion_sexual = id_orientacion_sexual
         self.descripcion = descripcion
     

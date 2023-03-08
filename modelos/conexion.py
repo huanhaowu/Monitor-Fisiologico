@@ -25,7 +25,7 @@ class Conexion:
         if self.conn:
             self.conn.close()
 
-    def execute_query(self, query, params=None):
+    def execute_query(self, query:str, params:list = None):
         self.enter()
         cursor = self.conn.cursor()
         if params:
@@ -36,7 +36,7 @@ class Conexion:
         self.exit()
         return rows
 
-    def execute_command(self, command, params=None):
+    def execute_command(self, command:str, params:list = None):
         self.enter()
         cursor = self.conn.cursor()
         if params:

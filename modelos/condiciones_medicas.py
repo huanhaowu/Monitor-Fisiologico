@@ -1,7 +1,7 @@
 from modelos.conexion import Conexion
 from modelos.parametros_fisiologicos import ParametrosFisiologicos
 class CondicionesMedicas:
-    def __init__(self, id_condicion_medica = 0, descripcion = "", parametros = []):
+    def __init__(self, id_condicion_medica:int = 0, descripcion:str = "", parametros:list[ParametrosFisiologicos] = []):
         self.id_condicion_medica = id_condicion_medica
         self.descripcion = descripcion
         self.parametros = parametros
@@ -29,5 +29,3 @@ class CondicionesMedicas:
             for parametro in resultado:
                 p = ParametrosFisiologicos(parametro[0], parametro[1], parametro[2], parametro[3], parametro[4], parametro[5], parametro[6], parametro[7], parametro[8])
                 self.parametros.append(p)
-#prueba = CondicionesMedicas()
-#print(prueba.obtener_lista_condiciones_medicas())

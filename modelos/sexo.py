@@ -1,9 +1,9 @@
 from modelos.conexion import Conexion
 
 class Sexo:
-    def __init__(self, id_sexo = 0, descripción = ""):
+    def __init__(self, id_sexo:int = 0, descripcion:str = ""):
         self.id_sexo = id_sexo
-        self.descripción = descripción
+        self.descripcion = descripcion
 
     def cargar_descripcion_sexo(self):
         bd = Conexion()

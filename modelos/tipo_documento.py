@@ -2,8 +2,8 @@ from modelos.conexion import Conexion
 
 class TipoDocumento:
     
-    def __init__(self,id_TipoDocumento = 0, descripcion = ""):
-        self.id_tipo_documento = id_TipoDocumento
+    def __init__(self, id_tipo_documento:int = 0, descripcion:str = ""):
+        self.id_tipo_documento = id_tipo_documento
         self.descripcion = descripcion
     
     def cargar_descripcion_tipo_documento(self):
