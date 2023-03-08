@@ -73,18 +73,33 @@ class SujetosEstudio:
         else:
             return False
      
-    def registrar(self, nombres:str, apellidos:str, fecha_nacimiento:datetime.date, sexo:Sexo, genero:Genero, orientacion_sexual:OrientacionSexual, nacionalidad:Nacionalidad, provincia:Provincia, correo:str, condiciones_medicas:list[CondicionesMedicas]):
+    def registrar(self, nombres:str, apellidos:str, fecha_nacimiento:datetime.date, sexo:int, genero:int, orientacion_sexual:int, nacionalidad:int, provincia:int, correo:str, condiciones_medicas:list[int]):
         bd = Conexion()
         self.nombres = nombres
         self.apellidos = apellidos
+        
         self.fecha_nacimiento = fecha_nacimiento
-        self.sexo = sexo
-        self.genero = genero
-        self.orientacion_sexual = orientacion_sexual
-        self.nacionalidad = nacionalidad
-        self.provincia = provincia
+
+        self.sexo = Sexo(sexo)
+        self.sexo.cargar_descripcion_sexo()
+
+        self.genero = Genero(genero)
+        self.genero.cargar_descripcion_genero()
+
+        self.orientacion_sexual = OrientacionSexual(orientacion_sexual)
+        self.orientacion_sexual.cargar_descripcion_orientacion_sexual()
+
+        self.nacionalidad = Nacionalidad(nacionalidad)
+        self.nacionalidad.cargar_descripcion_nacionalidad()
+
+        self.provincia = Provincia(provincia)
+        self.provincia.cargar_descripcion_provincia()
+
         self.correo = correo
-        self.condiciones_medicas = condiciones_medicas
+        for condicion in condiciones_medicas:
+            p = CondicionesMedicas(condicion)
+            p.cargar_descripcion_condicion_medica()
+            self.condiciones_medicas.append(p)
         
         #Primero verifico si el usuario existe
         existe = bd.execute_query('''SELECT id_sujeto FROM Sujetos_Estudio WHERE id_tipo_documento = ? AND codigo_documento = ?''', 
@@ -94,6 +109,10 @@ class SujetosEstudio:
             self.id_sujeto = existe[0][0]
             bd.execute_command('''UPDATE Sujetos_Estudio SET nombre = ?, apellido = ?, fecha_nacimiento = ?, id_sexo = ?, id_genero = ?, id_orientacion_sexual = ?, id_nacionalidad = ?, id_provincia = ?, correo_electronico = ? WHERE id_sujeto = ?''', 
                                [self.nombres, self.apellidos, self.fecha_nacimiento, self.sexo.id_sexo, self.genero.id_genero, self.orientacion_sexual.id_orientacion_sexual, self.nacionalidad.id_nacionalidad, self.provincia.id_provincia, self.correo, self.id_sujeto])
+            
+            bd.execute_command('''DELETE FROM Condiciones_Sujeto WHERE id_sujeto = ?''', 
+                               [self.id_sujeto])
+            
             for condicion in condiciones_medicas:
                 bd.execute_command(
                     '''INSERT INTO Condiciones_Sujeto (id_sujeto, id_condicion_medica) VALUES (?,?)''',
