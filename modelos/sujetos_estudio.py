@@ -63,7 +63,7 @@ class SujetosEstudio:
             
             self.correo = resultado[0][11]
 
-            bd.execute_query('''SELECT id_condicion_medica FROM Condiciones_Sujeto WHERE id_sujeto = ?''', [self.id_sujeto])
+            resultado = bd.execute_query('''SELECT id_condicion_medica FROM Condiciones_Sujeto WHERE id_sujeto = ?''', [self.id_sujeto])
             for condicion in resultado:
                 p = CondicionesMedicas(condicion[0])
                 p.cargar_descripcion_condicion_medica()
@@ -112,8 +112,7 @@ class SujetosEstudio:
             
             bd.execute_command('''DELETE FROM Condiciones_Sujeto WHERE id_sujeto = ?''', 
                                [self.id_sujeto])
-            
-            for condicion in condiciones_medicas:
+            for condicion in self.condiciones_medicas:
                 bd.execute_command(
                     '''INSERT INTO Condiciones_Sujeto (id_sujeto, id_condicion_medica) VALUES (?,?)''',
                     [self.id_sujeto, condicion.id_condicion_medica]
