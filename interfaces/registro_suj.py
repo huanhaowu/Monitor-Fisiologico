@@ -501,7 +501,7 @@ class RegistroSujeto():
         lista_condiciones_usuario = []
         for i in range(len(self.lista_condiciones_checkbox)):
             if self.lista_valoresbool_checkbox[i].get() == True:
-                lista_condiciones_usuario.append((i+1))
+                lista_condiciones_usuario.append(int(i+1))
         return lista_condiciones_usuario
 
 #Funcion para rellenar los campos con los de un usuario existente
@@ -510,23 +510,22 @@ class RegistroSujeto():
          self.txb_nombre.insert(0, self.sujetoexiste.nombres)
          self.txb_apellido.insert(0, self.sujetoexiste.apellidos)
          self.dt_fecha_nac.set_date(datetime.datetime.strptime(self.sujetoexiste.fecha_nacimiento,formfecha))
-         self.cb_sexo.current(int(self.sujetoexiste.sexo)-1)
-         self.cb_genero.current(int(self.sujetoexiste.genero)-1)
-         self.cb_orientacion_sexual.current(int(self.sujetoexiste.orientacion_sexual)-1),
-         self.cb_nacionalidad.current(int(self.sujetoexiste.nacionalidad)-1)
-         self.cb_provincia.current(int(self.sujetoexiste.provincia)-1)
+         self.cb_sexo.current(int(self.sujetoexiste.sexo.id_sexo)-1)
+         self.cb_genero.current(int(self.sujetoexiste.genero.id_genero)-1)
+         self.cb_orientacion_sexual.current(int(self.sujetoexiste.orientacion_sexual.id_orientacion_sexual)-1),
+         self.cb_nacionalidad.current(int(self.sujetoexiste.nacionalidad.id_nacionalidad)-1)
+         self.cb_provincia.current(int(self.sujetoexiste.provincia.id_provincia)-1)
          j = 0
          for i in range(len(self.lista_condiciones)):
-             print("Valor de j: ",j)
-             if(self.sujetoexiste.condiciones_medicas[j] == (i+1)):
+             if(self.sujetoexiste.condiciones_medicas[j].id_condicion_medica == (i+1)):
                     self.lista_valoresbool_checkbox[i].set(True)
+                    #print(self.sujetoexiste.condiciones_medicas[j].id_condicion_medica)
                     j+=1
+                    #print(len(self.sujetoexiste.condiciones_medicas))
+                    #hola = input()
                     if(j == len(self.sujetoexiste.condiciones_medicas)):
                         break
         
-    def obtener_indice(self):
-        indice = self.cb_sexo.current()
-        print(indice)    
 #Funcion para abrir otro formulario
     def abrir_menu(self):  
         from interfaces.menu_med import MenuMed
@@ -539,9 +538,10 @@ class RegistroSujeto():
         sujeto.orientacion_sexual = self.cb_orientacion_sexual.current() + 1
         sujeto.nacionalidad = self.cb_nacionalidad.current() + 1
         sujeto.provincia = self.cb_provincia.current() + 1
-        sujeto.fecha_creacion = fecha_creacion= datetime.datetime.now()
-        sujeto.condiciones_medicas = condiciones_medicas= self.condiciones_usuario()
-        sujeto.registrar(sujeto.nombres, sujeto.apellidos, sujeto.fecha_nacimiento, sujeto.sexo, sujeto.genero, sujeto.orientacion_sexual, sujeto.nacionalidad, sujeto.provincia, sujeto.fecha_creacion, sujeto.condiciones_medicas)
+        fecha_creacion = "Willfer"#datetime.datetime.now()
+        #sujeto.condiciones_medicas = self.condiciones_usuario()
+        #sujeto.condiciones_medicas.pop(0)
+        sujeto.registrar(sujeto.nombres, sujeto.apellidos, sujeto.fecha_nacimiento, sujeto.sexo, sujeto.genero, sujeto.orientacion_sexual, sujeto.nacionalidad, sujeto.provincia, fecha_creacion, self.condiciones_usuario())
         self.window.destroy()
         menu = MenuMed(sujeto)
 
