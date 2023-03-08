@@ -63,6 +63,13 @@ class SujetosEstudio:
             
             self.correo = resultado[0][11]
             self.fecha_creacion = resultado[0][12]
+
+            bd.execute_query('''SELECT id_condicion_medica FROM Condiciones_Sujeto WHERE id_sujeto = ?''', [self.id_sujeto])
+            for condicion in resultado:
+                p = CondicionesMedicas(condicion[0])
+                p.cargar_descripcion_condicion_medica()
+                self.condiciones_medicas.append(p)
+            
             return True
         else:
             return False
