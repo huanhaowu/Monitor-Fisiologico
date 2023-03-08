@@ -36,7 +36,3 @@ class MedicionParametro:
         else:
             if self.parametro.max_estandar < self.medida_parametro_fisiologico:
                 return ("#F5F5F5", '', self.medida_parametro_fisiologico)
-
-prueba = MedicionParametro(1, ParametrosFisiologicos(1, "Temperatura", 36, 37, 40, 34, 46, 29.99), 50)
-
-print(prueba.asignar_color())
