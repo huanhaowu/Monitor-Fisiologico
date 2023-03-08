@@ -6,8 +6,9 @@ from modelos.sexo import Sexo
 from modelos.provincia import Provincia
 from modelos.orientacion_sexual import OrientacionSexual
 from modelos.condiciones_medicas import CondicionesMedicas 
+from modelos.sujetos_estudio import SujetosEstudio
 
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, ttk
+from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, ttk,BooleanVar
 from tkcalendar import DateEntry
 import os
 import datetime
@@ -19,7 +20,7 @@ def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
 class RegistroSujeto():
-    def _init_(self, tipo_documento, codigo_documento):
+    def __init__(self, tipo_documento, codigo_documento):
         self.tipo_documento = tipo_documento
         self.codigo_documento = codigo_documento
 
@@ -284,12 +285,12 @@ class RegistroSujeto():
         )
         nacionalidad = Nacionalidad()
         #ComboBox de nacionalidad
-        self.txb_nacionalidad = ttk.Combobox(
+        self.cb_nacionalidad = ttk.Combobox(
             state = "readonly",
             values = nacionalidad.obtener_lista_nacionalidades()
         )
         #Localización del combobox de nacionalidad
-        self.txb_nacionalidad.place(
+        self.cb_nacionalidad.place(
             x=204.0,
             y=485.0,
             width=165.0,
@@ -477,54 +478,74 @@ class RegistroSujeto():
             outline=""
         )
         estados_salud = CondicionesMedicas()
-        lista_condiciones = estados_salud.obtener_lista_condiciones_medicas()
+        self.lista_condiciones = estados_salud.obtener_lista_condiciones_medicas()
         self.lista_condiciones_checkbox = []
-        for i in range(len(lista_condiciones)):
-            self.checkbox = ttk.Checkbutton(text=lista_condiciones[i])
+        self.lista_valoresbool_checkbox = [BooleanVar() for i in range(len(self.lista_condiciones))]
+        self.sujetoexiste = SujetosEstudio(tipo_documento, codigo_documento)
+        if(self.sujetoexiste.ingresar() == True):
+            self.usuario_existente()
+
+        for i in range(len(self.lista_condiciones)):
+            self.checkbox = ttk.Checkbutton(text=self.lista_condiciones[i], variable=self.lista_valoresbool_checkbox[i])
             if i < 7:
                 self.checkbox.place(x=860,y=410+(i*30),width=120,height=30)
             else :
                 self.checkbox.place(x=1020,y=410+((i-7)*30),width=180,height=30)
             self.lista_condiciones_checkbox.append(self.checkbox)
-
-
+        
         self.window.resizable(False, False)
         self.window.mainloop()
 
+#Funcion asignar las condiciones medicas del usuario 1.0
+    def condiciones_usuario(self):
+        lista_condiciones_usuario = []
+        for i in range(len(self.lista_condiciones_checkbox)):
+            if self.lista_valoresbool_checkbox[i].get() == True:
+                lista_condiciones_usuario.append((i+1))
+        return lista_condiciones_usuario
+
+#Funcion para rellenar los campos con los de un usuario existente
+    def usuario_existente(self):
+         formfecha = "%Y-%m-%d"
+         self.txb_nombre.insert(0, self.sujetoexiste.nombres)
+         self.txb_apellido.insert(0, self.sujetoexiste.apellidos)
+         self.dt_fecha_nac.set_date(datetime.datetime.strptime(self.sujetoexiste.fecha_nacimiento,formfecha))
+         self.cb_sexo.current(int(self.sujetoexiste.sexo)-1)
+         self.cb_genero.current(int(self.sujetoexiste.genero)-1)
+         self.cb_orientacion_sexual.current(int(self.sujetoexiste.orientacion_sexual)-1),
+         self.cb_nacionalidad.current(int(self.sujetoexiste.nacionalidad)-1)
+         self.cb_provincia.current(int(self.sujetoexiste.provincia)-1)
+         j = 0
+         for i in range(len(self.lista_condiciones)):
+             print("Valor de j: ",j)
+             if(self.sujetoexiste.condiciones_medicas[j] == (i+1)):
+                    self.lista_valoresbool_checkbox[i].set(True)
+                    j+=1
+                    if(j == len(self.sujetoexiste.condiciones_medicas)):
+                        break
+        
+    def obtener_indice(self):
+        indice = self.cb_sexo.current()
+        print(indice)    
 #Funcion para abrir otro formulario
-    def condiciones_usuario(lista_condiciones_checkbox):
-        lista_condiciones = []
-        for i in range(len(lista_condiciones_checkbox)):
-            if lista_condiciones_checkbox[i].instate(['selected']):
-                lista_condiciones.append(lista_condiciones_checkbox[i].cget("text"))
-        return lista_condiciones
-    
     def abrir_menu(self):  
         from interfaces.menu_med import MenuMed
+        sujeto = SujetosEstudio(self.tipo_documento, self.codigo_documento)
+        sujeto.nombres = self.txb_nombre.get()
+        sujeto.apellidos = self.txb_apellido.get()
+        sujeto.fecha_nacimiento = self.dt_fecha_nac.get_date()
+        sujeto.sexo = self.cb_sexo.current() + 1
+        sujeto.genero = self.cb_genero.current() + 1
+        sujeto.orientacion_sexual = self.cb_orientacion_sexual.current() + 1
+        sujeto.nacionalidad = self.cb_nacionalidad.current() + 1
+        sujeto.provincia = self.cb_provincia.current() + 1
+        sujeto.fecha_creacion = fecha_creacion= datetime.datetime.now()
+        sujeto.condiciones_medicas = condiciones_medicas= self.condiciones_usuario()
+        sujeto.registrar(sujeto.nombres, sujeto.apellidos, sujeto.fecha_nacimiento, sujeto.sexo, sujeto.genero, sujeto.orientacion_sexual, sujeto.nacionalidad, sujeto.provincia, sujeto.fecha_creacion, sujeto.condiciones_medicas)
         self.window.destroy()
-        from modelos.sujetos_estudio import SujetosEstudio
-        sujeto = SujetosEstudio(
-            self.tipo_documento, 
-            self.codigo_documento,
-            self.txb_nombre.get(),
-            self.txb_apellido.get(),
-            self.dt_fecha_nac.get_date(),
-            self.cb_sexo.get(),
-            self.cb_genero.get(),
-            self.cb_orientacion_sexual.get(),
-            self.txb_nacionalidad.get(),
-            self.cb_provincia.get(),
-            fecha_creacion= datetime.datetime.now(),
-            condiciones_medicas= self.condiciones_usuario(self.lista_condiciones_checkbox)
-            )
         menu = MenuMed(sujeto)
 
-    
     def abrir_login(self):  
         from interfaces.login_suj import LoginSujEstudio
         self.window.destroy()
         menu = LoginSujEstudio()
-
-
-#if _name_ == '_main_':
-#    registro = RegistroSujeto(1,1)
