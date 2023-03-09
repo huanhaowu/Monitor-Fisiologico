@@ -15,7 +15,7 @@ import datetime
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"assets/registro_suj")
-
+tamFuente = 18
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
@@ -23,8 +23,6 @@ class RegistroSujeto():
     def __init__(self, tipo_documento, codigo_documento):
         self.tipo_documento = tipo_documento
         self.codigo_documento = codigo_documento
-        #self.ttk_setPalette(background=u'AntiqueWhite1', activeBackground=u'peach puff')
-
         
         self.window = Tk()
         self.window.geometry("1260x725+{}+{}".format(self.window.winfo_screenwidth() // 2 - 1260 // 2, self.window.winfo_screenheight() // 2 - 725 // 2))
@@ -137,7 +135,8 @@ class RegistroSujeto():
             fg="#000716",
             highlightthickness=0,
             state = "disabled",
-            textvariable = var
+            textvariable = var,
+            font=("RobotoRoman Regular", tamFuente * -1)
         )
         #Loacalización del textbox del codigo de documento
         self.txb_codigo_doc.place(
@@ -162,7 +161,8 @@ class RegistroSujeto():
         td = TipoDocumento()
         self.cb_tipo_doc = ttk.Combobox(
             state = "disabled",
-            values = td.obtener_lista_tipo_documento()
+            values = td.obtener_lista_tipo_documento(),
+            font=("RobotoRoman Regular", tamFuente * -1)
         )
 
         #Colocar el valor por defecto de sexo
@@ -195,7 +195,8 @@ class RegistroSujeto():
             bd=1,
             bg="#FFFFFF",
             fg="#000716",
-            highlightthickness=0
+            highlightthickness=0,
+            font=("RobotoRoman Regular", tamFuente * -1)
         )
         #Localización del textbox del nombre
         self.txb_nombre.place(
@@ -222,7 +223,8 @@ class RegistroSujeto():
             bd=1,
             bg="#FFFFFF",
             fg="#000716",
-            highlightthickness=0
+            highlightthickness=0,
+            font=("RobotoRoman Regular", tamFuente * -1)
         )
         #Localización del textbox del apellido
         self.txb_apellido.place(
@@ -247,12 +249,10 @@ class RegistroSujeto():
         maxdate = datetime.date.today()
 
         #Datetimepicker de la Fecha de Nacimiento  
-        self.dt_fecha_nac = DateEntry() ## TO DO : CAMBIAR A DATETIMEPICKER
-            #state = "readonly",
-            #values = ["1","2"]
-        #)
+        self.dt_fecha_nac = DateEntry() 
+        
         #localización del datetimepicker de la fecha de nacimiento
-        self.dt_fecha_nac.config(maxdate = maxdate,firstweekday = 'sunday')
+        self.dt_fecha_nac.config(maxdate = maxdate,firstweekday = 'sunday',font=("RobotoRoman Regular", tamFuente * -1))
         self.dt_fecha_nac.place(
             x=204.0,
             y=374.0,
@@ -274,7 +274,8 @@ class RegistroSujeto():
         #Combobox de Sexo 
         self.cb_sexo = ttk.Combobox(
             state = "readonly",
-            value = sexo.obtener_lista_sexos()
+            value = sexo.obtener_lista_sexos(),
+            font=("RobotoRoman Regular", tamFuente * -1)
         )
         #Colocar el valor por defecto de sexo
         self.cb_sexo.current(0)
@@ -302,7 +303,8 @@ class RegistroSujeto():
         #ComboBox de nacionalidad
         self.cb_nacionalidad = ttk.Combobox(
             state = "readonly",
-            values = nacionalidad.obtener_lista_nacionalidades()
+            values = nacionalidad.obtener_lista_nacionalidades(),
+            font=("RobotoRoman Regular", tamFuente * -1)
         )
 
         #Colocar el valor por defecto de nacionalidad
@@ -330,7 +332,8 @@ class RegistroSujeto():
         #ComboBox para las provincias
         self.cb_provincia = ttk.Combobox(
             state = "readonly",
-            values = provincia.obtener_lista_provincias()
+            values = provincia.obtener_lista_provincias(),
+            font=("RobotoRoman Regular", tamFuente * -1)
         )
 
         #Colocar el valor por defecto de provincia
@@ -359,7 +362,8 @@ class RegistroSujeto():
         #ComboBox de genero
         self.cb_genero = ttk.Combobox(
             state = "readonly",
-            values = genero.obtener_lista_generos()
+            values = genero.obtener_lista_generos(),
+            font=("RobotoRoman Regular", tamFuente * -1)
         )
 
         #Colocar el valor por defecto de genero
@@ -387,7 +391,8 @@ class RegistroSujeto():
         #ComboBox de Orientacion Sexual
         self.cb_orientacion_sexual = ttk.Combobox(
         state = "readonly",
-        values = orientacion.obtener_lista_orientaciones()
+        values = orientacion.obtener_lista_orientaciones(),
+        font=("RobotoRoman Regular", tamFuente * -1)
         )
         #Localización del combobox de orientacion sexual
         self.cb_orientacion_sexual.place(
@@ -442,7 +447,8 @@ class RegistroSujeto():
             bd=1,
             bg="#FFFFFF",
             fg="#000716",
-            highlightthickness=0
+            highlightthickness=0,
+            font=("RobotoRoman Regular", tamFuente * -1)
         )
         self.txb_correo.place(
             x= 990.0,
@@ -491,7 +497,7 @@ class RegistroSujeto():
             self.usuario_existente()
 
         for i in range(len(self.lista_condiciones)):
-            self.checkbox = Checkbutton(text=self.lista_condiciones[i], variable=self.lista_valoresbool_checkbox[i],bg="#EEF8FF",)
+            self.checkbox = Checkbutton(text=self.lista_condiciones[i], variable=self.lista_valoresbool_checkbox[i],bg="#EEF8FF",font=("RobotoRoman Regular", 13 * -1))
             if i < 7:
                 self.checkbox.place(x=860,y=410+(i*30),width=120,height=30)
             else :
