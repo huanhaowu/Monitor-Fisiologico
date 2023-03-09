@@ -8,7 +8,7 @@ from modelos.orientacion_sexual import OrientacionSexual
 from modelos.condiciones_medicas import CondicionesMedicas 
 from modelos.sujetos_estudio import SujetosEstudio
 
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, ttk,BooleanVar
+from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, ttk,BooleanVar,StringVar,Checkbutton
 from tkcalendar import DateEntry
 import os
 import datetime
@@ -23,6 +23,7 @@ class RegistroSujeto():
     def __init__(self, tipo_documento, codigo_documento):
         self.tipo_documento = tipo_documento
         self.codigo_documento = codigo_documento
+        #self.ttk_setPalette(background=u'AntiqueWhite1', activeBackground=u'peach puff')
 
         
         self.window = Tk()
@@ -128,11 +129,15 @@ class RegistroSujeto():
             justify = 'center'
         )
         #Textbox del Codigo de Documento
+        var = StringVar(value=self.codigo_documento)
+        #self.txb_codigo_doc.insert(0, self.codigo_documento)
         self.txb_codigo_doc = Entry(
             bd=1,
             bg="#FFFFFF",
             fg="#000716",
-            highlightthickness=0
+            highlightthickness=0,
+            state = "disabled",
+            textvariable = var
         )
         #Loacalización del textbox del codigo de documento
         self.txb_codigo_doc.place(
@@ -141,7 +146,7 @@ class RegistroSujeto():
             width=165.0,
             height=34.0
         )
-        self.txb_codigo_doc.insert(0, self.codigo_documento)
+        
         #-------------------- TIPO DOCUMENTO -------------------
         #Label del Tipo de Documento
         self.canvas.create_text(
@@ -156,9 +161,13 @@ class RegistroSujeto():
         #Combobox del Tipo de Documento
         td = TipoDocumento()
         self.cb_tipo_doc = ttk.Combobox(
-            state = "readonly",
+            state = "disabled",
             values = td.obtener_lista_tipo_documento()
         )
+
+        #Colocar el valor por defecto de sexo
+        self.cb_tipo_doc.current(0)
+
         td.descripcion = self.tipo_documento
         td.cargar_id_tipo_documento()
         self.cb_tipo_doc.current(td.id_tipo_documento-1)
@@ -267,6 +276,9 @@ class RegistroSujeto():
             state = "readonly",
             value = sexo.obtener_lista_sexos()
         )
+        #Colocar el valor por defecto de sexo
+        self.cb_sexo.current(0)
+
         #Localización del combobox de sexo
         self.cb_sexo.place(
             x=561.0,
@@ -292,6 +304,10 @@ class RegistroSujeto():
             state = "readonly",
             values = nacionalidad.obtener_lista_nacionalidades()
         )
+
+        #Colocar el valor por defecto de nacionalidad
+        self.cb_nacionalidad.current(0)
+
         #Localización del combobox de nacionalidad
         self.cb_nacionalidad.place(
             x=204.0,
@@ -316,6 +332,10 @@ class RegistroSujeto():
             state = "readonly",
             values = provincia.obtener_lista_provincias()
         )
+
+        #Colocar el valor por defecto de provincia
+        self.cb_provincia.current(0)
+
         #Localización del combobox de provincia
         self.cb_provincia.place(
             x=561.0,
@@ -341,6 +361,9 @@ class RegistroSujeto():
             state = "readonly",
             values = genero.obtener_lista_generos()
         )
+
+        #Colocar el valor por defecto de genero
+        self.cb_genero.current(0)
         #Localización del combobox de genero
         self.cb_genero.place(
             x=204.0,
@@ -373,6 +396,9 @@ class RegistroSujeto():
             width=178.0,
             height=34.0
         )
+
+        #Colocar el valor por defecto de orientacion sexual
+        self.cb_orientacion_sexual.current(0)
         
         """
         #-------------------- ESTADOS DE SALUD -------------------
@@ -399,56 +425,32 @@ class RegistroSujeto():
             justify = 'center'
         )
 
-        #-------------------- ALCOHOL -------------------
-        #Label de Alcohol
+        #-------------------- CORREO ELECTRONICO -------------------
+        #Label de correo electronico
         self.canvas.create_text(
             830.0,
             230.0,
             anchor="nw",
-            text="Ingerir\n alcohol",
+            text="Correo\n Electronico",
             fill="#000000",
-            font=("RobotoRoman Regular", 25 * -1),
+            font=("RobotoRoman Regular", 22 * -1),
             justify = 'center'
         )
 
-        #CheckBox de Alcohol
-        self.ck_alcohol = ttk.Combobox(
-        state = "readonly",
-        values = ["Si","No"]
+        #CheckBox de correo electronico
+        self.txb_correo = Entry(
+            bd=1,
+            bg="#FFFFFF",
+            fg="#000716",
+            highlightthickness=0
         )
-        #Localización del checkbox de alcohol
-        self.ck_alcohol.place(
-            x=940.0,
-            y=247.0,
-            width=59.0,
-            height=35.0
+        self.txb_correo.place(
+            x= 990.0,
+            y= 235.0,
+            width= 220.0,
+            height=43.0
         )
-
-        #-------------------- FUMA -------------------
-        #Label de Fumar
-        self.canvas.create_text(
-            1020.0,
-            247.0,
-            anchor="nw",
-            text="Fumar",
-            fill="#000000",
-            font=("RobotoRoman Regular", 25 * -1),
-            justify = 'center'
-        )
-
-        #checkbox de Fumar
-        self.ck_fumar = ttk.Combobox(
-        state = "readonly",
-        values = ["Si","No"]
-        )
-        #Localización del checkbox de fumar
-        self.ck_fumar.place(
-            x= 1110.0,
-            y= 244.0,
-            width= 59.0,
-            height=35.0
-        )
-
+        
         #-------------------- Condiciones DE SALUD -------------------
         #Label de Condiciones de Salud
         self.canvas.create_text(
@@ -489,15 +491,16 @@ class RegistroSujeto():
             self.usuario_existente()
 
         for i in range(len(self.lista_condiciones)):
-            self.checkbox = ttk.Checkbutton(text=self.lista_condiciones[i], variable=self.lista_valoresbool_checkbox[i])
+            self.checkbox = Checkbutton(text=self.lista_condiciones[i], variable=self.lista_valoresbool_checkbox[i],bg="#EEF8FF",)
             if i < 7:
                 self.checkbox.place(x=860,y=410+(i*30),width=120,height=30)
             else :
                 self.checkbox.place(x=1020,y=410+((i-7)*30),width=180,height=30)
             self.lista_condiciones_checkbox.append(self.checkbox)
-        
+
         self.window.resizable(False, False)
         self.window.mainloop()
+
 
 #Funcion asignar las condiciones medicas del usuario 1.0
     def condiciones_usuario(self):
@@ -514,6 +517,7 @@ class RegistroSujeto():
          self.txb_apellido.insert(0, self.sujetoexiste.apellidos)
          self.dt_fecha_nac.set_date(datetime.datetime.strptime(self.sujetoexiste.fecha_nacimiento,formfecha))
          self.cb_sexo.current(int(self.sujetoexiste.sexo.id_sexo)-1)
+         self.txb_correo.insert(0, self.sujetoexiste.correo)
          self.cb_genero.current(int(self.sujetoexiste.genero.id_genero)-1)
          self.cb_orientacion_sexual.current(int(self.sujetoexiste.orientacion_sexual.id_orientacion_sexual)-1),
          self.cb_nacionalidad.current(int(self.sujetoexiste.nacionalidad.id_nacionalidad)-1)
@@ -539,10 +543,8 @@ class RegistroSujeto():
         sujeto.orientacion_sexual = self.cb_orientacion_sexual.current() + 1
         sujeto.nacionalidad = self.cb_nacionalidad.current() + 1
         sujeto.provincia = self.cb_provincia.current() + 1
-        fecha_creacion = "Willfer"#datetime.datetime.now()
-        #sujeto.condiciones_medicas = self.condiciones_usuario()
-        #sujeto.condiciones_medicas.pop(0)
-        sujeto.registrar(sujeto.nombres, sujeto.apellidos, sujeto.fecha_nacimiento, sujeto.sexo, sujeto.genero, sujeto.orientacion_sexual, sujeto.nacionalidad, sujeto.provincia, fecha_creacion, self.condiciones_usuario())
+        sujeto.correo = self.txb_correo.get()
+        sujeto.registrar(sujeto.nombres, sujeto.apellidos, sujeto.fecha_nacimiento, sujeto.sexo, sujeto.genero, sujeto.orientacion_sexual, sujeto.nacionalidad, sujeto.provincia, sujeto.correo, self.condiciones_usuario())
         self.window.destroy()
         menu = MenuMed(sujeto)
 
