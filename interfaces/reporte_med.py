@@ -500,8 +500,9 @@ class ReporteMed():
             bd=0,
             bg="#F5F5F5",
             fg="#000716",
-            font=("RobotoRoman Regular", 9),
-            yscrollcommand = scrollbar.set
+            font=("RobotoRoman Regular", 11),
+            yscrollcommand = scrollbar.set,
+            wrap = 'word'
         )
         self.txt_nota.insert("1.0",self.nota_aclaratoria)
         scrollbar.config(command=self.txt_nota.yview)
@@ -533,13 +534,14 @@ class ReporteMed():
 
     def crear_nota_aclaratoria(self):
         mensaje = ""
-        for x in self.sujeto.condiciones_medicas:
-            if mensaje == "":
-                mensaje += f"-La condicion ({x.descripcion}) puede afectar: "
-            else:
-                mensaje +=f"\n\n-La condicion ({x.descripcion}) puede afectar: "
-            for y in x.parametros:
-                mensaje += f"({y.descripcion})  "
+        if self.sujeto.condiciones_medicas != []:
+            for x in self.sujeto.condiciones_medicas:
+                if mensaje == "":
+                    mensaje += f"- La condición ({x.descripcion}) puede afectar: "
+                else:
+                    mensaje += f"\n\n- La condición ({x.descripcion}) puede afectar: "
+                parametros = ", ".join([y.descripcion for y in x.parametros])
+                mensaje += parametros
         return mensaje
 
     def calcular_edad(self):
