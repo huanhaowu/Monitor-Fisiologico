@@ -1,7 +1,6 @@
 from modelos.parametros_fisiologicos import ParametrosFisiologicos
 class MedicionParametro:
-    def __init__(self, id_detalle_medicion:int = 0, parametro:ParametrosFisiologicos = None, medida_parametro_fisiologico:float = 0):
-        self.id_detalle_medicion = id_detalle_medicion
+    def __init__(self, parametro:ParametrosFisiologicos, medida_parametro_fisiologico:float):
         self.parametro = parametro
         self.medida_parametro_fisiologico = medida_parametro_fisiologico
 
