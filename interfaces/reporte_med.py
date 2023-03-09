@@ -539,7 +539,7 @@ class ReporteMed():
             if mensaje == "":
                 mensaje += f"-La condicion ({x.descripcion}) puede afectar: "
             else:
-                mensaje +=f"\n-La condicion ({x.descripcion}) puede afectar: "
+                mensaje +=f"\n\n-La condicion ({x.descripcion}) puede afectar: "
             for y in x.parametros:
                 mensaje += f"({y.descripcion})  "
         return mensaje

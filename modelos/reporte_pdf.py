@@ -1,5 +1,4 @@
 from fpdf import FPDF
-
 class ReportePdf(FPDF):
     def __init__(self, reporte_med):
         FPDF.__init__(self)
@@ -72,13 +71,41 @@ class ReportePdf(FPDF):
 
         self.text(20, 183,
                  "---------------------------------------------------------------------------------------------------------------------------------")
-
+        #region NOTA ACLARATORIA
         self.set_font("helvetica", 'B', size=11)
         self.text(20, 189, "NOTA ACLARATORIA")
-        self.set_xy(20, 193)
+
+        # Define the maximum width of the page
+        max_width = 210
+
+        # Define the margin
+        margin = 20
+
+        # Define the line height
+        line_height = 7
+
+        # Define the starting position for the text
+        x_pos = margin
+        y_pos = 193
         self.set_font("helvetica", '', size=9)
-        #self.write(20, reporte_med.nota_aclaratoria)
-        self.multi_cell(60, 20, reporte_med.nota_aclaratoria, align='L', ln=1)
+
+        # Loop through each character in the text
+        for char in self.reporte_med.nota_aclaratoria:
+
+            # If the character goes beyond the maximum width of the page, add a line break
+            if x_pos + self.get_string_width(char) > max_width - margin or char == "-":
+                y_pos += line_height
+                x_pos = margin
+
+            # If the text reaches the bottom of the page, add a new page
+            if y_pos + line_height > self.h - margin:
+                self.add_page()
+                y_pos = 52
+
+            # Add the character to the PDF and update the position
+            self.text(x_pos, y_pos, char)
+            x_pos += self.get_string_width(char)
+        #endregion
 
 
         # save the pdf with name .pdf
