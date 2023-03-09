@@ -49,14 +49,21 @@ class MenuMed():
             height=60.0
         )
 
-        self.canvas.create_rectangle(
-            561.0,
-            302.0,
-            1189.0,
-            480.0,
-            fill="#EEF8FF",
-            outline="")
-
+        self.txt_pantalla = Entry(
+            bd=1,
+            bg="#FFFFFF",
+            fg="#000716",
+            highlightthickness=0, 
+            state= "readonly"
+            )
+        
+        self.txt_pantalla.place(
+            x = 561.0,
+            y = 280.0,
+            width = 630.0,
+            height = 200.0  )
+        
+        #Aqui va el texbox para la estatura
         self.canvas.create_text(
             720.0,
             177.0,
@@ -65,8 +72,6 @@ class MenuMed():
             fill="#000000",
             font=("RobotoRoman Regular", 25 * -1)
         )
-
-        #Aqui va el texbox para la estatura
         self.txb_estatura = Entry(
             bd=1,
             bg="#FFFFFF",
@@ -91,8 +96,6 @@ class MenuMed():
             width=59.0,
             height=35.0
         )
-
-
         self.canvas.create_text(
             990.0,
             177.0,
