@@ -5,10 +5,8 @@
 
 from datetime import date, datetime
 from pathlib import Path
-from tkinter import Tk, ttk, Canvas, Button, PhotoImage, HORIZONTAL, Label, Text, Scrollbar, RIGHT, scrolledtext, Y, \
+from tkinter import Tk, ttk, Canvas, Button, PhotoImage, HORIZONTAL, Label, Text, Scrollbar, RIGHT, Y, \
     DISABLED
-
-import tk
 
 # Bloque de codigo para trabajar con el path de los archivos
 OUTPUT_PATH = Path(__file__).parent
