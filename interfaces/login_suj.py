@@ -83,7 +83,7 @@ class LoginSujEstudio():
         #Imagen Logo de la Aplicación
         self.imagen_logo_app = PhotoImage(file=relative_to_assets("image_1.png"))
         #Localización del logo de la aplicación
-        logo_app = self.canvas.create_image(
+        self.logo_app = self.canvas.create_image(
             656.0,
             113.0,
             image=self.imagen_logo_app

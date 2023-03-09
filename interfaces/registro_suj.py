@@ -1,11 +1,20 @@
 from pathlib import Path
+from modelos.tipo_documento import TipoDocumento
+from modelos.nacionalidad import Nacionalidad
+from modelos.genero import Genero
+from modelos.sexo import Sexo
+from modelos.provincia import Provincia
+from modelos.orientacion_sexual import OrientacionSexual
+from modelos.condiciones_medicas import CondicionesMedicas 
+from modelos.sujetos_estudio import SujetosEstudio
 
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, ttk
+from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, ttk,BooleanVar
+from tkcalendar import DateEntry
 import os
+import datetime
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"assets/registro_suj")
-
 
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
@@ -14,6 +23,7 @@ class RegistroSujeto():
     def __init__(self, tipo_documento, codigo_documento):
         self.tipo_documento = tipo_documento
         self.codigo_documento = codigo_documento
+
         
         self.window = Tk()
         self.window.geometry("1260x725+{}+{}".format(self.window.winfo_screenwidth() // 2 - 1260 // 2, self.window.winfo_screenheight() // 2 - 725 // 2))
@@ -131,7 +141,7 @@ class RegistroSujeto():
             width=165.0,
             height=34.0
         )
-
+        self.txb_codigo_doc.insert(0, self.codigo_documento)
         #-------------------- TIPO DOCUMENTO -------------------
         #Label del Tipo de Documento
         self.canvas.create_text(
@@ -144,10 +154,14 @@ class RegistroSujeto():
             justify = 'center'
         )
         #Combobox del Tipo de Documento
+        td = TipoDocumento()
         self.cb_tipo_doc = ttk.Combobox(
             state = "readonly",
-            value = ["Cédula","Pasaporte"]
+            values = td.obtener_lista_tipo_documento()
         )
+        td.descripcion = self.tipo_documento
+        td.cargar_id_tipo_documento()
+        self.cb_tipo_doc.current(td.id_tipo_documento-1)
         #Localización del combobox del tipo de documento
         self.cb_tipo_doc.place(
             x=561.0,
@@ -220,12 +234,16 @@ class RegistroSujeto():
             justify = 'center'
         )
         
+        #Definir el día máximo de selección en el DT
+        maxdate = datetime.date.today()
+
         #Datetimepicker de la Fecha de Nacimiento  
-        self.dt_fecha_nac = ttk.Combobox(
-            state = "readonly",
-            values = ["1","2"]
-        )
+        self.dt_fecha_nac = DateEntry() ## TO DO : CAMBIAR A DATETIMEPICKER
+            #state = "readonly",
+            #values = ["1","2"]
+        #)
         #localización del datetimepicker de la fecha de nacimiento
+        self.dt_fecha_nac.config(maxdate = maxdate,firstweekday = 'sunday')
         self.dt_fecha_nac.place(
             x=204.0,
             y=374.0,
@@ -243,11 +261,11 @@ class RegistroSujeto():
             font=("RobotoRoman Regular", 25 * -1),
             justify = 'center'
         )
-
+        sexo = Sexo()
         #Combobox de Sexo 
         self.cb_sexo = ttk.Combobox(
             state = "readonly",
-            value = ["Masculino","Femenino","Intersexual"]
+            value = sexo.obtener_lista_sexos()
         )
         #Localización del combobox de sexo
         self.cb_sexo.place(
@@ -268,14 +286,14 @@ class RegistroSujeto():
             font=("RobotoRoman Regular", 25 * -1),
             justify = 'center'
         )
-        
+        nacionalidad = Nacionalidad()
         #ComboBox de nacionalidad
-        self.txb_nacionalidad = ttk.Combobox(
+        self.cb_nacionalidad = ttk.Combobox(
             state = "readonly",
-            values = ["Dominicano/a","Venezolano/a"]
+            values = nacionalidad.obtener_lista_nacionalidades()
         )
         #Localización del combobox de nacionalidad
-        self.txb_nacionalidad.place(
+        self.cb_nacionalidad.place(
             x=204.0,
             y=485.0,
             width=165.0,
@@ -292,11 +310,11 @@ class RegistroSujeto():
             fill="#000000",
             font=("RobotoRoman Regular", 25 * -1)
         )
-        
+        provincia = Provincia()
         #ComboBox para las provincias
         self.cb_provincia = ttk.Combobox(
             state = "readonly",
-            values = ["1","2"]
+            values = provincia.obtener_lista_provincias()
         )
         #Localización del combobox de provincia
         self.cb_provincia.place(
@@ -317,11 +335,11 @@ class RegistroSujeto():
             font=("RobotoRoman Regular", 25 * -1) ,
             justify = 'center'
         )
-        
+        genero = Genero()
         #ComboBox de genero
         self.cb_genero = ttk.Combobox(
             state = "readonly",
-            values = ["Masculino","Femenino","No Bionario","Otros"]
+            values = genero.obtener_lista_generos()
         )
         #Localización del combobox de genero
         self.cb_genero.place(
@@ -342,11 +360,11 @@ class RegistroSujeto():
             font=("RobotoRoman Regular", 25 * -1),
             justify = 'center'
         )
-        
+        orientacion = OrientacionSexual()
         #ComboBox de Orientacion Sexual
         self.cb_orientacion_sexual = ttk.Combobox(
         state = "readonly",
-        values = ["Heterosexual","Homosexual","Bisexual","Pansexual","Asexual","Otros"] 
+        values = orientacion.obtener_lista_orientaciones()
         )
         #Localización del combobox de orientacion sexual
         self.cb_orientacion_sexual.place(
@@ -364,7 +382,7 @@ class RegistroSujeto():
             910.0,
             126.0,
             anchor="nw",
-            text="ESTADO DE SALUD",
+            text="Correo Electrónico",
             fill="#000000",
             font=("RobotoRoman Regular", 25 * -1),
             justify = 'center'
@@ -375,7 +393,7 @@ class RegistroSujeto():
             850.0,
             168.0,
             anchor="nw",
-            text="Seleccione las opciones que se adecuen \na sus hábitos de consumo:",
+            text="Ingrese el correo electrónico por defecto \nde su usuario:",
             fill="#000000",
             font=("RobotoRoman Regular", 20 * -1),
             justify = 'center'
@@ -462,22 +480,73 @@ class RegistroSujeto():
             fill="#EEF8FF",
             outline=""
         )
+        estados_salud = CondicionesMedicas()
+        self.lista_condiciones = estados_salud.obtener_lista_condiciones_medicas()
+        self.lista_condiciones_checkbox = []
+        self.lista_valoresbool_checkbox = [BooleanVar() for i in range(len(self.lista_condiciones))]
+        self.sujetoexiste = SujetosEstudio(tipo_documento, codigo_documento)
+        if(self.sujetoexiste.ingresar() == True):
+            self.usuario_existente()
 
+        for i in range(len(self.lista_condiciones)):
+            self.checkbox = ttk.Checkbutton(text=self.lista_condiciones[i], variable=self.lista_valoresbool_checkbox[i])
+            if i < 7:
+                self.checkbox.place(x=860,y=410+(i*30),width=120,height=30)
+            else :
+                self.checkbox.place(x=1020,y=410+((i-7)*30),width=180,height=30)
+            self.lista_condiciones_checkbox.append(self.checkbox)
+        
         self.window.resizable(False, False)
         self.window.mainloop()
 
+#Funcion asignar las condiciones medicas del usuario 1.0
+    def condiciones_usuario(self):
+        lista_condiciones_usuario = []
+        for i in range(len(self.lista_condiciones_checkbox)):
+            if self.lista_valoresbool_checkbox[i].get() == True:
+                lista_condiciones_usuario.append(int(i+1))
+        return lista_condiciones_usuario
+
+#Funcion para rellenar los campos con los de un usuario existente
+    def usuario_existente(self):
+         formfecha = "%Y-%m-%d"
+         self.txb_nombre.insert(0, self.sujetoexiste.nombres)
+         self.txb_apellido.insert(0, self.sujetoexiste.apellidos)
+         self.dt_fecha_nac.set_date(datetime.datetime.strptime(self.sujetoexiste.fecha_nacimiento,formfecha))
+         self.cb_sexo.current(int(self.sujetoexiste.sexo.id_sexo)-1)
+         self.cb_genero.current(int(self.sujetoexiste.genero.id_genero)-1)
+         self.cb_orientacion_sexual.current(int(self.sujetoexiste.orientacion_sexual.id_orientacion_sexual)-1),
+         self.cb_nacionalidad.current(int(self.sujetoexiste.nacionalidad.id_nacionalidad)-1)
+         self.cb_provincia.current(int(self.sujetoexiste.provincia.id_provincia)-1)
+         j = 0
+         if(len(self.sujetoexiste.condiciones_medicas)>0):
+            for i in range(len(self.lista_condiciones)):
+                if(self.sujetoexiste.condiciones_medicas[j].id_condicion_medica == (i+1)):
+                    self.lista_valoresbool_checkbox[i].set(True)
+                    j+=1
+                    if(j == len(self.sujetoexiste.condiciones_medicas)):
+                        break
+        
 #Funcion para abrir otro formulario
     def abrir_menu(self):  
         from interfaces.menu_med import MenuMed
-        self.window.destroy()
-        from modelos.sujetos_estudio import SujetosEstudio
         sujeto = SujetosEstudio(self.tipo_documento, self.codigo_documento)
+        sujeto.nombres = self.txb_nombre.get()
+        sujeto.apellidos = self.txb_apellido.get()
+        sujeto.fecha_nacimiento = self.dt_fecha_nac.get_date()
+        sujeto.sexo = self.cb_sexo.current() + 1
+        sujeto.genero = self.cb_genero.current() + 1
+        sujeto.orientacion_sexual = self.cb_orientacion_sexual.current() + 1
+        sujeto.nacionalidad = self.cb_nacionalidad.current() + 1
+        sujeto.provincia = self.cb_provincia.current() + 1
+        fecha_creacion = "Willfer"#datetime.datetime.now()
+        #sujeto.condiciones_medicas = self.condiciones_usuario()
+        #sujeto.condiciones_medicas.pop(0)
+        sujeto.registrar(sujeto.nombres, sujeto.apellidos, sujeto.fecha_nacimiento, sujeto.sexo, sujeto.genero, sujeto.orientacion_sexual, sujeto.nacionalidad, sujeto.provincia, fecha_creacion, self.condiciones_usuario())
+        self.window.destroy()
         menu = MenuMed(sujeto)
 
     def abrir_login(self):  
         from interfaces.login_suj import LoginSujEstudio
         self.window.destroy()
         menu = LoginSujEstudio()
-
-if __name__ == '__main__':
-    registro = RegistroSujeto()

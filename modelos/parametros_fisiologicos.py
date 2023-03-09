@@ -11,6 +11,38 @@ class ParametrosFisiologicos:
         self.critico_alto = critico_alto
         self.critico_bajo = critico_bajo
         self.instrucciones = instrucciones
+    def realizar_medicion_parametro(self):
+        
+        #TO-DO acordar la conexion con el dispositivo del monitor
+        
+        if self.descripcion == 'Temperatura':
+            return 35
+        
+        elif self.descripcion == 'Presion Arterial Sistolica':
+            return 80
+
+        elif self.descripcion == 'Presion Arterial Diastolica':
+            return 60
+        
+        elif self.descripcion == 'Frecuencia Cardiaca':
+            return 60
+        
+        elif self.descripcion == 'Saturacion de Oxigeno':
+            return 95
+
+    def cargar_datos_parametro(self, descripcion:str):
+        bd = Conexion()
+        resultado = bd.execute_query("SELECT * FROM Parametros_Fisiologicos WHERE descripcion = ?", [descripcion])
+        if resultado:
+            self.id_parametro_fisiologico = resultado[0][0]
+            self.descripcion = resultado[0][1]
+            self.min_estandar = resultado[0][2]
+            self.max_estandar = resultado[0][3]
+            self.alerta_alto = resultado[0][4]
+            self.alerta_bajo = resultado[0][5]
+            self.critico_alto = resultado[0][6]
+            self.critico_bajo = resultado[0][7]
+            self.instrucciones = resultado[0][8]
     
     def obtener_lista_parametros_fisiologicos(self):
         bd = Conexion()
