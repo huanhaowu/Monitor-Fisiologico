@@ -21,16 +21,10 @@ class ReporteMed():
         self.sujeto = sujeto
         self.mediciones = mediciones
 
-        #Inicializamos todas las mediciones vacias
-        self.lista_temperatura = ["N/A", "", "N/A"]
-        self.lista_presion = ["N/A", "", "N/A"]
-        self.lista_oxigeno = ["N/A", "", "N/A"]
-        self.lista_frecuencia = ["N/A", "", "N/A"]
-
         #Rellenamos los valores de las mediciones realizadas con la funcion buscar_parametro
         self.lista_temperatura = self.buscar_parametro("Temperatura")
         self.lista_presion = self.buscar_parametro("Presion Arterial")
-        self.lista_oxigeno = self.buscar_parametro("Oxigeno en sangre")
+        self.lista_oxigeno = self.buscar_parametro("Saturacion Oxigeno")
         self.lista_frecuencia = self.buscar_parametro("Frecuencia Cardiaca")
 
         #Definicion puerto, servidor, correo y contraseña de envio de reportes
@@ -61,7 +55,7 @@ class ReporteMed():
                            darkcolor=BAR_COLOR)
 
         TROUGH_COLOR = '#F5F5F5'
-        BAR_COLOR = '#FFD706'
+        BAR_COLOR = '#FFBF00'
         sty_amarillo = ttk.Style()
         sty_amarillo.theme_use('clam')
         sty_amarillo.configure("amarillo.Horizontal.TProgressbar", troughcolor=TROUGH_COLOR,
@@ -73,6 +67,14 @@ class ReporteMed():
         sty_verde = ttk.Style()
         sty_verde.theme_use('clam')
         sty_verde.configure("verde.Horizontal.TProgressbar", troughcolor=TROUGH_COLOR,
+                            bordercolor=TROUGH_COLOR, background=BAR_COLOR, lightcolor=BAR_COLOR,
+                            darkcolor=BAR_COLOR)
+
+        TROUGH_COLOR = '#F5F5F5'
+        BAR_COLOR = '#F5F5F5'
+        sty_gris = ttk.Style()
+        sty_gris.theme_use('clam')
+        sty_gris.configure("gris.Horizontal.TProgressbar", troughcolor=TROUGH_COLOR,
                             bordercolor=TROUGH_COLOR, background=BAR_COLOR, lightcolor=BAR_COLOR,
                             darkcolor=BAR_COLOR)
 
@@ -344,7 +346,7 @@ class ReporteMed():
         # aqui se colocara el textbox con el valor de la temperatura
         self.lbl_temperatura = Label(
             self.window,
-            text="",
+            text=self.lista_temperatura[2],
             bd=0,
             bg="#F5F5F5",
             fg="#000716",
@@ -358,16 +360,13 @@ class ReporteMed():
         )
         # Aqui se colora el progress bar para la escala de la temperatura
 
-        self.pb_temperatura = ttk.Progressbar(self.window, orient=HORIZONTAL, mode='determinate',
-                                              style="rojo.Horizontal.TProgressbar")
+        self.pb_temperatura = self.llenar_barras(self.lista_temperatura)
         self.pb_temperatura.place(
             x=527.0,
             y=415.0,
             width=224.0,
             height=34.0
         )
-        self.pb_temperatura['value'] = 75
-
         # endregion
 
         # region SATURACION DE OXIGENO
@@ -382,7 +381,7 @@ class ReporteMed():
         # aqui se colocara el textbox que contiene el valor de la saturacion de oxigeno
         self.lbl_saturacion_oxigeno = Label(
             self.window,
-            text="",
+            text=self.lista_oxigeno[2],
             bd=0,
             bg="#F5F5F5",
             fg="#000716",
@@ -396,17 +395,13 @@ class ReporteMed():
         )
         # Aqui se colocara el progress bar para la escala de saturacion de oxigeno
 
-        self.pb_saturacion_oxigeno = ttk.Progressbar(self.window, orient=HORIZONTAL, mode='determinate',
-                                                     style="amarillo.Horizontal.TProgressbar")
+        self.pb_saturacion_oxigeno = self.llenar_barras(self.lista_oxigeno)
         self.pb_saturacion_oxigeno.place(
             x=527.0,
             y=478.0,
             width=224.0,
             height=34.0
         )
-
-        self.pb_saturacion_oxigeno['value'] = 50
-
         # endregion
 
         # region PRESION ARTERIAL
@@ -422,7 +417,7 @@ class ReporteMed():
         # aqui va el textbox del valor correspondiente a la presion arterial
         self.lbl_presion_arterial = Label(
             self.window,
-            text="",
+            text=self.lista_presion[2],
             bd=0,
             bg="#F5F5F5",
             fg="#000716",
@@ -437,30 +432,13 @@ class ReporteMed():
         )
 
         # aqui va el progress bar de la presion arterial
-
-        self.lbl_saturacion_oxigeno = Label(
-            self.window,
-            text="",
-            bd=0,
-            bg="#F5F5F5",
-            fg="#000716",
-            font=("RobotoRoman Regular", 25 * -1)
-        )
-        self.lbl_saturacion_oxigeno.place(
-            x=379.0,
-            y=480.0,
-            width=96.0,
-            height=34.0
-        )
-        self.pb_presion_arterial = ttk.Progressbar(self.window, orient=HORIZONTAL, mode='determinate',
-                                                   style="amarillo.Horizontal.TProgressbar")
+        self.pb_presion_arterial = self.llenar_barras(self.lista_presion)
         self.pb_presion_arterial.place(
             x=527.0,
             y=538.0,
             width=224.0,
             height=34.0
         )
-        self.pb_presion_arterial['value'] = 100
         # endregion
 
         # region FRECUENCIA CARDIACA
@@ -476,7 +454,7 @@ class ReporteMed():
         # aqui va el valor correspondiente a la medicion de la frecuencia cardiaca
         self.lbl_frecuencia_cardiaca = Label(
             self.window,
-            text="",
+            text=self.lista_frecuencia[2],
             bd=0,
             bg="#F5F5F5",
             fg="#000716",
@@ -490,16 +468,13 @@ class ReporteMed():
         )
         # aqui debe ir el progress bar para colocar la frecuencia cardiaca
 
-        self.pb_frecuencia_cardiaca = ttk.Progressbar(self.window, orient=HORIZONTAL, mode='determinate',
-                                                      style="verde.Horizontal.TProgressbar")
+        self.pb_frecuencia_cardiaca = self.llenar_barras(self.lista_frecuencia)
         self.pb_frecuencia_cardiaca.place(
             x=527.0,
             y=597.0,
             width=224.0,
             height=34.0,
         )
-        self.pb_frecuencia_cardiaca['value'] = 75
-
         # endregion
 
         # region NOTA ACLARATORIA
@@ -560,11 +535,32 @@ class ReporteMed():
             if x.parametro.descripcion == parametro_fis:
                 return x.asignar_color()
 
+        return ["gris", " ", "N/A"]
+
     def crear_pdf(self):
         from modelos.reporte_pdf import ReportePdf
         self.ruta_logo = relative_to_assets("logo1.png")
         self.ruta_pdf = str(relative_to_assets("Reporte_HeartBeat.pdf"))
         pdf = ReportePdf(self)
+
+    def llenar_barras(self, lista=[]):
+        if lista[0] == "rojo":
+            pb=ttk.Progressbar(self.window, orient=HORIZONTAL, mode='determinate',
+                                              style="rojo.Horizontal.TProgressbar")
+            pb['value'] = 50
+        elif lista[0] == "verde":
+            pb = ttk.Progressbar(self.window, orient=HORIZONTAL, mode='determinate',
+                                 style="verde.Horizontal.TProgressbar")
+            pb['value'] = 100
+        elif lista[0] == "amarillo":
+            pb = ttk.Progressbar(self.window, orient=HORIZONTAL, mode='determinate',
+                                 style="amarillo.Horizontal.TProgressbar")
+            pb['value'] = 75
+        elif lista[0] == "gris":
+            pb = ttk.Progressbar(self.window, orient=HORIZONTAL, mode='determinate',
+                                 style="gris.Horizontal.TProgressbar")
+            pb['value'] = 0
+        return pb
 
     # def enviar_pdf2(self):
     #     ssl_context = ssl.create_default_context()
