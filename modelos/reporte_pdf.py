@@ -8,6 +8,7 @@ class ReportePdf(FPDF):
         self.add_page()
         self.header()
         self.footer()
+        self.set_margins(20, 0, 20)
         self.set_font("helvetica", '', size=13)
         self.text(162, 42, reporte_med.fecha_actual_str)
 
@@ -55,26 +56,30 @@ class ReportePdf(FPDF):
         self.text(20, 176, "Frecuencia Cardíaca")
         # VALORES
         self.text(85, 122, f"{reporte_med.lista_temperatura[2]}")
-        lista_presion = reporte_med.buscar_parametro("Presion Arterial")
-        self.text(20, 140, "Presión Arterial")
-        self.text(20, 158, "Saturación de Oxígeno")
-        self.text(20, 176, "Frecuencia Cardíaca")
+        self.text(85, 140, f"{reporte_med.lista_presion[2]}")
+        self.text(85, 158, f"{reporte_med.lista_oxigeno[2]}")
+        self.text(85, 176, f"{reporte_med.lista_frecuencia[2]}")
         # UNIDADES
         self.text(127, 122, "C")
         self.text(123, 140, "mmHg")
         self.text(127, 158, "%")
         self.text(125, 176, "lpm")
         # ESCALAS
-        self.text(20, 122, "")
-        self.text(20, 140, "Presión Arterial")
-        self.text(20, 158, "Saturación de Oxígeno")
-        self.text(20, 176, "Frecuencia Cardíaca")
+        self.text(160, 122, f"{self.escala_en_texto(reporte_med.lista_temperatura)} {reporte_med.lista_temperatura[1]}")
+        self.text(160, 140, f"{self.escala_en_texto(reporte_med.lista_presion)} {reporte_med.lista_presion[1]}")
+        self.text(160, 158, f"{self.escala_en_texto(reporte_med.lista_oxigeno)} {reporte_med.lista_oxigeno[1]}")
+        self.text(160, 176, f"{self.escala_en_texto(reporte_med.lista_frecuencia)} {reporte_med.lista_frecuencia[1]}")
 
         self.text(20, 183,
                  "---------------------------------------------------------------------------------------------------------------------------------")
 
         self.set_font("helvetica", 'B', size=11)
         self.text(20, 189, "NOTA ACLARATORIA")
+        self.set_xy(20, 193)
+        self.set_font("helvetica", '', size=9)
+        #self.write(20, reporte_med.nota_aclaratoria)
+        self.multi_cell(60, 20, reporte_med.nota_aclaratoria, align='L', ln=1)
+
 
         # save the pdf with name .pdf
         self.output(self.reporte_med.ruta_pdf)
@@ -89,3 +94,14 @@ class ReportePdf(FPDF):
                  "Alerta: un poco alejado del estándar | Crítico: bastante alejado del estándar | N/A: valor no medido")
         self.text(20, 288, "")
         self.text(20, 292, "")
+    
+    def escala_en_texto(self, lista=[]):
+        if lista[0] == "rojo":
+            return "Crítico"
+        elif lista[0] == "verde":
+            return "Estándar"
+        elif lista[0] == "amarillo":
+            return "Alerta"
+        else:
+            return "N/A"
+

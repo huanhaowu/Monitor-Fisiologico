@@ -5,7 +5,10 @@
 
 from datetime import date, datetime
 from pathlib import Path
-from tkinter import Tk, ttk, Canvas, Button, PhotoImage, HORIZONTAL, Label
+from tkinter import Tk, ttk, Canvas, Button, PhotoImage, HORIZONTAL, Label, Text, Scrollbar, RIGHT, scrolledtext, Y, \
+    DISABLED
+
+import tk
 
 # Bloque de codigo para trabajar con el path de los archivos
 OUTPUT_PATH = Path(__file__).parent
@@ -36,6 +39,7 @@ class ReporteMed():
         #Campos calculados en cada reporte
         self.fecha_actual_str = date.today().strftime("%Y/%m/%d")
         self.edad = self.calcular_edad()
+        self.nota_aclaratoria = self.crear_nota_aclaratoria()
         self.ruta_logo = relative_to_assets("logo1.png")
         self.ruta_pdf = str(relative_to_assets("Reporte_HeartBeat.pdf"))
 
@@ -487,20 +491,25 @@ class ReporteMed():
             font=("RobotoRoman Regular", 30 * -1)
         )
         # Aqui debe ir el textbox con el valor de la nota aclaratoria
-        self.lbl_nota = Label(
-            self.window,
-            text="",
+        f = ttk.Frame(self.window)
+        f.config(height=14, width=50)
+        f.place(x=840.0, y=417.0)
+        scrollbar = Scrollbar(f)
+        self.txt_nota = Text(
+            f,
+            width=50,
+            height=13,
             bd=0,
             bg="#F5F5F5",
             fg="#000716",
-            font=("RobotoRoman Regular", 25 * -1)
+            font=("RobotoRoman Regular", 9),
+            yscrollcommand = scrollbar.set
         )
-        self.lbl_nota.place(
-            x=840.0,
-            y=417.0,
-            width=356.0,
-            height=214.0
-        )
+        self.txt_nota.insert("1.0",self.nota_aclaratoria)
+        scrollbar.config(command=self.txt_nota.yview)
+        scrollbar.pack(side=RIGHT, fill=Y)
+        self.txt_nota.pack(side="left")
+        self.txt_nota.config(state=DISABLED)
         # endregion
 
         # region BOTON GUARDAR
@@ -523,6 +532,17 @@ class ReporteMed():
         self.crear_pdf()
         self.window.resizable(False, False)
         self.window.mainloop()
+
+    def crear_nota_aclaratoria(self):
+        mensaje = ""
+        for x in self.sujeto.condiciones_medicas:
+            if mensaje == "":
+                mensaje += f"-La condicion ({x.descripcion}) puede afectar: "
+            else:
+                mensaje +=f"\n-La condicion ({x.descripcion}) puede afectar: "
+            for y in x.parametros:
+                mensaje += f"({y.descripcion})  "
+        return mensaje
 
     def calcular_edad(self):
         fecha_actual_date = datetime.strptime(self.fecha_actual_str, '%Y/%m/%d')
@@ -612,19 +632,21 @@ if __name__ == "__main__":
     condicion1 = CondicionesMedicas(0, "Asma", lista_parametros)
     condicion2 = CondicionesMedicas(1, "Diabetes", lista_parametros)
     lista_condiciones = [condicion1, condicion2]
-    tipo_documento = TipoDocumento(0, "Cedula")
+    tipo_documento = TipoDocumento(0, "Cedula"
+                                      "")
     fecha_nacimiento = datetime.strptime("1990/01/01", '%Y/%m/%d')
 
     sujeto1 = SujetosEstudio(tipo_documento.descripcion, "1234532", 1, "Juan", "Perez", fecha_nacimiento,
                              sexo, genero, orientacion, nacionalidad, provincia, "paolasaldanaquezada@gmail.com",
                              lista_condiciones)
 
-    medicion_parametros1 = MedicionParametro(1, parametro1, 36)
-    medicion_parametros2 = MedicionParametro(2, parametro2, 45)
+    medicion_parametros1 = MedicionParametro(parametro1, 36)
+    medicion_parametros2 = MedicionParametro(parametro2, 45)
     listaMediciones = [medicion_parametros1, medicion_parametros2]
     medicion1 = MedicionesSujeto(1, sujeto1, 70, 180, date.today(), listaMediciones)
     reporte = ReporteMed(sujeto1, medicion1)
     reporte.crear_pdf()
+
 
 
 
