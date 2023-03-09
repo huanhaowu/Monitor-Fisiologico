@@ -29,8 +29,6 @@ class MenuMed():
             highlightthickness = 0,
             relief = "ridge"
         )
-
-
         #Aqui va el boton para volver al frame anterior
         self.canvas.place(x = 0, y = 0)
         bt_imagen_volver = PhotoImage(
@@ -83,7 +81,8 @@ class MenuMed():
             bd=1,
             bg="#FFFFFF",
             fg="#000716",
-            highlightthickness=0
+            highlightthickness=0, 
+            font=("Arial", 12)
         )
         self.txb_estatura.place(
             x=640.0,
@@ -91,16 +90,16 @@ class MenuMed():
             width=165.0,
             height=35.0
         )
-
         #Aqui va el combobox para especificar si la estatura esta dado en Metros o Pies
         self.cb_estatura = ttk.Combobox(
         state = "readonly",
-        values = ["Metros","Pies"]
+        values = ["Metros","Pies"], 
+        font=("Arial", 10)
         )
         self.cb_estatura.place(
             x=820.0,
             y=234.0,
-            width=59.0,
+            width=63.0,
             height=35.0
         )
         self.canvas.create_text(
@@ -111,13 +110,15 @@ class MenuMed():
             fill="#000000",
             font=("RobotoRoman Regular", 25 * -1)
         )
-
+        self.cb_estatura.current(0)
+       
         #Aqui va el Texbox para el peso
         self.txb_peso = Entry(
             bd=1,
             bg="#FFFFFF",
             fg="#000716",
-            highlightthickness=0
+            highlightthickness=0,
+            font=("Arial", 12)
         )
         self.txb_peso.place(
             x=900.0,
@@ -129,7 +130,8 @@ class MenuMed():
         #Aqui va el combobox para especificar si el peso esta dado en lb o kg
         self.cb_peso = ttk.Combobox(
         state = "readonly",
-        values = ["Kg","Lb"]
+        values = ["Kg","Lb"], 
+        font=("Arial", 10)
         )
         self.cb_peso.place(
             x=1090.0,
@@ -137,6 +139,7 @@ class MenuMed():
             width=59.0,
             height=35.0
         )
+        self.cb_peso.current(0)
 
         #Aqui va el label para el parametro medido
         self.texto_parametro = StringVar()
@@ -179,7 +182,7 @@ class MenuMed():
             image=self.bt_imagen_comenzar,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: self.validar(),
+            command=lambda: self.validar(self.validar_caso),
             relief="flat",
             bg = "White"
         )
@@ -216,8 +219,7 @@ class MenuMed():
             640.0,
             61.0,
             image=self.image_image_1
-        )
-
+        )         
         #Aqui va el boton para iniciar medicion de saturacion de oxigeno 
         self.bt_imagen_saturacion_oxigeno = PhotoImage(
             file=relative_to_assets("button_4.png"))
@@ -308,8 +310,9 @@ class MenuMed():
             width=424.0,
             height=91.0
         )
-        self.deshabilitar_botones("")
-        self.mensaje_pantalla("") #Colocar el texto por defecto al iniciar la interfaz en la pantalla
+        self.validar_caso = " " #variable que funciona para validar cual es el caso que se encuentra activo, esta inicializada en " " debido a que es el caso por defecto
+        self.deshabilitar_botones("", "")
+        self.mensaje_pantalla("", "") #Colocar el texto por defecto al iniciar la interfaz en la pantalla
         self.window.resizable(False, False)
         self.window.mainloop()
 
@@ -320,16 +323,16 @@ class MenuMed():
     def abrir_registro(self):
         from interfaces.registro_suj import RegistroSujeto
         self.window.destroy()
-        registro = RegistroSujeto(self.sujeto.tipo_documento, self.sujeto.codigo_documento)
+        self.registro = RegistroSujeto(self.sujeto.tipo_documento.descripcion, self.sujeto.codigo_documento)
 
     def abrir_reporte(self):
         from interfaces.reporte_med import ReporteMed
         self.window.destroy()
-        reporte = ReporteMed(self.sujeto, self.mediciones)
+        self.reporte = ReporteMed(self.sujeto, self.mediciones)
         
 
 #Funciones para deshabilitar y habilitar las interfaces
-    def deshabilitar_botones(self, boton):
+    def deshabilitar_botones(self, boton,instruccion):
 
         def case_a(): #Caso a es para la temperatura
             self.bt_limpiar.config(state = 'normal')
@@ -338,9 +341,10 @@ class MenuMed():
             self.bt_frecuencia_cardiaca.config(state = 'disabled')
             self.bt_temperatura.config(state = 'normal')
             self.bt_generar_informe.config(state = 'normal')
-            self.bt_comenzar.config(state = "disabled")
             self.bt_limpiar.config(state = "normal")
-            self.mensaje_pantalla("a")
+            self.bt_comenzar.config(state = "normal")
+            self.bt_generar_informe.config(state = "disabled")
+            self.mensaje_pantalla("a",instruccion)
 
 
         def case_b(): #Caso b es para la saturacion de oxigeno  
@@ -350,9 +354,10 @@ class MenuMed():
             self.bt_frecuencia_cardiaca.config(state = 'disabled')
             self.bt_temperatura.config(state = 'disabled')
             self.bt_generar_informe.config(state = 'normal')
-            self.bt_comenzar.config(state = "disabled")
             self.bt_limpiar.config(state = "normal")
-            self.mensaje_pantalla("b")
+            self.bt_comenzar.config(state = "normal")
+            self.bt_generar_informe.config(state = "disabled")
+            self.mensaje_pantalla("b",instruccion)
 
 
         def case_c(): #Caso c es para la presion arterial 
@@ -363,7 +368,9 @@ class MenuMed():
             self.bt_temperatura.config(state = 'disabled')
             self.bt_generar_informe.config(state = 'normal')
             self.bt_limpiar.config(state = "normal")
-            self.mensaje_pantalla("c")
+            self.bt_comenzar.config(state = "normal")
+            self.bt_generar_informe.config(state = "disabled")
+            self.mensaje_pantalla("c",instruccion)
 
 
         def case_d(): #Caso e es para la frecuencia cardiaca 
@@ -373,9 +380,10 @@ class MenuMed():
             self.bt_frecuencia_cardiaca.config(state = 'normal')
             self.bt_temperatura.config(state = 'disabled')
             self.bt_generar_informe.config(state = 'normal')
-            self.bt_comenzar.config(state = "disabled")
             self.bt_limpiar.config(state = "normal")
-            self.mensaje_pantalla("d")
+            self.bt_comenzar.config(state = "normal")
+            self.bt_generar_informe.config(state = "disabled")
+            self.mensaje_pantalla("d",instruccion)
 
       
         def case_default():
@@ -385,7 +393,7 @@ class MenuMed():
             self.bt_frecuencia_cardiaca.config(state = 'disabled')
             self.bt_temperatura.config(state = 'disabled')
             self.bt_generar_informe.config(state = 'disabled')
-            self.mensaje_pantalla("")
+            self.mensaje_pantalla("", "")
 
         switch_case = {
             "Temperatura": case_a,
@@ -395,15 +403,15 @@ class MenuMed():
         }
         switch_case.get(boton, case_default)()
               
-    def mensaje_pantalla(self,caso):
+    def mensaje_pantalla(self,caso,instrucciones):
         def case_a(): #Caso a es para las instrucciones de temperatura 
-            self.texto_pantalla.set("\n\t\t\t INSTRUCCIONES: \n 1) Paso 1 \n 2) Paso 2 \n 3) Paso 3") 
+            self.texto_pantalla.set(instrucciones) 
         def case_b(): #Caso b es para las instrucciones de la  saturacion de oxigeno
-            self.texto_pantalla.set("\n\t\t\t INSTRUCCIONES: \n 1) Paso 1 \n 2) Paso 2 \n 3) Paso 3") 
+            self.texto_pantalla.set(instrucciones) 
         def case_c(): #Caso c es para las instrucciones de la saturacion de presion arterial 
-            self.texto_pantalla.set("\n\t\t\t INSTRUCCIONES: \n 1) Paso 1 \n 2) Paso 2 \n 3) Paso 3") 
+            self.texto_pantalla.set(instrucciones) 
         def case_d(): #Caso e es para las instrucciones de la frecuencia cardiaca 
-            self.texto_pantalla.set("\n\t\t\t INSTRUCCIONES: \n 1) Paso 1 \n 2) Paso 2 \n 3) Paso 3") 
+            self.texto_pantalla.set(instrucciones) 
         def case_default():
             self.texto_pantalla.set("\n\t\t\t INSTRUCCIONES: \n 1) Digite su peso y estatura. \n\n 2) Haga click en el boton verde para validar sus datos") 
 
@@ -434,26 +442,65 @@ class MenuMed():
         self.txb_peso.config(state = "readonly")
         self.cb_estatura.config(state = "disabled")
         self.cb_peso.config(state = "disabled")
+        self.bt_comenzar.config(state = "disabled")
+        self.bt_generar_informe.config(state = "normal")
         self.limpiar()
 
-    def validar(self):
-        self.alerta_texto_vacio()
+    def validar(self, caso):
+        def case_a(): #Caso a es para las instrucciones de temperatura 
+            if(messagebox.askokcancel("Confirmar medicion","¿Desea guardar la medición?")== True):
+                self.limpiar()
+                self.habilitar_botones()
+            else:
+                self.limpiar()
+        def case_b(): #Caso b es para las instrucciones de la  saturacion de oxigeno
+            if(messagebox.askokcancel("Confirmar medicion","¿Desea guardar la medición?")== True):
+                self.limpiar()
+                self.habilitar_botones()
+            else:
+                self.limpiar()
+        def case_c(): #Caso c es para las instrucciones de la saturacion de presion arterial 
+            if(messagebox.askokcancel("Confirmar medicion","¿Desea guardar la medición?")== True):
+                self.limpiar()
+                self.habilitar_botones()
+            else:
+                self.limpiar()
+        def case_d(): #Caso e es para las instrucciones de la frecuencia cardiaca 
+            if(messagebox.askokcancel("Confirmar medicion","¿Desea guardar la medición?")== True):
+                self.limpiar()
+                self.habilitar_botones()
+            else:
+                self.limpiar()
+        def case_default():
+          self.alerta_texto_vacio()
+
+        switch_case = {
+            "a": case_a,
+            "b": case_b,
+            "c": case_c,
+            "d": case_d
+        }
+        switch_case.get(caso, case_default)()
 
     def tomar_medicion(self,medicion,caso):
-        self.mensaje_pantalla(caso)
-        self.deshabilitar_botones(medicion)
+        self.validar_caso = caso # se le asigna un valor a la variable validar caso para determinar cual es el caso activo al presionaro un  boton
         self.parametros_fisiologicos = pf()
+        self.instrucciones = " "
+        self.deshabilitar_botones(medicion,self.instrucciones)
         if(medicion == "Presion Arterial"):
             self.parametros_fisiologicos.cargar_datos_parametro(medicion + " Sistolica")
             self.presion_arterial_sistolica = self.parametros_fisiologicos.realizar_medicion_parametro()
             self.parametros_fisiologicos.cargar_datos_parametro(medicion + " Diastolica")
+            self.instrucciones = self.parametros_fisiologicos.instrucciones
+            self.mensaje_pantalla(caso,self.instrucciones) #se toman las instrucciones de la diastolica porque son las mismas que la sistolica
+            self.deshabilitar_botones(medicion,self.instrucciones)
             self.presion_arterial_diastolica = self.parametros_fisiologicos.realizar_medicion_parametro()
-
             self.texto_parametro.set(str(self.presion_arterial_sistolica) + "/" +str(self.presion_arterial_diastolica))
             self.texto_parametro_medido.set(medicion + " Sistolica/Diastolica: ")
-
         else:
             self.parametros_fisiologicos.cargar_datos_parametro(medicion)
+            self.instrucciones = self.parametros_fisiologicos.instrucciones
+            self.mensaje_pantalla(caso,self.instrucciones) #se toman las instrucciones de la diastolica porque son las mismas que la sistolica
             self.texto_parametro.set(self.parametros_fisiologicos.realizar_medicion_parametro())
             self.texto_parametro_medido.set(self.parametros_fisiologicos.descripcion + ": ")
             
@@ -462,18 +509,5 @@ class MenuMed():
         self.texto_pantalla.set("")
         self.texto_parametro_medido.set("Parametro medido: ")
         
-
-
-
-        
-
-
-
-    
-        
-
-
-
-
-
-        
+    def almacenar_medicion(self,medicion):
+        return 0
