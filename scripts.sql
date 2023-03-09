@@ -163,20 +163,27 @@ VALUES
 ('Saturacion de Oxigeno', 95, 100, 89, NULL, 0, NULL, 'Ingrese la saturacion de oxigeno del sujeto en porcentaje');
 
 -- Genero
-INSERT INTO Genero (descripcion) VALUES ('Masculino');
-INSERT INTO Genero (descripcion) VALUES ('Femenino');
+INSERT INTO Genero (descripcion) VALUES ('Hombre');
+INSERT INTO Genero (descripcion) VALUES ('Mujer');
+INSERT INTO Genero (descripcion) VALUES ('No Binario');
+INSERT INTO Genero (descripcion) VALUES ('Transgenero');
+INSERT INTO Genero (descripcion) VALUES ('Genero fluido');
 INSERT INTO Genero (descripcion) VALUES ('Otro');
+
+
 
 -- Orientacion_Sexual
 INSERT INTO Orientacion_Sexual (descripcion) VALUES ('Heterosexual');
 INSERT INTO Orientacion_Sexual (descripcion) VALUES ('Homosexual');
 INSERT INTO Orientacion_Sexual (descripcion) VALUES ('Bisexual');
+INSERT INTO Orientacion_Sexual (descripcion) VALUES ('Pansexual');
 INSERT INTO Orientacion_Sexual (descripcion) VALUES ('Otro');
 
 -- Nacionalidad
+INSERT INTO Nacionalidad (descripcion) VALUES ('Dominicana');
 INSERT INTO Nacionalidad (descripcion) VALUES ('Argentina');
 INSERT INTO Nacionalidad (descripcion) VALUES ('Boliviana');
-INSERT INTO Nacionalidad (descripcion) VALUES ('Brasileña');
+INSERT INTO Nacionalidad (descripcion) VALUES ('Brasilena');
 INSERT INTO Nacionalidad (descripcion) VALUES ('Chilena');
 INSERT INTO Nacionalidad (descripcion) VALUES ('Colombiana');
 INSERT INTO Nacionalidad (descripcion) VALUES ('Ecuatoriana');
@@ -184,7 +191,6 @@ INSERT INTO Nacionalidad (descripcion) VALUES ('Paraguaya');
 INSERT INTO Nacionalidad (descripcion) VALUES ('Peruana');
 INSERT INTO Nacionalidad (descripcion) VALUES ('Uruguaya');
 INSERT INTO Nacionalidad (descripcion) VALUES ('Venezolana');
-INSERT INTO Nacionalidad (descripcion) VALUES ('Dominicana');
 INSERT INTO Nacionalidad (descripcion) VALUES ('Mexicana');
 INSERT INTO Nacionalidad (descripcion) VALUES ('Cubana');
 INSERT INTO Nacionalidad (descripcion) VALUES ('Estadounidense');
@@ -196,10 +202,10 @@ INSERT INTO Provincia (descripcion) VALUES ('Santo Domingo');
 INSERT INTO Provincia (descripcion) VALUES ('Azua');
 INSERT INTO Provincia (descripcion) VALUES ('Bahoruco');
 INSERT INTO Provincia (descripcion) VALUES ('Barahona');
-INSERT INTO Provincia (descripcion) VALUES ('Dajabón');
+INSERT INTO Provincia (descripcion) VALUES ('Dajabon');
 INSERT INTO Provincia (descripcion) VALUES ('Distrito Nacional');
 INSERT INTO Provincia (descripcion) VALUES ('Duarte');
-INSERT INTO Provincia (descripcion) VALUES ('Elías Piña');
+INSERT INTO Provincia (descripcion) VALUES ('Elias Piña');
 INSERT INTO Provincia (descripcion) VALUES ('El Seibo');
 INSERT INTO Provincia (descripcion) VALUES ('Espaillat');
 INSERT INTO Provincia (descripcion) VALUES ('Hato Mayor');
@@ -208,21 +214,21 @@ INSERT INTO Provincia (descripcion) VALUES ('Independencia');
 INSERT INTO Provincia (descripcion) VALUES ('La Altagracia');
 INSERT INTO Provincia (descripcion) VALUES ('La Romana');
 INSERT INTO Provincia (descripcion) VALUES ('La Vega');
-INSERT INTO Provincia (descripcion) VALUES ('María Trinidad Sánchez');
+INSERT INTO Provincia (descripcion) VALUES ('Maria Trinidad Sanchez');
 INSERT INTO Provincia (descripcion) VALUES ('Monseñor Nouel');
 INSERT INTO Provincia (descripcion) VALUES ('Monte Cristi');
 INSERT INTO Provincia (descripcion) VALUES ('Monte Plata');
 INSERT INTO Provincia (descripcion) VALUES ('Pedernales');
 INSERT INTO Provincia (descripcion) VALUES ('Peravia');
 INSERT INTO Provincia (descripcion) VALUES ('Puerto Plata');
-INSERT INTO Provincia (descripcion) VALUES ('Samaná');
-INSERT INTO Provincia (descripcion) VALUES ('San Cristóbal');
-INSERT INTO Provincia (descripcion) VALUES ('San José de Ocoa');
+INSERT INTO Provincia (descripcion) VALUES ('Samana');
+INSERT INTO Provincia (descripcion) VALUES ('San Cristobal');
+INSERT INTO Provincia (descripcion) VALUES ('San Jose de Ocoa');
 INSERT INTO Provincia (descripcion) VALUES ('San Juan');
-INSERT INTO Provincia (descripcion) VALUES ('San Pedro de Macorís');
-INSERT INTO Provincia (descripcion) VALUES ('Sánchez Ramírez');
+INSERT INTO Provincia (descripcion) VALUES ('San Pedro de Macoris');
+INSERT INTO Provincia (descripcion) VALUES ('Sanchez Ramirez');
 INSERT INTO Provincia (descripcion) VALUES ('Santiago');
-INSERT INTO Provincia (descripcion) VALUES ('Santiago Rodríguez');
+INSERT INTO Provincia (descripcion) VALUES ('Santiago Rodriguez');
 INSERT INTO Provincia (descripcion) VALUES ('Valverde');
 
 -- Tipo_Documento
@@ -235,9 +241,6 @@ INSERT INTO Sexo (descripcion) VALUES ('Femenino');
 INSERT INTO Sexo (descripcion) VALUES ('Intersexual');
 
 -- Condiciones_Medicas
-INSERT INTO Condiciones_Medicas (descripcion) VALUES ('Alcohol');
-INSERT INTO Condiciones_Medicas (descripcion) VALUES ('Fumador');
-INSERT INTO Condiciones_Medicas (descripcion) VALUES ('Droga');
 INSERT INTO Condiciones_Medicas (descripcion) VALUES ('Anemia');
 INSERT INTO Condiciones_Medicas (descripcion) VALUES ('Hipertiroidismo');
 INSERT INTO Condiciones_Medicas (descripcion) VALUES ('Hipotiroidismo');
