@@ -291,7 +291,7 @@ class MenuMed():
     def abrir_registro(self):
         from interfaces.registro_suj import RegistroSujeto
         self.window.destroy()
-        registro = RegistroSujeto(self.sujeto.tipo_documento, self.sujeto.codigo_documento)
+        registro = RegistroSujeto(self.sujeto.tipo_documento.descripcion, self.sujeto.codigo_documento)
 
     def abrir_reporte(self):
         from interfaces.reporte_med import ReporteMed
