@@ -156,11 +156,11 @@ INSERT INTO Tipo_Usuario (descripcion) VALUES ('Analista');
 -- Parametros_Fisiologicos
 INSERT INTO Parametros_Fisiologicos (descripcion, min_estandar, max_estandar, alerta_bajo, alerta_alto, critico_bajo, critico_alto, instrucciones) 
 VALUES 
-('Temperatura', 36, 37, 34, 40, 29.99, 46, 'Ingrese la temperatura del sujeto en grados Celsius'), 
-('Presion Arterial Sistolica', 110, 120, 90, 139, 70, NULL, 'Ingrese la presion arterial del sujeto en mmHg'), 
-('Presion Arterial Diastolica', 70, 80, 60, 89, 50, NULL, 'Ingrese la presion arterial del sujeto en mmHg'), 
-('Frecuencia Cardiaca', 60, 100, 40, 149, 34.99, NULL, 'Ingrese la frecuencia cardiaca del sujeto en latidos por minuto'), 
-('Saturacion de Oxigeno', 95, 100, 89, NULL, 0, NULL, 'Ingrese la saturacion de oxigeno del sujeto en porcentaje');
+('Temperatura', 36, 37, 34, 40, 29.99, 46, '\n\t\t\t INSTRUCCIONES: \n 1) Paso 1 \n 2) Paso 2 \n 3) Paso 3'), 
+('Presion Arterial Sistolica', 110, 120, 90, 139, 70, NULL, '\n\t\t\t INSTRUCCIONES: \n 1) Paso 1 \n 2) Paso 2 \n 3) Paso 3'), 
+('Presion Arterial Diastolica', 70, 80, 60, 89, 50, NULL, '\n\t\t\t INSTRUCCIONES: \n 1) Paso 1 \n 2) Paso 2 \n 3) Paso 3'), 
+('Frecuencia Cardiaca', 60, 100, 40, 149, 34.99, NULL, '\n\t\t\t INSTRUCCIONES: \n 1) Paso 1 \n 2) Paso 2 \n 3) Paso 3'), 
+('Saturacion de Oxigeno', 95, 100, 89, NULL, 0, NULL, '\n\t\t\t INSTRUCCIONES: \n 1) Paso 1 \n 2) Paso 2 \n 3) Paso 3');
 
 -- Genero
 INSERT INTO Genero (descripcion) VALUES ('Hombre');
