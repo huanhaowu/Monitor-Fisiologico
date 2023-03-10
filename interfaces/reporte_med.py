@@ -551,14 +551,9 @@ class ReporteMed():
         return edad
 
     def buscar_parametro(self, parametro_fis):
-        if parametro_fis == "Presion Arterial":
-            for x in self.mediciones.parametros_medidos:
-                if x.parametro.descripcion == 'Presion Arterial Sistolica':
-                    return x.asignar_color()
-        else:
-            for x in self.mediciones.parametros_medidos:
-                if x.parametro.descripcion == parametro_fis:
-                    return x.asignar_color()
+        for x in self.mediciones.parametros_medidos:
+            if x.parametro.descripcion == parametro_fis:
+                return x.asignar_color()
 
         return ["gris", " ", "N/A"]
 
