@@ -17,7 +17,7 @@ def relative_to_assets(path: str) -> Path:
 
 
 class MenuMed():
-    def __init__(self, sujeto, mediciones = []):
+    def __init__(self, sujeto:se, mediciones:list[mp] = []):
         self.sujeto = sujeto
         self.mediciones = mediciones
         self.window = Tk()
@@ -332,13 +332,14 @@ class MenuMed():
         from interfaces.reporte_med import ReporteMed
         import datetime
         medicion_sujeto = ms()
-        medicion_sujeto.guardar_medicion(self.sujeto, self.txb_peso.get(), self.txb_estatura.get(), datetime.datetime.now(), self.mediciones)
+        medicion_sujeto.guardar_medicion(self.sujeto, float(self.txb_peso.get()), float(self.txb_estatura.get()), datetime.date.today(), self.mediciones)
+        
         self.window.destroy()
-        self.reporte = ReporteMed(self.sujeto, self.mediciones)
+        self.reporte = ReporteMed(self.sujeto, medicion_sujeto)
         
 
 #Funciones para deshabilitar y habilitar las interfaces
-    def deshabilitar_botones(self, boton,instruccion):
+    def deshabilitar_botones(self, boton, instruccion):
 
         def case_a(): #Caso a es para la temperatura
             self.bt_limpiar.config(state = 'normal')
@@ -510,19 +511,22 @@ class MenuMed():
         self.deshabilitar_botones(medicion,self.instrucciones)
         if(medicion == "Presion Arterial"):
             self.parametros_fisiologicos.cargar_datos_parametro(medicion + " Sistolica")
-            self.presion_arterial_sistolica = self.parametros_fisiologicos.realizar_medicion_parametro()
-            self.parametros_fisiologicos.cargar_datos_parametro(medicion + " Diastolica")
+            self.presion_arterial_sistolica = self.parametros_fisiologicos
+            self.medida_presion_arterial_sistolica = self.parametros_fisiologicos.realizar_medicion_parametro()
             self.instrucciones = self.parametros_fisiologicos.instrucciones
             self.mensaje_pantalla(caso,self.instrucciones) #se toman las instrucciones de la diastolica porque son las mismas que la sistolica
             self.deshabilitar_botones(medicion,self.instrucciones)
-            self.presion_arterial_diastolica = self.parametros_fisiologicos.realizar_medicion_parametro()
-            self.texto_parametro.set(str(self.presion_arterial_sistolica) + "/" +str(self.presion_arterial_diastolica))
+            self.parametros_fisiologicos.cargar_datos_parametro(medicion + " Diastolica")
+            self.presion_arterial_diastolica = self.parametros_fisiologicos
+            self.medida_presion_arterial_diastolica = self.parametros_fisiologicos.realizar_medicion_parametro()
+            self.texto_parametro.set(str(self.medida_presion_arterial_sistolica) + "/" +str(self.medida_presion_arterial_diastolica))
             self.texto_parametro_medido.set(medicion + " Sistolica/Diastolica: ")
         else:
             self.parametros_fisiologicos.cargar_datos_parametro(medicion)
             self.instrucciones = self.parametros_fisiologicos.instrucciones
             self.mensaje_pantalla(caso,self.instrucciones) #se toman las instrucciones de la diastolica porque son las mismas que la sistolica
-            self.texto_parametro.set(self.parametros_fisiologicos.realizar_medicion_parametro())
+            self.medida = self.parametros_fisiologicos.realizar_medicion_parametro()
+            self.texto_parametro.set(self.medida)
             self.texto_parametro_medido.set(self.parametros_fisiologicos.descripcion + ": ")
 
             
@@ -533,10 +537,10 @@ class MenuMed():
         
     def almacenar_medicion(self, medicion):
         if(medicion == "Presion Arterial"):
-            medicion_parametro = mp(self.parametros_fisiologicos, self.presion_arterial_sistolica)
-            medicion_parametro = mp(self.parametros_fisiologicos, self.presion_arterial_diastolica)
+            medicion_parametro = mp(self.presion_arterial_sistolica, self.medida_presion_arterial_sistolica)
+            medicion_parametro = mp(self.presion_arterial_diastolica, self.medida_presion_arterial_diastolica)
         else:
-            medicion_parametro = mp(self.parametros_fisiologicos, self.texto_parametro)
+            medicion_parametro = mp(self.parametros_fisiologicos, self.medida)
 
         self.mediciones.append(medicion_parametro)
 

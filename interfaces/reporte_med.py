@@ -25,7 +25,8 @@ class ReporteMed():
         #Rellenamos los valores de las mediciones realizadas con la funcion buscar_parametro
         self.lista_temperatura = self.buscar_parametro("Temperatura")
         self.lista_presion = self.buscar_parametro("Presion Arterial")
-        self.lista_oxigeno = self.buscar_parametro("Saturacion Oxigeno")
+        self.lista_oxigeno = self.buscar_parametro("Saturacion de Oxigeno")
+
         self.lista_frecuencia = self.buscar_parametro("Frecuencia Cardiaca")
 
         #Definicion puerto, servidor, correo y contraseña de envio de reportes
@@ -190,7 +191,7 @@ class ReporteMed():
         self.lbl_sexo.place(
             x=985.0,
             y=198.0,
-            width=108.0,
+            width=120.0,
             height=34.0
         )
 
@@ -544,15 +545,20 @@ class ReporteMed():
         return mensaje
 
     def calcular_edad(self):
-        fecha_actual_date = datetime.strptime(self.fecha_actual_str, '%Y/%m/%d')
+        fecha_actual_date = date.today()
         edad = (fecha_actual_date - self.sujeto.fecha_nacimiento)
         edad = (edad.days) // 365
         return edad
 
     def buscar_parametro(self, parametro_fis):
-        for x in self.mediciones.parametros_medidos:
-            if x.parametro.descripcion == parametro_fis:
-                return x.asignar_color()
+        if parametro_fis == "Presion Arterial":
+            for x in self.mediciones.parametros_medidos:
+                if x.parametro.descripcion == 'Presion Arterial Sistolica':
+                    return x.asignar_color()
+        else:
+            for x in self.mediciones.parametros_medidos:
+                if x.parametro.descripcion == parametro_fis:
+                    return x.asignar_color()
 
         return ["gris", " ", "N/A"]
 
@@ -599,9 +605,10 @@ class ReporteMed():
     #     pdf_envio.email_send()
 
     def abrir_menu(self):
-        from interfaces.menu_med import MenuMed
-        self.window.destroy()
-        menu = MenuMed(self.sujeto, self.mediciones)
+        #from interfaces.menu_med import MenuMed
+        #self.window.destroy()
+        #menu = MenuMed(self.sujeto, self.mediciones)
+        pass
 
 
 if __name__ == "__main__":

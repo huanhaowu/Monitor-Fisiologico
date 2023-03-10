@@ -33,7 +33,7 @@ class ParametrosFisiologicos:
 
     def cargar_datos_parametro(self, descripcion:str):
         bd = Conexion()
-        resultado = bd.execute_query("SELECT * FROM Parametros_Fisiologicos WHERE descripcion = ?", [descripcion])
+        resultado = bd.execute_query("SELECT id_parametro_fisiologico, descripcion, min_estandar, max_estandar, alerta_alto, alerta_bajo, critico_alto, critico_bajo, instrucciones FROM Parametros_Fisiologicos WHERE descripcion = ?", [descripcion])
         if resultado:
             self.id_parametro_fisiologico = resultado[0][0]
             self.descripcion = resultado[0][1]
