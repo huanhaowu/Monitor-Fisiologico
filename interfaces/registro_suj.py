@@ -8,7 +8,7 @@ from modelos.orientacion_sexual import OrientacionSexual
 from modelos.condiciones_medicas import CondicionesMedicas 
 from modelos.sujetos_estudio import SujetosEstudio
 
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, ttk,BooleanVar,StringVar,Checkbutton
+from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, ttk,BooleanVar,StringVar,Checkbutton,messagebox
 from tkcalendar import DateEntry
 import os
 import datetime
@@ -157,8 +157,8 @@ class RegistroSujeto():
             font=("RobotoRoman Regular", 25 * -1),
             justify = 'center'
         )
-        #Combobox del Tipo de Documento
         td = TipoDocumento()
+        #Combobox del Tipo de Documento
         self.cb_tipo_doc = ttk.Combobox(
             state = "disabled",
             values = td.obtener_lista_tipo_documento(),
@@ -250,7 +250,7 @@ class RegistroSujeto():
 
         #Datetimepicker de la Fecha de Nacimiento  
         self.dt_fecha_nac = DateEntry() 
-        
+
         #localización del datetimepicker de la fecha de nacimiento
         self.dt_fecha_nac.config(maxdate = maxdate,firstweekday = 'sunday',font=("RobotoRoman Regular", tamFuente * -1))
         self.dt_fecha_nac.place(
@@ -274,7 +274,7 @@ class RegistroSujeto():
         #Combobox de Sexo 
         self.cb_sexo = ttk.Combobox(
             state = "readonly",
-            value = sexo.obtener_lista_sexos(),
+            value = [var[1] for var in sexo.obtener_lista_sexos()],
             font=("RobotoRoman Regular", tamFuente * -1)
         )
         #Colocar el valor por defecto de sexo
@@ -303,7 +303,7 @@ class RegistroSujeto():
         #ComboBox de nacionalidad
         self.cb_nacionalidad = ttk.Combobox(
             state = "readonly",
-            values = nacionalidad.obtener_lista_nacionalidades(),
+            values = [var[1] for var in nacionalidad.obtener_lista_nacionalidades()],
             font=("RobotoRoman Regular", tamFuente * -1)
         )
 
@@ -332,7 +332,7 @@ class RegistroSujeto():
         #ComboBox para las provincias
         self.cb_provincia = ttk.Combobox(
             state = "readonly",
-            values = provincia.obtener_lista_provincias(),
+            values = [var[1] for var in provincia.obtener_lista_provincias()],
             font=("RobotoRoman Regular", tamFuente * -1)
         )
 
@@ -362,7 +362,7 @@ class RegistroSujeto():
         #ComboBox de genero
         self.cb_genero = ttk.Combobox(
             state = "readonly",
-            values = genero.obtener_lista_generos(),
+            values = [var[1] for var in genero.obtener_lista_generos()],
             font=("RobotoRoman Regular", tamFuente * -1)
         )
 
@@ -391,7 +391,7 @@ class RegistroSujeto():
         #ComboBox de Orientacion Sexual
         self.cb_orientacion_sexual = ttk.Combobox(
         state = "readonly",
-        values = orientacion.obtener_lista_orientaciones(),
+        values = [var[1] for var in orientacion.obtener_lista_orientaciones()],
         font=("RobotoRoman Regular", tamFuente * -1)
         )
         #Localización del combobox de orientacion sexual
@@ -406,9 +406,9 @@ class RegistroSujeto():
         self.cb_orientacion_sexual.current(0)
         
         """
-        #-------------------- ESTADOS DE SALUD -------------------
+        #-------------------- Correo Electronico -------------------
         """
-        #Label principal de la sección de Estado de Salud
+        #Label principal de la sección de Correo Electronico
         self.canvas.create_text(
             910.0,
             126.0,
@@ -497,7 +497,7 @@ class RegistroSujeto():
             self.usuario_existente()
 
         for i in range(len(self.lista_condiciones)):
-            self.checkbox = Checkbutton(text=self.lista_condiciones[i], variable=self.lista_valoresbool_checkbox[i],bg="#EEF8FF",font=("RobotoRoman Regular", 13 * -1))
+            self.checkbox = Checkbutton(text=(self.lista_condiciones[i])[1], variable=self.lista_valoresbool_checkbox[i],bg="#EEF8FF",font=("RobotoRoman Regular", 13 * -1))
             if i < 7:
                 self.checkbox.place(x=860,y=410+(i*30),width=120,height=30)
             else :
@@ -536,23 +536,41 @@ class RegistroSujeto():
                     j+=1
                     if(j == len(self.sujetoexiste.condiciones_medicas)):
                         break
-        
+
+    def alerta_texto_vacio(self):
+        if (self.txb_nombre.get().isspace() or self.txb_nombre.get() == "" or self.txb_apellido.get().isspace() or self.txb_apellido.get() == ""  or self.cb_genero.get().isspace() or self.cb_genero.get() == "" or self.cb_nacionalidad.get().isspace() or self.cb_nacionalidad.get() == "" or self.cb_orientacion_sexual.get().isspace() or self.cb_orientacion_sexual.get() == "" or self.cb_provincia.get().isspace() or self.cb_provincia.get() == "" or self.cb_sexo.get().isspace() or self.cb_sexo.get() == "" or self.cb_tipo_doc.get().isspace() or self.cb_tipo_doc.get() == "" or self.txb_codigo_doc.get().isspace() or self.txb_codigo_doc.get() == "" or self.txb_correo.get().isspace() or self.txb_correo.get() == ""): #este if valida si el texto esta vacio
+            messagebox.showwarning("ALERTA", "Ha dejado campos vacios. Recuerde que tiene que llenar todos los campos. \n\nNOTA: Las condiciones medicas pueden quedar vacias. \n\nIngréselos para continuar.")
+            return False
+        else:
+            return True
+            
+    #def funciondetectarcamposvacios(self):
+    #    lista_campos = {self.txb_nombre,self.txb_apellido, self.cb_genero, self.cb_nacionalidad, self.cb_orientacion_sexual, self.cb_provincia, self.cb_sexo, self.cb_tipo_doc, self.txb_codigo_doc}
+    #    lista_campos_vacios = []
+    #    for i in lista_campos:
+    #        if(i.get().isspace() or i.get() == ""):
+    #            lista_campos_vacios.append(i)
+    #    return lista_campos_vacios
+
 #Funcion para abrir otro formulario
     def abrir_menu(self):  
-        from interfaces.menu_med import MenuMed
-        sujeto = SujetosEstudio(self.tipo_documento, self.codigo_documento)
-        sujeto.nombres = self.txb_nombre.get()
-        sujeto.apellidos = self.txb_apellido.get()
-        sujeto.fecha_nacimiento = self.dt_fecha_nac.get_date()
-        sujeto.sexo = self.cb_sexo.current() + 1
-        sujeto.genero = self.cb_genero.current() + 1
-        sujeto.orientacion_sexual = self.cb_orientacion_sexual.current() + 1
-        sujeto.nacionalidad = self.cb_nacionalidad.current() + 1
-        sujeto.provincia = self.cb_provincia.current() + 1
-        sujeto.correo = self.txb_correo.get()
-        sujeto.registrar(sujeto.nombres, sujeto.apellidos, sujeto.fecha_nacimiento, sujeto.sexo, sujeto.genero, sujeto.orientacion_sexual, sujeto.nacionalidad, sujeto.provincia, sujeto.correo, self.condiciones_usuario())
-        self.window.destroy()
-        menu = MenuMed(sujeto)
+        if(self.alerta_texto_vacio() == True):
+            #self.window.destroy()
+            from interfaces.menu_med import MenuMed
+            sujeto = SujetosEstudio(self.tipo_documento, self.codigo_documento)
+            sujeto.nombres = self.txb_nombre.get()
+            sujeto.apellidos = self.txb_apellido.get()
+            sujeto.fecha_nacimiento = self.dt_fecha_nac.get_date()
+            sujeto.sexo = self.cb_sexo.current() + 1
+            sujeto.genero = self.cb_genero.current() + 1
+            sujeto.orientacion_sexual = self.cb_orientacion_sexual.current() + 1
+            sujeto.nacionalidad = self.cb_nacionalidad.current() + 1
+            sujeto.provincia = self.cb_provincia.current() + 1
+            sujeto.correo = self.txb_correo.get()
+            sujeto.registrar(sujeto.nombres, sujeto.apellidos, sujeto.fecha_nacimiento, sujeto.sexo, sujeto.genero, sujeto.orientacion_sexual, sujeto.nacionalidad, sujeto.provincia, sujeto.correo, self.condiciones_usuario())
+            self.window.destroy()
+            menu = MenuMed(sujeto)
+
 
     def abrir_login(self):  
         from interfaces.login_suj import LoginSujEstudio
