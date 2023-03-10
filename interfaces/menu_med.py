@@ -1,6 +1,9 @@
 from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, ttk, Label, StringVar, messagebox
 from modelos.parametros_fisiologicos import ParametrosFisiologicos as pf
+from modelos.medicion_parametro import MedicionParametro as mp
+from modelos.mediciones_sujeto import MedicionesSujeto as ms
+from modelos.sujetos_estudio import SujetosEstudio as se
 
 #Libreria para utilizar funciones del sistema
 import os
@@ -14,7 +17,7 @@ def relative_to_assets(path: str) -> Path:
 
 
 class MenuMed():
-    def __init__(self, sujeto, mediciones = {}):
+    def __init__(self, sujeto, mediciones = []):
         self.sujeto = sujeto
         self.mediciones = mediciones
         self.window = Tk()
@@ -300,7 +303,7 @@ class MenuMed():
             image=self.bt_imagen_generar_informe,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: self.abrir_reporte(),
+            command=lambda: self.abrir_reporte(), 
             relief="flat",
             bg = "White", 
         )
@@ -327,6 +330,9 @@ class MenuMed():
 
     def abrir_reporte(self):
         from interfaces.reporte_med import ReporteMed
+        import datetime
+        medicion_sujeto = ms()
+        medicion_sujeto.guardar_medicion(self.sujeto, self.txb_peso.get(), self.txb_estatura.get(), datetime.datetime.now(), self.mediciones)
         self.window.destroy()
         self.reporte = ReporteMed(self.sujeto, self.mediciones)
         
@@ -422,9 +428,20 @@ class MenuMed():
             "c": case_c,
             "d": case_d,            
         }
+        
         switch_case.get(caso, case_default)()
+
+    def validar_texto_vacio(self, text): #No esta funcionando
+        self.text_sin_espacios = text.replace(" ", " ") #Eliminamos los espacios vacios del texto
+        if len(text)==0:
+            return False
+        elif  (len(self.text_sin_espacios) == 0):
+            return False
+        return True
+
     def alerta_texto_vacio(self):
-        if (self.txb_estatura.get() == "" or self.txb_peso.get() == "" or self.cb_peso.get()=="" or self.cb_estatura.get()==""): #este if valida si el texto esta vacio
+        if (self.validar_texto_vacio(self.txb_estatura.get()) == False):
+       # if (self.txb_estatura.get() == "" or self.txb_peso.get() == "" or self.cb_peso.get()=="" or self.cb_estatura.get()==""): #este if valida si el texto esta vacio
             messagebox.showwarning("ALERTA", "¡Recuerde ingresar su peso y estatura antes de comenzar!")
             self.txb_estatura.focus_set()
             self.txb_peso.focus_set()
@@ -449,26 +466,30 @@ class MenuMed():
     def validar(self, caso):
         def case_a(): #Caso a es para las instrucciones de temperatura 
             if(messagebox.askokcancel("Confirmar medicion","¿Desea guardar la medición?")== True):
-                self.limpiar()
                 self.habilitar_botones()
+                self.almacenar_medicion("Temperatura")
+            
             else:
                 self.limpiar()
         def case_b(): #Caso b es para las instrucciones de la  saturacion de oxigeno
             if(messagebox.askokcancel("Confirmar medicion","¿Desea guardar la medición?")== True):
-                self.limpiar()
                 self.habilitar_botones()
+                self.almacenar_medicion("Saturacion de Oxigeno")
+               
             else:
                 self.limpiar()
         def case_c(): #Caso c es para las instrucciones de la saturacion de presion arterial 
             if(messagebox.askokcancel("Confirmar medicion","¿Desea guardar la medición?")== True):
-                self.limpiar()
                 self.habilitar_botones()
+                self.almacenar_medicion("Presion Arterial")
+
             else:
                 self.limpiar()
         def case_d(): #Caso e es para las instrucciones de la frecuencia cardiaca 
             if(messagebox.askokcancel("Confirmar medicion","¿Desea guardar la medición?")== True):
-                self.limpiar()
-                self.habilitar_botones()
+                self.habilitar_botones()  
+                self.almacenar_medicion("Frecuencia Cardiaca")
+
             else:
                 self.limpiar()
         def case_default():
@@ -503,11 +524,21 @@ class MenuMed():
             self.mensaje_pantalla(caso,self.instrucciones) #se toman las instrucciones de la diastolica porque son las mismas que la sistolica
             self.texto_parametro.set(self.parametros_fisiologicos.realizar_medicion_parametro())
             self.texto_parametro_medido.set(self.parametros_fisiologicos.descripcion + ": ")
+
             
     def limpiar(self):
         self.texto_parametro.set("")
         self.texto_pantalla.set("")
         self.texto_parametro_medido.set("Parametro medido: ")
         
-    def almacenar_medicion(self,medicion):
-        return 0
+    def almacenar_medicion(self, medicion):
+        if(medicion == "Presion Arterial"):
+            medicion_parametro = mp(self.parametros_fisiologicos, self.presion_arterial_sistolica)
+            medicion_parametro = mp(self.parametros_fisiologicos, self.presion_arterial_diastolica)
+        else:
+            medicion_parametro = mp(self.parametros_fisiologicos, self.texto_parametro)
+
+        self.mediciones.append(medicion_parametro)
+
+    
+   
