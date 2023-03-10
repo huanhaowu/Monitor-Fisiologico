@@ -28,7 +28,7 @@ class MedicionesSujeto:
             for parametro in parametros_medidos:
                 bd.execute_command(
                     "INSERT INTO Medicion_Parametro (id_medicion, id_parametro_fisiologico, medida_parametro_fisiologico) VALUES (?,?,?)",
-                [self.id_medicion, parametro.id_parametro_fisiologico, parametro.medida_parametro_fisiologico])
+                [self.id_medicion, parametro.parametro.id_parametro_fisiologico, parametro.medida_parametro_fisiologico])
 
     def cargar_datos_medicion(self, id_medicion):
         bd = Conexion()
