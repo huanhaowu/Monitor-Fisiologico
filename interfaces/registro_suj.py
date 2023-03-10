@@ -495,13 +495,14 @@ class RegistroSujeto():
         self.sujetoexiste = SujetosEstudio(tipo_documento, codigo_documento)
         if(self.sujetoexiste.ingresar() == True):
             self.usuario_existente()
-
-        for i in range(len(self.lista_condiciones)):
+            
+        numCond = len(self.lista_condiciones)
+        for i in range(numCond):
             self.checkbox = Checkbutton(text=(self.lista_condiciones[i])[1], variable=self.lista_valoresbool_checkbox[i],bg="#EEF8FF",font=("RobotoRoman Regular", 13 * -1))
-            if i < 7:
+            if i < numCond/2:
                 self.checkbox.place(x=860,y=410+(i*30),width=120,height=30)
             else :
-                self.checkbox.place(x=1020,y=410+((i-7)*30),width=180,height=30)
+                self.checkbox.place(x=1020,y=410+((i-round(numCond/2))*30),width=180,height=30)
             self.lista_condiciones_checkbox.append(self.checkbox)
 
         self.window.resizable(False, False)
