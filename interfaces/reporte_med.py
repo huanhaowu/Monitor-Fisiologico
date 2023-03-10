@@ -518,7 +518,7 @@ class ReporteMed():
             image=self.img_guardar,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_2 clicked"),
+            command=lambda: self.crear_pdf(),
             relief="flat"
         )
         self.btn_guardar.place(
@@ -528,7 +528,6 @@ class ReporteMed():
             height=68.0
         )
         # endregion
-        self.crear_pdf()
         self.window.resizable(False, False)
         self.window.mainloop()
 
@@ -645,7 +644,6 @@ if __name__ == "__main__":
     listaMediciones = [medicion_parametros1, medicion_parametros2]
     medicion1 = MedicionesSujeto(1, sujeto1, 70, 180, date.today(), listaMediciones)
     reporte = ReporteMed(sujeto1, medicion1)
-    reporte.crear_pdf()
 
 
 
