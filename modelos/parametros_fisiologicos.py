@@ -11,6 +11,7 @@ class ParametrosFisiologicos:
         self.critico_alto = critico_alto
         self.critico_bajo = critico_bajo
         self.instrucciones = instrucciones
+    
     def realizar_medicion_parametro(self):
         
         #TO-DO acordar la conexion con el dispositivo del monitor
@@ -43,6 +44,9 @@ class ParametrosFisiologicos:
             self.critico_alto = resultado[0][6]
             self.critico_bajo = resultado[0][7]
             self.instrucciones = resultado[0][8]
+            self.instrucciones = self.instrucciones.replace('\\n',"\n")
+            self.instrucciones = self.instrucciones.replace('\\t',"\t")
+            
     
     def obtener_lista_parametros_fisiologicos(self):
         bd = Conexion()

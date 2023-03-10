@@ -250,7 +250,7 @@ INSERT INTO Condiciones_Medicas (descripcion) VALUES ('Asma');
 INSERT INTO Condiciones_Medicas (descripcion) VALUES ('Hipertension');
 INSERT INTO Condiciones_Medicas (descripcion) VALUES ('Hipotension');
 INSERT INTO Condiciones_Medicas (descripcion) VALUES ('Migrana');
-INSERT INTO Condiciones_Medicas (descripcion) VALUES ('Enfermedad Pulmonar Obstructiva Cronica');
+INSERT INTO Condiciones_Medicas (descripcion) VALUES ('Enfermedad Pulmonar');
 INSERT INTO Condiciones_Medicas (descripcion) VALUES ('Insuficiencia Cardiaca');
 
 -- Condicion_Parametro
