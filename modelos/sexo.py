@@ -1,4 +1,5 @@
 from modelos.conexion import Conexion
+#Arreglo - Documentar el funcionamiento
 
 class Sexo:
     def __init__(self, id_sexo:int = 0, descripcion:str = ""):

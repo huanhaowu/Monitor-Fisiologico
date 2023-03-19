@@ -1,4 +1,6 @@
 from fpdf import FPDF
+#Arreglo - Documentar el funcionamiento
+
 class ReportePdf(FPDF):
     def __init__(self, reporte_med):
         FPDF.__init__(self)

@@ -18,6 +18,10 @@ def relative_to_assets(path: str) -> Path:
 class ReporteMed():
     def __init__(self, sujeto, mediciones):
 
+        #Arreglo - Documenta esta parte para que sea mas facil encontrar los campos, puedes guiarte de la estructura que siguieron los de la interfaz registro_suj.py
+        #Arreglo - Agrupa los controles del formulario en secciones por tipo, es decir, pon todos los botones en un solo lado, todos los textos en otro. Esto con el objetivo facilitar los arreglos
+        #Arreglo - Continua usando los "region" para definir las secciones de los controles
+
         # Datos a mostrar dentro del formulario
         self.sujeto = sujeto
         self.mediciones = mediciones
@@ -26,7 +30,6 @@ class ReporteMed():
         self.lista_temperatura = self.buscar_parametro("Temperatura")
         self.lista_presion = self.buscar_parametro("Presion Arterial")
         self.lista_oxigeno = self.buscar_parametro("Saturacion de Oxigeno")
-
         self.lista_frecuencia = self.buscar_parametro("Frecuencia Cardiaca")
 
         #Definicion puerto, servidor, correo y contraseña de envio de reportes
@@ -532,6 +535,7 @@ class ReporteMed():
         self.window.resizable(False, False)
         self.window.mainloop()
 
+    #Arreglo - Documenta todas tus funciones
     def crear_nota_aclaratoria(self):
         mensaje = ""
         if self.sujeto.condiciones_medicas != []:
@@ -581,7 +585,7 @@ class ReporteMed():
                                  style="gris.Horizontal.TProgressbar")
             pb['value'] = 0
         return pb
-
+    #Arreglo - Elimina todo lo que no estes usando
     # def enviar_pdf2(self):
     #     ssl_context = ssl.create_default_context()
     #     service = smtplib.SMTP_SSL(self.smtp_server_domain_name, self.port, context=ssl_context)
@@ -600,54 +604,7 @@ class ReporteMed():
     #     pdf_envio.email_send()
 
     def abrir_menu(self):
-        #from interfaces.menu_med import MenuMed
-        #self.window.destroy()
-        #menu = MenuMed(self.sujeto, self.mediciones)
-        pass
-
-
-if __name__ == "__main__":
-    # region IMPORTS CLASES
-    from datetime import date, datetime
-    from modelos.sujetos_estudio import SujetosEstudio
-    from modelos.mediciones_sujeto import MedicionesSujeto
-    from modelos.medicion_parametro import MedicionParametro
-    from modelos.parametros_fisiologicos import ParametrosFisiologicos
-    from modelos.tipo_documento import TipoDocumento
-    from modelos.sexo import Sexo
-    from modelos.genero import Genero
-    from modelos.orientacion_sexual import OrientacionSexual
-    from modelos.nacionalidad import Nacionalidad
-    from modelos.provincia import Provincia
-    from modelos.condiciones_medicas import CondicionesMedicas
-
-    # endregion
-    sexo = Sexo(0, "Hombre")
-    genero = Genero(0, "Masculino")
-    orientacion = OrientacionSexual(0, "Heterosexual")
-    provincia = Provincia(0, "Santo Domingo")
-    nacionalidad = Nacionalidad(0, "Dominicano")
-    parametro1 = ParametrosFisiologicos(1, "Temperatura", 36, 37, 40, 34, 46, 29.99, "Instruccion")
-    parametro2 = ParametrosFisiologicos(2, "Presion Arterial", 36, 37, 40, 34, 46, 29.99, "Instruccion")
-    lista_parametros = [parametro1, parametro2]
-    condicion1 = CondicionesMedicas(0, "Asma", lista_parametros)
-    condicion2 = CondicionesMedicas(1, "Diabetes", lista_parametros)
-    lista_condiciones = [condicion1, condicion2]
-    tipo_documento = TipoDocumento(0, "Cedula"
-                                      "")
-    fecha_nacimiento = datetime.strptime("1990/01/01", '%Y/%m/%d')
-
-    sujeto1 = SujetosEstudio(tipo_documento.descripcion, "1234532", 1, "Juan", "Perez", fecha_nacimiento,
-                             sexo, genero, orientacion, nacionalidad, provincia, "paolasaldanaquezada@gmail.com",
-                             lista_condiciones)
-
-    medicion_parametros1 = MedicionParametro(parametro1, 36)
-    medicion_parametros2 = MedicionParametro(parametro2, 45)
-    listaMediciones = [medicion_parametros1, medicion_parametros2]
-    medicion1 = MedicionesSujeto(1, sujeto1, 70, 180, date.today(), listaMediciones)
-    reporte = ReporteMed(sujeto1, medicion1)
-
-
-
-
-
+        from interfaces.menu_med import MenuMed
+        self.window.destroy()
+        menu = MenuMed(self.sujeto, self.mediciones)
+        

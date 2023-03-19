@@ -1,5 +1,7 @@
 from modelos.conexion import Conexion
 
+#Arreglo - Documentar el funcionamiento
+
 class Provincia:
     def __init__(self, id_provincia:int = 0, descripcion:str = ""):
         self.id_provincia = id_provincia

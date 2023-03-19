@@ -1,6 +1,6 @@
 from modelos.conexion import Conexion
 from modelos.tipo_usuario import TipoUsuario
-
+#Arreglo - Documentar el funcionamiento
 class Usuario:
     def __init__(self, usuario, clave, id_usuario = 0, tipo_usuario = None, nombre = "", apellido = "", fecha_nacimiento = None, id_creador = 0, correo_electronico = "", telefono = "", activo = True, fecha_creacion = None):
         self.id_usuario = id_usuario

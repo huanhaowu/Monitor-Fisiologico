@@ -8,14 +8,14 @@ from modelos.orientacion_sexual import OrientacionSexual
 from modelos.condiciones_medicas import CondicionesMedicas 
 from modelos.sujetos_estudio import SujetosEstudio
 
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, ttk,BooleanVar,StringVar,Checkbutton,messagebox
+from tkinter import Tk, Canvas, Entry, Button, PhotoImage, ttk,BooleanVar,StringVar,Checkbutton,messagebox
 from tkcalendar import DateEntry
 import os
 import datetime
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"assets/registro_suj")
-tamFuente = 18
+tamFuente = 18 # Arreglo - esta variable debe declararse como constante y escribirse en mayusculas
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
@@ -28,7 +28,6 @@ class RegistroSujeto():
         self.window.geometry("1260x725+{}+{}".format(self.window.winfo_screenwidth() // 2 - 1260 // 2, self.window.winfo_screenheight() // 2 - 725 // 2))
         self.window.configure(bg = "#FFFFFF")
         self.window.title("Registro de Sujeto")
-
         #-------------------- Ventana Principal -------------------
         #Canvas de la ventana principal
         #Dimensiones del canva
@@ -70,6 +69,7 @@ class RegistroSujeto():
             fill="#000000",
             outline="")
 
+        #Arreglo - Usa los "region" para agrupar las secciones que defines
         #-------------------- Botón Regresar -------------------
         #Imagen del botón regresar
         self.btn_img_regresar = PhotoImage(
@@ -128,6 +128,7 @@ class RegistroSujeto():
         )
         #Textbox del Codigo de Documento
         var = StringVar(value=self.codigo_documento)
+        #Arreglo - Todo el codigo que no estes utilizando borralo
         #self.txb_codigo_doc.insert(0, self.codigo_documento)
         self.txb_codigo_doc = Entry(
             bd=1,
@@ -492,9 +493,9 @@ class RegistroSujeto():
         self.lista_condiciones = estados_salud.obtener_lista_condiciones_medicas()
         self.lista_condiciones_checkbox = []
         self.lista_valoresbool_checkbox = [BooleanVar() for i in range(len(self.lista_condiciones))]
-        self.sujetoexiste = SujetosEstudio(tipo_documento, codigo_documento)
+        self.sujetoexiste = SujetosEstudio(tipo_documento, codigo_documento) #Arreglo - Colocar underscore para separar las dos palabras sujeto_existe
         if(self.sujetoexiste.ingresar() == True):
-            self.usuario_existente()
+            self.usuario_existente() #Arreglo - Las funciones deben comenzar por un verbo
             
         numCond = len(self.lista_condiciones)
         for i in range(numCond):
@@ -509,8 +510,8 @@ class RegistroSujeto():
         self.window.mainloop()
 
 
-#Funcion asignar las condiciones medicas del usuario 1.0
-    def condiciones_usuario(self):
+#Funcion asignar las condiciones medicas del usuario 1.0 
+    def condiciones_usuario(self): #Arreglo - Las funciones deben comenzar con un verbo en infinitivo
         lista_condiciones_usuario = []
         for i in range(len(self.lista_condiciones_checkbox)):
             if self.lista_valoresbool_checkbox[i].get() == True:
@@ -518,7 +519,7 @@ class RegistroSujeto():
         return lista_condiciones_usuario
 
 #Funcion para rellenar los campos con los de un usuario existente
-    def usuario_existente(self):
+    def usuario_existente(self): #Arreglo - Las funciones deben comenzar con un verbo en infinitivo
          formfecha = "%Y-%m-%d"
          self.txb_nombre.insert(0, self.sujetoexiste.nombres)
          self.txb_apellido.insert(0, self.sujetoexiste.apellidos)
@@ -529,6 +530,7 @@ class RegistroSujeto():
          self.cb_orientacion_sexual.current(int(self.sujetoexiste.orientacion_sexual.id_orientacion_sexual)-1),
          self.cb_nacionalidad.current(int(self.sujetoexiste.nacionalidad.id_nacionalidad)-1)
          self.cb_provincia.current(int(self.sujetoexiste.provincia.id_provincia)-1)
+         #Arreglo - Documenta mejor esta parte del codigo
          j = 0
          if(len(self.sujetoexiste.condiciones_medicas)>0):
             for i in range(len(self.lista_condiciones)):
@@ -538,13 +540,13 @@ class RegistroSujeto():
                     if(j == len(self.sujetoexiste.condiciones_medicas)):
                         break
 
-    def alerta_texto_vacio(self):
+    def alerta_texto_vacio(self): #Arreglo - Las funciones deben comenzar por un verbo
         if (self.txb_nombre.get().isspace() or self.txb_nombre.get() == "" or self.txb_apellido.get().isspace() or self.txb_apellido.get() == ""  or self.cb_genero.get().isspace() or self.cb_genero.get() == "" or self.cb_nacionalidad.get().isspace() or self.cb_nacionalidad.get() == "" or self.cb_orientacion_sexual.get().isspace() or self.cb_orientacion_sexual.get() == "" or self.cb_provincia.get().isspace() or self.cb_provincia.get() == "" or self.cb_sexo.get().isspace() or self.cb_sexo.get() == "" or self.cb_tipo_doc.get().isspace() or self.cb_tipo_doc.get() == "" or self.txb_codigo_doc.get().isspace() or self.txb_codigo_doc.get() == "" or self.txb_correo.get().isspace() or self.txb_correo.get() == ""): #este if valida si el texto esta vacio
             messagebox.showwarning("ALERTA", "Ha dejado campos vacios. Recuerde que tiene que llenar todos los campos. \n\nNOTA: Las condiciones medicas pueden quedar vacias. \n\nIngréselos para continuar.")
             return False
         else:
             return True
-            
+    #Arreglo - El codigo que no estes usando borralo      
     #def funciondetectarcamposvacios(self):
     #    lista_campos = {self.txb_nombre,self.txb_apellido, self.cb_genero, self.cb_nacionalidad, self.cb_orientacion_sexual, self.cb_provincia, self.cb_sexo, self.cb_tipo_doc, self.txb_codigo_doc}
     #    lista_campos_vacios = []

@@ -1,6 +1,7 @@
 import sqlite3
 import os
 
+#Arreglo - Documentar el funcionamiento
 
 class Conexion:
     def __init__(self):

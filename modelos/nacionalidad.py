@@ -1,6 +1,7 @@
 from modelos.conexion import Conexion
 class Nacionalidad:
-    
+    #Arreglo - Documentar el funcionamiento
+
     def __init__(self, id_nacionalidad:int = 0, descripcion:str = ""):
         self.id_nacionalidad = id_nacionalidad
         self.descripcion = descripcion
@@ -15,5 +16,3 @@ class Nacionalidad:
         resultado = bd.execute_query("SELECT descripcion FROM Nacionalidad WHERE id_nacionalidad = ?", [self.id_nacionalidad])
         self.descripcion = resultado[0][0]
 
-#prueba = Nacionalidad()
-#print(prueba.obtener_lista_nacionalidades())

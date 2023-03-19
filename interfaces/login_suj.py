@@ -1,5 +1,5 @@
 from pathlib import Path
-from tkinter import Tk, ttk, Canvas, Entry, Text, Button, PhotoImage, messagebox
+from tkinter import Tk, ttk, Canvas, Entry, Button, PhotoImage, messagebox
 from modelos.tipo_documento import TipoDocumento as td
 
 OUTPUT_PATH = Path(__file__).parent
@@ -14,6 +14,9 @@ class LoginSujEstudio():
         self.window.geometry("1260x725+{}+{}".format(self.window.winfo_screenwidth() // 2 - 1260 // 2, self.window.winfo_screenheight() // 2 - 725 // 2))
         self.window.configure(bg = "#FFFFFF")
         self.window.title("Login Sujetos de Estudio")
+        #Arreglo - Documenta esta parte para que sea mas facil encontrar los campos, puedes guiarte de la estructura que siguieron los de la interfaz registro_suj.py
+        #Arreglo - Agrupa los controles del formulario en secciones por tipo, es decir, pon todos los botones en un solo lado, todos los textos en otro. Esto con el objetivo facilitar los arreglos
+        #Arreglo - Usa los "region" para definir las secciones de los controles
         #Canvas
         self.canvas = Canvas(
             self.window,
@@ -131,8 +134,9 @@ class LoginSujEstudio():
         self.window.resizable(False, False)
         self.window.mainloop()
         
-    def abrir_registro(self, id_tipo_documento, descripcion = None):
+    def abrir_registro(self, id_tipo_documento:int, descripcion:str):
         from interfaces.registro_suj import RegistroSujeto as rs
+        #Arreglo - Trata de que los nombres de tus variables sean autodescriptivas, cambia el nombre bol
         bol = comprobar_cod_documento(descripcion)
         if bol == True:
             self.window.destroy()
@@ -172,10 +176,9 @@ class LoginSujEstudio():
         
         
 # Función para comprobar que se pase un codigo de documento antes de cambiar de pantalla
-def comprobar_cod_documento(codigo_documento):
+#Arreglo - Esta funcion debe ir dentro de la clase
+def comprobar_cod_documento(codigo_documento:str):
     if codigo_documento == "":
         return False
     else:
         return True
-
-

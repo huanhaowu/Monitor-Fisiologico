@@ -1,5 +1,7 @@
 from modelos.conexion import Conexion
 from modelos.parametros_fisiologicos import ParametrosFisiologicos
+#Arreglo - Documentar el funcionamiento
+
 class CondicionesMedicas:
     def __init__(self, id_condicion_medica:int = 0, descripcion:str = "", parametros:list[ParametrosFisiologicos] = []):
         self.id_condicion_medica = id_condicion_medica

@@ -8,7 +8,8 @@ from modelos.provincia import Provincia
 from modelos.condiciones_medicas import CondicionesMedicas
 import datetime
 class SujetosEstudio:
-    
+    #Arreglo - Documentar el funcionamiento
+
     def __init__(self, tipo_documento:str, codigo_documento:str, id_sujeto:int = 0 , nombres:str = "", apellidos:str = "", fecha_nacimiento:datetime.date = None, sexo:Sexo = None, genero:Genero = None, orientacion_sexual:OrientacionSexual = None, nacionalidad:Nacionalidad = None, provincia:Provincia = None, correo:str = "", condiciones_medicas:list[CondicionesMedicas] = []):
         #Parametros obligatorios
         self.tipo_documento = TipoDocumento(descripcion = tipo_documento)

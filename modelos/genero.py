@@ -1,4 +1,6 @@
 from modelos.conexion import Conexion
+#Arreglo - Documentar el funcionamiento
+
 class Genero:
     def __init__(self, id_genero:int = 0, descripcion:str = ""):
         self.id_genero = id_genero
@@ -13,6 +15,3 @@ class Genero:
         bd = Conexion()
         resultado = bd.execute_query("SELECT descripcion FROM Genero WHERE id_genero = ?", [self.id_genero])
         self.descripcion = resultado[0][0]
-
-#prueba = Genero()
-#print(prueba.obtener_lista_generos())

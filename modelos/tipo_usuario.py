@@ -1,4 +1,5 @@
 from modelos.conexion import Conexion
+#Arreglo - Documentar el funcionamiento
 
 class TipoUsuario:
     def __init__(self, id_tipo_usuario:int = 0, descripcion:str = ""):

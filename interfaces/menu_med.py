@@ -32,8 +32,12 @@ class MenuMed():
             highlightthickness = 0,
             relief = "ridge"
         )
+        #Arreglo - Documenta esta parte para que sea mas facil encontrar los campos, puedes guiarte de la estructura que siguieron los de la interfaz registro_suj.py
+        #Arreglo - Agrupa los controles del formulario en secciones por tipo, es decir, pon todos los botones en un solo lado, todos los textos en otro. Esto con el objetivo facilitar los arreglos
+        #Arreglo - Usa los "region" para definir las secciones de los controles
         #Aqui va el boton para volver al frame anterior
         self.canvas.place(x = 0, y = 0)
+        #Arreglo - Sigue la nomenclatura de los botones, es btn
         bt_imagen_volver = PhotoImage(
             file=relative_to_assets("button_1.png"))
         self.bt_volver = Button(
@@ -50,10 +54,9 @@ class MenuMed():
             width=61.0,
             height=60.0
         )
-
         self.texto_pantalla = StringVar()
         self.texto_pantalla.set("")
-
+        #Arreglo - Sigue la nomenclatura de los label, es lbl
         self.txt_pantalla = Label(
             borderwidth=2, 
             relief="groove", 
@@ -63,14 +66,12 @@ class MenuMed():
             justify="left", #justificar el texto a la izquierda
             font = ("Arial", 12)
             )
-        
         self.txt_pantalla.place(
             x = 561.0,
             y = 280.0,
             width = 630.0,
             height = 200.0  
             )
-        
         #Aqui va el texbox para la estatura
         self.canvas.create_text(
             720.0,
@@ -147,7 +148,7 @@ class MenuMed():
         #Aqui va el label para el parametro medido
         self.texto_parametro = StringVar()
         self.texto_parametro.set("")
-
+        #Arreglo - Sigue la nomenclatura de los label, es lbl
         self.txt_parametro = Label(
             borderwidth=2, 
             relief="groove", 
@@ -179,6 +180,7 @@ class MenuMed():
         )
 
         #Aqui va el boton para comenzar una medicion
+        #Arreglo - Sigue la nomenclatura de los botones, es btn
         self.bt_imagen_comenzar = PhotoImage(
             file=relative_to_assets("button_2.png"))
         self.bt_comenzar = Button(
@@ -198,6 +200,7 @@ class MenuMed():
 
 
         #Aqui va el boton para limpiar y elegir otra medicion
+        #Arreglo - Sigue la nomenclatura de los botones, es btn
         self.bt_imagen_limpiar = PhotoImage(
             file=relative_to_assets("button_3.png"))
         self.bt_limpiar = Button(
@@ -224,6 +227,7 @@ class MenuMed():
             image=self.image_image_1
         )         
         #Aqui va el boton para iniciar medicion de saturacion de oxigeno 
+        #Arreglo - Sigue la nomenclatura de los botones, es btn
         self.bt_imagen_saturacion_oxigeno = PhotoImage(
             file=relative_to_assets("button_4.png"))
         self.bt_saturacion_oxigeno = Button(
@@ -315,6 +319,7 @@ class MenuMed():
         )
         self.validar_caso = " " #variable que funciona para validar cual es el caso que se encuentra activo, esta inicializada en " " debido a que es el caso por defecto
         self.deshabilitar_botones("", "")
+        #Arreglo - Las funciones deben comenzar por un verbo
         self.mensaje_pantalla("", "") #Colocar el texto por defecto al iniciar la interfaz en la pantalla
         self.window.resizable(False, False)
         self.window.mainloop()
@@ -339,8 +344,8 @@ class MenuMed():
         
 
 #Funciones para deshabilitar y habilitar las interfaces
-    def deshabilitar_botones(self, boton, instruccion):
-
+    def deshabilitar_botones(self, boton:str, instruccion:str):
+        #Arreglo - Documenta mejor estas funciones
         def case_a(): #Caso a es para la temperatura
             self.bt_limpiar.config(state = 'normal')
             self.bt_saturacion_oxigeno.config(state = 'disabled')
@@ -410,7 +415,7 @@ class MenuMed():
         }
         switch_case.get(boton, case_default)()
               
-    def mensaje_pantalla(self,caso,instrucciones):
+    def mensaje_pantalla(self,caso:str,instrucciones:str):
         def case_a(): #Caso a es para las instrucciones de temperatura 
             self.texto_pantalla.set(instrucciones) 
         def case_b(): #Caso b es para las instrucciones de la  saturacion de oxigeno
@@ -432,14 +437,14 @@ class MenuMed():
         
         switch_case.get(caso, case_default)()
 
-    def validar_texto_vacio(self, text): #No esta funcionando
+    def validar_texto_vacio(self, text:str): #No esta funcionando
         self.text_sin_espacios = text.replace(" ", " ") #Eliminamos los espacios vacios del texto
         if len(text)==0:
             return False
         elif  (len(self.text_sin_espacios) == 0):
             return False
         return True
-
+    #Arreglo - Las funciones deben comenzar por un verbo
     def alerta_texto_vacio(self):
         if (self.validar_texto_vacio(self.txb_estatura.get()) == False):
        # if (self.txb_estatura.get() == "" or self.txb_peso.get() == "" or self.cb_peso.get()=="" or self.cb_estatura.get()==""): #este if valida si el texto esta vacio
@@ -463,8 +468,8 @@ class MenuMed():
         self.bt_comenzar.config(state = "disabled")
         self.bt_generar_informe.config(state = "normal")
         self.limpiar()
-
-    def validar(self, caso):
+    #Arreglo - Documenta mejor para que sirve la funcion
+    def validar(self, caso): #Arreglo - se mas especifico con el nombre de la funcion
         def case_a(): #Caso a es para las instrucciones de temperatura 
             if(messagebox.askokcancel("Confirmar medicion","¿Desea guardar la medición?")== True):
                 self.habilitar_botones()
@@ -503,8 +508,8 @@ class MenuMed():
             "d": case_d
         }
         switch_case.get(caso, case_default)()
-
-    def tomar_medicion(self,medicion,caso):
+    #Arreglo - Documenta mejor el funcionamiento del metodo
+    def tomar_medicion(self,medicion:str,caso:str):
         self.validar_caso = caso # se le asigna un valor a la variable validar caso para determinar cual es el caso activo al presionaro un  boton
         self.parametros_fisiologicos = pf()
         self.instrucciones = " "
@@ -530,12 +535,12 @@ class MenuMed():
             self.texto_parametro_medido.set(self.parametros_fisiologicos.descripcion + ": ")
 
             
-    def limpiar(self):
+    def limpiar(self): #Arreglo - Se mas especifico con el nombre de la funcion y documenta mejor
         self.texto_parametro.set("")
         self.texto_pantalla.set("")
         self.texto_parametro_medido.set("Parametro medido: ")
         
-    def almacenar_medicion(self, medicion):
+    def almacenar_medicion(self, medicion:str):
         if(medicion == "Presion Arterial"):
             medicion_parametro = mp(self.presion_arterial_sistolica, self.medida_presion_arterial_sistolica)
             medicion_parametro = mp(self.presion_arterial_diastolica, self.medida_presion_arterial_diastolica)

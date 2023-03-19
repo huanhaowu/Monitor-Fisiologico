@@ -1,4 +1,6 @@
 from modelos.parametros_fisiologicos import ParametrosFisiologicos
+#Arreglo - Documentar el funcionamiento
+
 class MedicionParametro:
     def __init__(self, parametro:ParametrosFisiologicos, medida_parametro_fisiologico:float):
         self.parametro = parametro

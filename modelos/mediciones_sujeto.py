@@ -3,6 +3,8 @@ from modelos.medicion_parametro import MedicionParametro
 from modelos.parametros_fisiologicos import ParametrosFisiologicos
 from modelos.sujetos_estudio import SujetosEstudio
 import datetime
+#Arreglo - Documentar el funcionamiento
+
 class MedicionesSujeto:
     def __init__(self, id_medicion:int = 0, sujeto:SujetosEstudio = None, peso_sujeto:float = 0, altura_sujeto:float = 0, fecha_medicion:datetime.date = None, parametros_medidos:list[MedicionParametro] = []):
         self.id_medicion = id_medicion

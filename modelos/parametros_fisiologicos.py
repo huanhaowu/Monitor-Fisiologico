@@ -1,4 +1,5 @@
 from modelos.conexion import Conexion
+#Arreglo - Documentar el funcionamiento
 
 class ParametrosFisiologicos:
     def __init__(self, id_parametro_fisiologico:int = 0, descripcion:str = "", min_estandar:float = 0, max_estandar:float = 0, alerta_alto:float = 0, alerta_bajo:float = 0, critico_alto:float = 0, critico_bajo:float = 0, instrucciones:str = ""):

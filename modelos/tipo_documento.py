@@ -1,4 +1,5 @@
 from modelos.conexion import Conexion
+#Arreglo - Documentar el funcionamiento
 
 class TipoDocumento:
     
