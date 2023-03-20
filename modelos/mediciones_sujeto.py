@@ -27,6 +27,7 @@ class MedicionesSujeto:
 
         self.id_medicion = int(bd.execute_query("SELECT MAX(id_medicion) FROM Mediciones_Sujeto")[0][0]) 
         if self.id_medicion:
+            bd.execute_command("DELETE FROM Medicion_Parametro WHERE id_medicion = ?", [self.id_medicion])
             for parametro in parametros_medidos:
                 bd.execute_command(
                     "INSERT INTO Medicion_Parametro (id_medicion, id_parametro_fisiologico, medida_parametro_fisiologico) VALUES (?,?,?)",
