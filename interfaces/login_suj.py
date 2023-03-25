@@ -21,6 +21,7 @@ class LoginSujEstudio():
         #Arreglo - Usa los "region" para definir las secciones de los controles
 
         #INICIALIZACION DE VARIABLES
+        
         #Inicializando canvas principal de la ventana
         self.canvas = Canvas(
             self.window,
@@ -32,6 +33,7 @@ class LoginSujEstudio():
             relief = "ridge"
         )
 
+        #region // Botones
         #Imagen Boton Acceder
         self.imagen_btn_acceder = PhotoImage(file=relative_to_assets("button_1.png"))
 
@@ -44,10 +46,12 @@ class LoginSujEstudio():
             relief="flat",
             bg = "white"
         )
+        #endregion
 
         #Imagen Logo de la Aplicación
         self.imagen_logo_app = PhotoImage(file=relative_to_assets("image_1.png"))
 
+        #region // Inicializando cmb y txtbox
         #Inicializando variable para obtener lista de tipo_documento permitidos
         tipo_documento = td()
         lista_tipo_documento = tipo_documento.obtener_lista_tipo_documento()
@@ -71,8 +75,9 @@ class LoginSujEstudio():
             highlightthickness=0,
             font = ("RobotoRoman Regular", 25 * -1)
         )
+        #endregion
 
-        #UBICACIONES
+        #region // UBICACIONES
         #Ubicacion del canvas principal
         self.canvas.place(x = 0, y = 0)
         self.canvas.create_rectangle(
@@ -114,8 +119,9 @@ class LoginSujEstudio():
             width=404.0,
             height=52.0
         )
+        #endregion
 
-        #TEXTOS
+        #region // TEXTOS
         #Pregunta acerca del tipo de documento
         self.canvas.create_text(
             453.0,
@@ -145,14 +151,17 @@ class LoginSujEstudio():
             fill="#FFFFFF",
             font=("Inter", 25 * -1)
         )
+        #endregion
         
-        #PROCESOS
         #Provocando que el documento inicial sea la cedula
         self.cb_tipo_doc.current(0)
         
         self.window.resizable(False, False)
         self.window.mainloop()
-        
+
+    #PROCESOS
+
+    #region // Funcion para abrir registro
     def abrir_registro(self, id_tipo_documento:int, descripcion:str):
         from interfaces.registro_suj import RegistroSujeto as rs
         codigo_aceptado = self.comprobar_cod_documento(descripcion)
@@ -193,11 +202,14 @@ class LoginSujEstudio():
             )
             messagebox.showwarning("Rellene el formulario", "Ingrese el código de su documento")
 
-    # Función para comprobar que se pase un codigo de documento antes de cambiar de pantalla
+#endregion
+
+    #region // Función para comprobar que se pase un codigo de documento antes de cambiar de pantalla
     def comprobar_cod_documento(self, codigo_documento:str):
         if codigo_documento.isalnum() == True and len(codigo_documento) >= 9 and codigo_documento.find("ñ") == -1 and codigo_documento.find("Ñ") == -1:
             return True
         else:
             return False
-                
+    #endregion            
+ 
         
