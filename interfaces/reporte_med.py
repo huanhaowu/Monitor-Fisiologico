@@ -1,9 +1,8 @@
-#Librerias para pruebas, aun no estan siendo utilizadas
-#import smtplib
-#import ssl
-#from pdf_mail import sendpdf
+
 
 from datetime import date, datetime
+from email import encoders
+from email.mime.base import MIMEBase
 from pathlib import Path
 from tkinter import Tk, ttk, Canvas, Button, PhotoImage, HORIZONTAL, Label, Text, Scrollbar, RIGHT, Y, \
     DISABLED
@@ -31,12 +30,6 @@ class ReporteMed():
         self.lista_presion = self.buscar_parametro("Presion Arterial")
         self.lista_oxigeno = self.buscar_parametro("Saturacion de Oxigeno")
         self.lista_frecuencia = self.buscar_parametro("Frecuencia Cardiaca")
-
-        #Definicion puerto, servidor, correo y contraseña de envio de reportes
-        self.port = 465
-        self.smtp_server_domain_name = "smtp.gmail.com"
-        self.sender_mail = "heartbeatmonitorfisiologico@gmail.com"
-        self.password = "!#MonitorHeartBeat2686"
 
         #Campos calculados en cada reporte
         self.fecha_actual_str = date.today().strftime("%Y/%m/%d")
@@ -522,7 +515,7 @@ class ReporteMed():
             image=self.img_guardar,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: self.crear_pdf(),
+            command=lambda: self.enviar_pdf(),
             relief="flat"
         )
         self.btn_guardar.place(
@@ -567,6 +560,7 @@ class ReporteMed():
         self.ruta_pdf = str(relative_to_assets("Reporte_HeartBeat.pdf"))
         pdf = ReportePdf(self)
 
+
     def llenar_barras(self, lista=[]):
         if lista[0] == "rojo":
             pb=ttk.Progressbar(self.window, orient=HORIZONTAL, mode='determinate',
@@ -580,28 +574,51 @@ class ReporteMed():
             pb = ttk.Progressbar(self.window, orient=HORIZONTAL, mode='determinate',
                                  style="amarillo.Horizontal.TProgressbar")
             pb['value'] = 75
-        elif lista[0] == "gris":
+        else:
             pb = ttk.Progressbar(self.window, orient=HORIZONTAL, mode='determinate',
                                  style="gris.Horizontal.TProgressbar")
             pb['value'] = 0
         return pb
-    #Arreglo - Elimina todo lo que no estes usando
-    # def enviar_pdf2(self):
-    #     ssl_context = ssl.create_default_context()
-    #     service = smtplib.SMTP_SSL(self.smtp_server_domain_name, self.port, context=ssl_context)
-    #     service.login(self.sender_mail, self.password)
-    #     service.sendmail(self.sender_mail, "saldanaquezada@gmail.com", "Subject")
-    #     service.quit()
 
-    # def enviar_pdf(self):
-    #     pdf_envio = sendpdf("heartbeatmonitorfisiologico@gmail.com",
-    #                         self.sujeto.correo,
-    #                         "!#MonitorHeartBeat2686",
-    #                         "Reporte de Medicion ",
-    #                         "Este es el reporte con las mediciones generadas en el sistema HeartBeat. Gracias por preferirnos!",
-    #                         "Reporte_HeartBeat",
-    #                         "C:/Users/Angel/Monitor-Fisiologico/interfaces")
-    #     pdf_envio.email_send()
+
+    def enviar_pdf(self):
+        self.crear_pdf()
+        destinatario = self.sujeto.correo
+        from Google import Create_Service
+        import base64
+        from email.mime.multipart import MIMEMultipart
+
+        nombre_pdf = 'Reporte_HeartBeat.pdf'
+        ruta_pdf = relative_to_assets(nombre_pdf)
+        CLIENT_SECRET_FILE = 'credentials.json'
+        API_NAME = 'gmail'
+        API_VERSION = 'v1'
+        SCOPES = ['https://mail.google.com/']
+
+        service = Create_Service(CLIENT_SECRET_FILE, API_NAME, API_VERSION, SCOPES)
+
+        correo = MIMEMultipart()
+        correo['to'] = destinatario
+        correo['subject'] = f'Reporte {self.fecha_actual_str}'
+        # correo.attach(MIMEText(cuerpo_correo, 'plain'))
+
+
+        # se abre el archivo pdf en binario
+        binary_pdf = open(ruta_pdf, 'rb')
+
+        payload = MIMEBase('application', 'octate-stream', Name=nombre_pdf)
+        payload.set_payload((binary_pdf).read())
+
+        # se codifica el binario a base64
+        encoders.encode_base64(payload)
+
+        # adjuntar el archivo o 'carga' al correo
+        correo.attach(payload)
+
+        #enviar correo
+        cuerpo_crudo = base64.urlsafe_b64encode(correo.as_bytes()).decode()
+        message = service.users().messages().send(userId='me', body={'raw': cuerpo_crudo}).execute()
+
 
     def abrir_menu(self):
         from interfaces.menu_med import MenuMed
