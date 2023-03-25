@@ -1,6 +1,9 @@
 from pathlib import Path
 from tkinter import Tk, ttk, Canvas, Entry, Button, PhotoImage, messagebox, StringVar
+from tkinter.font import Font
 from modelos.tipo_documento import TipoDocumento as td
+
+
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"assets/login_suj")
@@ -53,8 +56,12 @@ class LoginSujEstudio():
         self.cb_tipo_doc = ttk.Combobox(
             state = "readonly",
             value = lista_tipo_documento,
-            font = ("RobotoRoman Regular", 25 * -1)
+            font = ("RobotoRoman Regular", 25 * -1)  
         )
+
+        cb_tipo_doc_fs = Font(family = "RobotoRoman Regular", size = 30) #Variable para aumentar el tamaño de las opciones en el combobox
+        self.cb_tipo_doc.option_add("*TCombobox*Listbox*Font", cb_tipo_doc_fs) #Agregando una opcion para aumentar el tamaño de un listbox dentro del combobox
+    
 
         #Inicializacion del textbox para el numero de documento
         self.txb_codigo_doc = Entry(
