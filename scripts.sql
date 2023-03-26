@@ -1,3 +1,5 @@
+
+
 --CREACION DE LAS TABLAS
 CREATE TABLE Parametros_Fisiologicos (
     id_parametro_fisiologico INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -150,6 +152,8 @@ CREATE TABLE Historico_Solicitud(
 );
 -- INSERCION DE LOS DATOS INICIALES
 -- Tipo_Usuario
+
+
 INSERT INTO Tipo_Usuario (descripcion) VALUES ('Administrador');
 INSERT INTO Tipo_Usuario (descripcion) VALUES ('Analista');
 
@@ -205,7 +209,7 @@ INSERT INTO Provincia (descripcion) VALUES ('Barahona');
 INSERT INTO Provincia (descripcion) VALUES ('Dajabon');
 INSERT INTO Provincia (descripcion) VALUES ('Distrito Nacional');
 INSERT INTO Provincia (descripcion) VALUES ('Duarte');
-INSERT INTO Provincia (descripcion) VALUES ('Elias Piña');
+INSERT INTO Provincia (descripcion) VALUES ('Elias Piรฑa');
 INSERT INTO Provincia (descripcion) VALUES ('El Seibo');
 INSERT INTO Provincia (descripcion) VALUES ('Espaillat');
 INSERT INTO Provincia (descripcion) VALUES ('Hato Mayor');
@@ -215,7 +219,7 @@ INSERT INTO Provincia (descripcion) VALUES ('La Altagracia');
 INSERT INTO Provincia (descripcion) VALUES ('La Romana');
 INSERT INTO Provincia (descripcion) VALUES ('La Vega');
 INSERT INTO Provincia (descripcion) VALUES ('Maria Trinidad Sanchez');
-INSERT INTO Provincia (descripcion) VALUES ('Monseñor Nouel');
+INSERT INTO Provincia (descripcion) VALUES ('Monseรฑor Nouel');
 INSERT INTO Provincia (descripcion) VALUES ('Monte Cristi');
 INSERT INTO Provincia (descripcion) VALUES ('Monte Plata');
 INSERT INTO Provincia (descripcion) VALUES ('Pedernales');
