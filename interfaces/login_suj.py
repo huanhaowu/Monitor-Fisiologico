@@ -75,6 +75,9 @@ class LoginSujEstudio():
             highlightthickness=0,
             font = ("RobotoRoman Regular", 25 * -1)
         )
+
+        self.txb_codigo_doc.bind('<Key>', self.evitar_espacio) # enlaza la función evitar_espacio a la txb_codigo_doc cada vez que se presiona una tecla en la entrada.
+        
         #endregion
 
         #region // UBICACIONES
@@ -165,6 +168,7 @@ class LoginSujEstudio():
     def abrir_registro(self, id_tipo_documento:int, descripcion:str):
         from interfaces.registro_suj import RegistroSujeto as rs
         codigo_aceptado = self.comprobar_cod_documento(descripcion)
+
         if codigo_aceptado == True:
             self.window.destroy()
             descripcion = descripcion.upper()
@@ -200,16 +204,28 @@ class LoginSujEstudio():
                 font = ("RobotoRoman Bold", 35 * -1),
                 justify= 'center',
             )
-            messagebox.showwarning("Rellene el formulario", "Ingrese el código de su documento")
+            messagebox.showwarning("Rellene el formulario", codigo_aceptado[1])
 
 #endregion
 
     #region // Función para comprobar que se pase un codigo de documento antes de cambiar de pantalla
     def comprobar_cod_documento(self, codigo_documento:str):
-        if codigo_documento.isalnum() == True and len(codigo_documento) >= 9 and codigo_documento.find("ñ") == -1 and codigo_documento.find("Ñ") == -1:
+        if codigo_documento.isalnum() and len(codigo_documento) >= 9 and codigo_documento.find("ñ") == -1 and codigo_documento.find("Ñ") == -1:
             return True
         else:
-            return False
-    #endregion            
- 
+            error = ""
+            if not codigo_documento.isalnum():
+                error += " El código del documento debe contener únicamente letras y números."
+            if len(codigo_documento) < 9:
+                error += " El código del documento debe tener al menos 9 caracteres."
+            if codigo_documento.find("ñ") != -1 or codigo_documento.find("Ñ") != -1:
+                error += " El código del documento no puede contener la letra 'ñ' o 'Ñ'."
+            return False, error # Devuelve una tupla el False indicando error tiene indice [0], y el mensaje de error tiene indice [1]
+    #endregion 
+
+    #region // Funcion para evitar espacios dentro del txtbox
+    def evitar_espacio(self, event):
+        if event.keysym == 'space':
+            return 'break'      
+    #endregion
         
