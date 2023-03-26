@@ -4,8 +4,10 @@ from datetime import date
 from email import encoders
 from email.mime.base import MIMEBase
 from pathlib import Path
-from tkinter import Tk, messagebox, ttk, Canvas, Button, PhotoImage, HORIZONTAL, Label, Text, Scrollbar, RIGHT, Y, \
+import re
+from tkinter import Tk, messagebox, simpledialog, ttk, Canvas, Button, PhotoImage, HORIZONTAL, Label, Text, Scrollbar, RIGHT, Y, \
     DISABLED
+import tkinter
 
 # Bloque de codigo para trabajar con el path de los archivos
 OUTPUT_PATH = Path(__file__).parent
@@ -87,8 +89,6 @@ class ReporteMed():
             highlightthickness=0,
             relief="ridge"
         )
-
-        messagebox.askokcancel("Confirmar envio","¿Desea recibir el reporte a su correo?")
 
         self.canvas.place(x=0, y=0)
 
@@ -621,13 +621,13 @@ class ReporteMed():
         return pb
 
 
-    def enviar_pdf(self):
+    def enviar_pdf(self, correo_envio):
         from gmail.Google import Create_Service
         import base64
         from email.mime.multipart import MIMEMultipart
 
         self.crear_pdf()
-        destinatario = self.sujeto.correo
+        destinatario = correo_envio
         nombre_pdf = 'Reporte_HeartBeat.pdf'
         ruta_pdf = relative_to_assets(nombre_pdf)
         CLIENT_SECRET_FILE = 'gmail/credentials.json'
@@ -659,13 +659,38 @@ class ReporteMed():
         cuerpo_crudo = base64.urlsafe_b64encode(correo.as_bytes()).decode()
         message = service.users().messages().send(userId='me', body={'raw': cuerpo_crudo}).execute()
     
+    def verificar_correo_electronico(self, correo): 
+        if(correo !="" or correo.isspace() == False):
+               patron =  r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+               resultado = re.match(patron, correo)
+               if(resultado):
+                    return True
+               else:
+                    messagebox.showwarning("ALERTA", "El correo electronico no es valido. \n\nPor favor ingrese un correo electronico valido.")
+                    return False
+        return True
+    
+
     def confirmar_correo(self):
-        mensaje =  Tk()
-        mensaje.geometry("150x150")
-        if(messagebox.askokcancel("Confirmar envio","¿Desea recibir el reporte a su correo?")== True):
-            self.enviar_pdf()
-            messagebox.showinfo("Envio exitoso","El reporte ha sido enviado a su correo")
-        mensaje.mainloop()
+        correo_envio = None
+        while correo_envio == None:
+
+            if(messagebox.askyesno("Confirmar envio","¿Desea recibir el reporte a su correo?")== True):
+                correo_envio = simpledialog.askstring(title="Confirmar correo",
+                prompt="Correo a enviar:",
+                initialvalue= self.sujeto.correo)
+                if(correo_envio != None):
+                    while(self.verificar_correo_electronico(correo_envio) == False):
+                        correo_envio = simpledialog.askstring(title="Confirmar correo",
+                        prompt="Correo a enviar:",
+                        initialvalue= self.sujeto.correo)
+                        self.enviar_pdf(correo_envio)== True
+                        messagebox.showinfo("Envio exitoso","El reporte ha sido enviado a su correo")
+
+        from interfaces.login_suj import LoginSujEstudio
+        self.window.destroy()
+        menu = LoginSujEstudio()
+
 
     def abrir_menu(self):
         from interfaces.menu_med import MenuMed
