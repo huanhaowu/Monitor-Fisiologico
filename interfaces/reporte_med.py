@@ -1,6 +1,6 @@
 
 
-from datetime import date, datetime
+from datetime import date
 from email import encoders
 from email.mime.base import MIMEBase
 from pathlib import Path
@@ -584,13 +584,13 @@ class ReporteMed():
     def enviar_pdf(self):
         self.crear_pdf()
         destinatario = self.sujeto.correo
-        from Google import Create_Service
+        from gmail.Google import Create_Service
         import base64
         from email.mime.multipart import MIMEMultipart
 
         nombre_pdf = 'Reporte_HeartBeat.pdf'
         ruta_pdf = relative_to_assets(nombre_pdf)
-        CLIENT_SECRET_FILE = 'credentials.json'
+        CLIENT_SECRET_FILE = 'gmail/credentials.json'
         API_NAME = 'gmail'
         API_VERSION = 'v1'
         SCOPES = ['https://mail.google.com/']

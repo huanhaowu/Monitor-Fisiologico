@@ -16,9 +16,11 @@ def Create_Service(client_secret_file, api_name, api_version, *scopes):
     print(SCOPES)
 
     cred = None
+    dir_name = 'gmail'  # name of the directory to store the pickle file
+    if not os.path.exists(dir_name):
+        os.makedirs(dir_name)  # create the directory if it doesn't exist
 
-    pickle_file = f'token_{API_SERVICE_NAME}_{API_VERSION}.pickle'
-    # print(pickle_file)
+    pickle_file = os.path.join(dir_name, f'token_{API_SERVICE_NAME}_{API_VERSION}.pickle')
 
     if os.path.exists(pickle_file):
         with open(pickle_file, 'rb') as token:
