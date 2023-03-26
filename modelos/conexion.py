@@ -10,13 +10,13 @@ class Conexion:
 
     def enter(self):
         self.conn = sqlite3.connect(self.db_file, detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) #Se crea la conexion con la base de datos
-        self.conn.text_factory = lambda x: str(x, 'utf8', 'ignore') #Establecer la codificación para la conexión
+        self.conn.text_factory = lambda x: x.decode("utf-8") #Establecer la codificación para la conexión
         
 
     def create_database(self):
         self.enter() #Se crea la conexion con la base de datos
         sql_file = os.path.abspath("scripts.sql") #Se obtiene la ruta del archivo con el script
-        with open(sql_file, 'r', encoding='utf-8') as f: #Se abre el archivo
+        with open(sql_file, 'r', encoding="utf-8") as f: #Se abre el archivo
             sql = f.read() #Se lee el archivo
             self.conn.executescript(sql) #Se ejecuta el script
             self.conn.execute("PRAGMA encoding='UTF-8';") # Se establece la codificación de la base de datos a UTF-8

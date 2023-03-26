@@ -1,5 +1,3 @@
-
-
 --CREACION DE LAS TABLAS
 CREATE TABLE Parametros_Fisiologicos (
     id_parametro_fisiologico INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -202,14 +200,13 @@ INSERT INTO Nacionalidad (descripcion) VALUES ('Canadiense');
 INSERT INTO Nacionalidad (descripcion) VALUES ('Otro');
 
 -- Provincia
-INSERT INTO Provincia (descripcion) VALUES ('Santo Domingo');
-INSERT INTO Provincia (descripcion) VALUES ('Azua');
-INSERT INTO Provincia (descripcion) VALUES ('Bahoruco');
-INSERT INTO Provincia (descripcion) VALUES ('Barahona');
-INSERT INTO Provincia (descripcion) VALUES ('Dajabon');
 INSERT INTO Provincia (descripcion) VALUES ('Distrito Nacional');
+INSERT INTO Provincia (descripcion) VALUES ('Azua');
+INSERT INTO Provincia (descripcion) VALUES ('Baoruco');
+INSERT INTO Provincia (descripcion) VALUES ('Barahona');
+INSERT INTO Provincia (descripcion) VALUES ('Dajabón');
 INSERT INTO Provincia (descripcion) VALUES ('Duarte');
-INSERT INTO Provincia (descripcion) VALUES ('Elias Piรฑa');
+INSERT INTO Provincia (descripcion) VALUES ('Elías Piña');
 INSERT INTO Provincia (descripcion) VALUES ('El Seibo');
 INSERT INTO Provincia (descripcion) VALUES ('Espaillat');
 INSERT INTO Provincia (descripcion) VALUES ('Hato Mayor');
@@ -218,25 +215,27 @@ INSERT INTO Provincia (descripcion) VALUES ('Independencia');
 INSERT INTO Provincia (descripcion) VALUES ('La Altagracia');
 INSERT INTO Provincia (descripcion) VALUES ('La Romana');
 INSERT INTO Provincia (descripcion) VALUES ('La Vega');
-INSERT INTO Provincia (descripcion) VALUES ('Maria Trinidad Sanchez');
-INSERT INTO Provincia (descripcion) VALUES ('Monseรฑor Nouel');
+INSERT INTO Provincia (descripcion) VALUES ('María Trinidad Sánchez');
+INSERT INTO Provincia (descripcion) VALUES ('Monseñor Nouel');
 INSERT INTO Provincia (descripcion) VALUES ('Monte Cristi');
 INSERT INTO Provincia (descripcion) VALUES ('Monte Plata');
 INSERT INTO Provincia (descripcion) VALUES ('Pedernales');
 INSERT INTO Provincia (descripcion) VALUES ('Peravia');
 INSERT INTO Provincia (descripcion) VALUES ('Puerto Plata');
-INSERT INTO Provincia (descripcion) VALUES ('Samana');
-INSERT INTO Provincia (descripcion) VALUES ('San Cristobal');
-INSERT INTO Provincia (descripcion) VALUES ('San Jose de Ocoa');
+INSERT INTO Provincia (descripcion) VALUES ('Samaná');
+INSERT INTO Provincia (descripcion) VALUES ('Sánchez Ramírez');
+INSERT INTO Provincia (descripcion) VALUES ('San Cristóbal');
+INSERT INTO Provincia (descripcion) VALUES ('San José de Ocoa');
 INSERT INTO Provincia (descripcion) VALUES ('San Juan');
-INSERT INTO Provincia (descripcion) VALUES ('San Pedro de Macoris');
-INSERT INTO Provincia (descripcion) VALUES ('Sanchez Ramirez');
+INSERT INTO Provincia (descripcion) VALUES ('San Pedro de Macorís');
 INSERT INTO Provincia (descripcion) VALUES ('Santiago');
-INSERT INTO Provincia (descripcion) VALUES ('Santiago Rodriguez');
+INSERT INTO Provincia (descripcion) VALUES ('Santiago Rodríguez');
+INSERT INTO Provincia (descripcion) VALUES ('Santo Domingo');
 INSERT INTO Provincia (descripcion) VALUES ('Valverde');
 
+
 -- Tipo_Documento
-INSERT INTO Tipo_Documento (descripcion) VALUES ('Cedula');
+INSERT INTO Tipo_Documento (descripcion) VALUES ('Cédula');
 INSERT INTO Tipo_Documento (descripcion) VALUES ('Pasaporte');
 
 -- Sexo
