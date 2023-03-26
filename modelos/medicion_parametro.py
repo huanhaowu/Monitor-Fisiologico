@@ -20,7 +20,7 @@ class MedicionParametro:
             return ("amarillo", '-', self.medida_parametro_fisiologico)
 
         if self.parametro.min_estandar <= self.medida_parametro_fisiologico <= self.parametro.max_estandar:
-            return ("verde", '', self.medida_parametro_fisiologico)
+            return ("verde", ' ', self.medida_parametro_fisiologico)
 
         if (self.parametro.alerta_alto):
             if self.parametro.max_estandar < self.medida_parametro_fisiologico <= self.parametro.alerta_alto:

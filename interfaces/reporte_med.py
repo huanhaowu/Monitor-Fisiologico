@@ -366,6 +366,16 @@ class ReporteMed():
             width=224.0,
             height=34.0
         )
+        #indicador de temperatura
+        self.canvas.create_text(
+            755.0,
+            415.0,
+            anchor="nw",
+            text=self.lista_temperatura[1],
+            fill="#000000",
+            font=("RobotoRoman Regular", 25 * -1)
+        )
+
         # endregion
 
         # region SATURACION DE OXIGENO
@@ -400,6 +410,15 @@ class ReporteMed():
             y=478.0,
             width=224.0,
             height=34.0
+        )
+        # indicador de oxigeno
+        self.canvas.create_text(
+            755.0,
+            478.0,
+            anchor="nw",
+            text=self.lista_oxigeno[1],
+            fill="#000000",
+            font=("RobotoRoman Regular", 25 * -1)
         )
         # endregion
 
@@ -438,6 +457,15 @@ class ReporteMed():
             width=224.0,
             height=34.0
         )
+        # indicador de presion arterial
+        self.canvas.create_text(
+            755.0,
+            538.0,
+            anchor="nw",
+            text=self.lista_presion[1],
+            fill="#000000",
+            font=("RobotoRoman Regular", 25 * -1)
+        )
         # endregion
 
         # region FRECUENCIA CARDIACA
@@ -474,6 +502,16 @@ class ReporteMed():
             width=224.0,
             height=34.0,
         )
+        # indicador de frecuencia cardiaca
+        self.canvas.create_text(
+            755.0,
+            597.0,
+            anchor="nw",
+            text=self.lista_frecuencia[1],
+            fill="#000000",
+            font=("RobotoRoman Regular", 25 * -1)
+        )
+
         # endregion
 
         # region NOTA ACLARATORIA
@@ -582,12 +620,12 @@ class ReporteMed():
 
 
     def enviar_pdf(self):
-        self.crear_pdf()
-        destinatario = self.sujeto.correo
         from gmail.Google import Create_Service
         import base64
         from email.mime.multipart import MIMEMultipart
 
+        self.crear_pdf()
+        destinatario = self.sujeto.correo
         nombre_pdf = 'Reporte_HeartBeat.pdf'
         ruta_pdf = relative_to_assets(nombre_pdf)
         CLIENT_SECRET_FILE = 'gmail/credentials.json'
