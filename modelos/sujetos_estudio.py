@@ -30,13 +30,14 @@ class SujetosEstudio:
         self.condiciones_medicas = condiciones_medicas
         
     def ingresar(self):
-        bd = Conexion()
-        resultado = bd.execute_query('''SELECT id_sujeto, nombre, apellido, fecha_nacimiento, id_tipo_documento, 
-                                            codigo_documento, id_sexo, id_genero, id_orientacion_sexual, id_nacionalidad, id_provincia, correo_electronico 
+        bd = Conexion() #Se crea un objeto de la clase Conexion
+        #Se ejecuta la consulta para obtener un sujeto de estudio por su tipo de cdocumento y codigo
+        resultado = bd.execute_query('''SELECT * 
                                         FROM Sujetos_Estudio
-                                        WHERE id_tipo_documento = ? AND codigo_documento = ?''', 
-                                        [self.tipo_documento.id_tipo_documento, self.codigo_documento])
-        if resultado:
+                                        WHERE id_tipo_documento = ? AND codigo_documento = ?''',  
+                                        [self.tipo_documento.id_tipo_documento, self.codigo_documento]) 
+        if resultado:  #Si se obtuvieron resultados
+            #Se asignan los valores obtenidos a los atributos de la clase
             self.id_sujeto = resultado[0][0]
             self.nombres = resultado[0][1]
             self.apellidos = resultado[0][2]
@@ -64,7 +65,8 @@ class SujetosEstudio:
             
             self.correo = resultado[0][11]
 
-            resultado = bd.execute_query('''SELECT id_condicion_medica FROM Condiciones_Sujeto WHERE id_sujeto = ?''', [self.id_sujeto])
+            #Se hace una consulta para obtener las condiciones médicas del sujeto
+            resultado = bd.execute_query('''SELECT id_condicion_medica FROM Condiciones_Sujeto WHERE id_sujeto = ?''', [self.id_sujeto]) 
             for condicion in resultado:
                 p = CondicionesMedicas(condicion[0])
                 p.cargar_descripcion_condicion_medica()
@@ -73,7 +75,8 @@ class SujetosEstudio:
             return True
         else:
             return False
-     
+        
+    #Se registra el sujeto 
     def registrar(self, nombres:str, apellidos:str, fecha_nacimiento:datetime.date, sexo:int, genero:int, orientacion_sexual:int, nacionalidad:int, provincia:int, correo:str, condiciones:list[int]):
         bd = Conexion()
         self.nombres = nombres
@@ -98,17 +101,22 @@ class SujetosEstudio:
 
         self.correo = correo
         self.condiciones_medicas.clear()
+        
+        # Se añaden sus condiciones médicas 
         for condicion in condiciones:
             p = CondicionesMedicas(condicion)
             p.cargar_descripcion_condicion_medica()
             self.condiciones_medicas.append(p)
         
-        #Primero verifico si el usuario existe
+        # Primero verifico si el usuario existe 
         existe = bd.execute_query('''SELECT id_sujeto FROM Sujetos_Estudio WHERE id_tipo_documento = ? AND codigo_documento = ?''', 
                                   [self.tipo_documento.id_tipo_documento, self.codigo_documento])
         
+        # Si existe el usuario
         if existe:
             self.id_sujeto = existe[0][0]
+            
+            #Se actualizan sus datos y sus condiciones médicas
             bd.execute_command('''UPDATE Sujetos_Estudio SET nombre = ?, apellido = ?, fecha_nacimiento = ?, id_sexo = ?, id_genero = ?, id_orientacion_sexual = ?, id_nacionalidad = ?, id_provincia = ?, correo_electronico = ? WHERE id_sujeto = ?''', 
                                [self.nombres, self.apellidos, self.fecha_nacimiento, self.sexo.id_sexo, self.genero.id_genero, self.orientacion_sexual.id_orientacion_sexual, self.nacionalidad.id_nacionalidad, self.provincia.id_provincia, self.correo, self.id_sujeto])
             
@@ -120,10 +128,12 @@ class SujetosEstudio:
                     [self.id_sujeto, condicion.id_condicion_medica]
                 )
         else:
+            # Si el usuario no existe se crea un nuevo registro
             bd.execute_command('''INSERT INTO Sujetos_Estudio(nombre, apellido, fecha_nacimiento, id_tipo_documento, codigo_documento, id_sexo, id_genero, id_orientacion_sexual, id_nacionalidad, id_provincia, correo_electronico) 
                               VALUES (?,?,?,?,?,?,?,?,?,?,?)''',
                               [self.nombres, self.apellidos, self.fecha_nacimiento, self.tipo_documento.id_tipo_documento, self.codigo_documento, self.sexo.id_sexo, self.genero.id_genero, self.orientacion_sexual.id_orientacion_sexual, self.nacionalidad.id_nacionalidad, self.provincia.id_provincia, self.correo])
-        
+
+            # Se selecciona el usuario creado para adjuntarle sus condiciones médicas
             self.id_sujeto = int(bd.execute_query("SELECT MAX(id_sujeto) FROM Sujetos_Estudio")[0][0])
             if self.id_sujeto:
                 for condicion in self.condiciones_medicas:
