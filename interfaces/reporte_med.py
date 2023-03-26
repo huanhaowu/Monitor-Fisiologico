@@ -4,7 +4,7 @@ from datetime import date
 from email import encoders
 from email.mime.base import MIMEBase
 from pathlib import Path
-from tkinter import Tk, ttk, Canvas, Button, PhotoImage, HORIZONTAL, Label, Text, Scrollbar, RIGHT, Y, \
+from tkinter import Tk, messagebox, ttk, Canvas, Button, PhotoImage, HORIZONTAL, Label, Text, Scrollbar, RIGHT, Y, \
     DISABLED
 
 # Bloque de codigo para trabajar con el path de los archivos
@@ -87,6 +87,8 @@ class ReporteMed():
             highlightthickness=0,
             relief="ridge"
         )
+
+        messagebox.askokcancel("Confirmar envio","¿Desea recibir el reporte a su correo?")
 
         self.canvas.place(x=0, y=0)
 
@@ -553,7 +555,7 @@ class ReporteMed():
             image=self.img_guardar,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: self.enviar_pdf(),
+            command=lambda: self.confirmar_correo(),
             relief="flat"
         )
         self.btn_guardar.place(
@@ -656,7 +658,14 @@ class ReporteMed():
         #enviar correo
         cuerpo_crudo = base64.urlsafe_b64encode(correo.as_bytes()).decode()
         message = service.users().messages().send(userId='me', body={'raw': cuerpo_crudo}).execute()
-
+    
+    def confirmar_correo(self):
+        mensaje =  Tk()
+        mensaje.geometry("150x150")
+        if(messagebox.askokcancel("Confirmar envio","¿Desea recibir el reporte a su correo?")== True):
+            self.enviar_pdf()
+            messagebox.showinfo("Envio exitoso","El reporte ha sido enviado a su correo")
+        mensaje.mainloop()
 
     def abrir_menu(self):
         from interfaces.menu_med import MenuMed
