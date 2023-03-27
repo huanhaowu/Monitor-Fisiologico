@@ -5,8 +5,9 @@ from email import encoders
 from email.mime.base import MIMEBase
 from pathlib import Path
 import re
-from tkinter import Tk, messagebox, simpledialog, ttk, Canvas, Button, PhotoImage, HORIZONTAL, Label, Text, Scrollbar, RIGHT, Y, \
-    DISABLED
+from tkinter import Tk, messagebox, simpledialog, ttk, Canvas, Button, PhotoImage, HORIZONTAL, Label, Text, Scrollbar, \
+    RIGHT, Y, \
+    DISABLED, VERTICAL, LEFT, BOTH, TRUE
 import tkinter
 
 # Bloque de codigo para trabajar con el path de los archivos
@@ -46,6 +47,8 @@ class ReporteMed():
                                                      self.window.winfo_screenheight() // 2 - 725 // 2))
         self.window.configure(bg="#FFFFFF")
 
+
+
         # region ESTILOS DE PROGRESS BAR
         TROUGH_COLOR = '#F5F5F5'
         BAR_COLOR = '#FF0211'
@@ -80,6 +83,8 @@ class ReporteMed():
                             darkcolor=BAR_COLOR)
 
         # endregion
+
+
         self.canvas = Canvas(
             self.window,
             bg="#FFFFFF",
@@ -91,7 +96,6 @@ class ReporteMed():
         )
 
         self.canvas.place(x=0, y=0)
-
         self.img_regresar = PhotoImage(
             file=relative_to_assets("button_1.png"))
         self.btn_regresar = Button(
@@ -150,7 +154,7 @@ class ReporteMed():
             50.0,
             195.0,
             anchor="nw",
-            text="Nombre : ",
+            text="Nombre:",
             fill="#000000",
             font=("RobotoRoman Regular", 25 * -1)
         )
@@ -174,7 +178,7 @@ class ReporteMed():
             900.0,
             198.0,
             anchor="nw",
-            text="Sexo :",
+            text="Sexo:",
             fill="#000000",
             font=("RobotoRoman Regular", 25 * -1)
         )
@@ -198,7 +202,7 @@ class ReporteMed():
             600,
             195.0,
             anchor="nw",
-            text="Edad : ",
+            text="Edad:",
             fill="#000000",
             font=("RobotoRoman Regular", 25 * -1)
         )
@@ -223,7 +227,7 @@ class ReporteMed():
             600,
             242.60400390625,
             anchor="nw",
-            text="Peso :",
+            text="Peso:",
             fill="#000000",
             font=("RobotoRoman Regular", 25 * -1)
         )
@@ -247,7 +251,7 @@ class ReporteMed():
             862.0,
             247.0,
             anchor="nw",
-            text="Estatura :",
+            text="Estatura:",
             fill="#000000",
             font=("RobotoRoman Regular", 25 * -1)
         )
@@ -296,7 +300,7 @@ class ReporteMed():
             50.0,
             247.0,
             anchor="nw",
-            text= (self.sujeto.tipo_documento.descripcion) + " : ",
+            text= (self.sujeto.tipo_documento.descripcion) + ":",
             fill="#000000",
             font=("RobotoRoman Regular", 25 * -1)
         )
@@ -535,9 +539,9 @@ class ReporteMed():
         )
         # Aqui debe ir el textbox con el valor de la nota aclaratoria
         f = ttk.Frame(self.window)
-        f.config(height=14, width=50)
-        f.place(x=840.0, y=417.0)
-        scrollbar = Scrollbar(f)
+        f.config(height=14, width=140)
+        f.place(x=800.0, y=417.0)
+        scrollbar_nota = Scrollbar(f)
         self.txt_nota = Text(
             f,
             width=50,
@@ -546,12 +550,12 @@ class ReporteMed():
             bg="#F5F5F5",
             fg="#000716",
             font=("RobotoRoman Regular", 11),
-            yscrollcommand = scrollbar.set,
+            yscrollcommand = scrollbar_nota.set,
             wrap = 'word'
         )
         self.txt_nota.insert("1.0",self.nota_aclaratoria)
-        scrollbar.config(command=self.txt_nota.yview)
-        scrollbar.pack(side=RIGHT, fill=Y)
+        scrollbar_nota.config(command=self.txt_nota.yview)
+        scrollbar_nota.pack(side=RIGHT, fill=Y)
         self.txt_nota.pack(side="left")
         self.txt_nota.config(state=DISABLED)
         # endregion
@@ -682,7 +686,6 @@ class ReporteMed():
     def confirmar_correo(self):
         correo_envio = None
         while correo_envio == None:
-
             if(messagebox.askyesno("Confirmar envio","¿Desea recibir el reporte a su correo?")== True):
                 correo_envio = simpledialog.askstring(title="Confirmar correo",
                 prompt="Correo a enviar:",
@@ -692,8 +695,10 @@ class ReporteMed():
                         correo_envio = simpledialog.askstring(title="Confirmar correo",
                         prompt="Correo a enviar:",
                         initialvalue= self.sujeto.correo)
-                        self.enviar_pdf(correo_envio)== True
-                        messagebox.showinfo("Envio exitoso","El reporte ha sido enviado a su correo")
+                    self.enviar_pdf(correo_envio)
+                    messagebox.showinfo("Envio exitoso", "El reporte ha sido enviado a su correo")
+            else:
+                break
 
         from interfaces.login_suj import LoginSujEstudio
         self.window.destroy()
