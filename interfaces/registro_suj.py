@@ -17,6 +17,7 @@ import re
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"assets/registro_suj")
 TAMANO_FUENTE = 16 # (ARREGLADO)Arreglo - esta variable debe declararse como constante y escribirse en mayusculas
+FORMFECHA = str("%Y-%m-%d")
 POS_X_LABELS = 45
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
@@ -536,10 +537,9 @@ class RegistroSujeto():
 
 #region // Funcion para rellenar los campos con los de un usuario existente
     def buscar_usuario_existente(self): #(Arreglado)Arreglo - Las funciones deben comenzar con un verbo en infinitivo
-         formfecha = "%Y-%m-%d"
          self.txb_nombre.insert(0, self.sujeto_existe.nombres)
          self.txb_apellido.insert(0, self.sujeto_existe.apellidos)
-         self.dt_fecha_nac.set_date(datetime.datetime.strptime(self.sujeto_existe.fecha_nacimiento,formfecha))
+         self.dt_fecha_nac.set_date(datetime.datetime.strptime(str(self.sujeto_existe.fecha_nacimiento),FORMFECHA))
          self.cb_sexo.current(int(self.sujeto_existe.sexo.id_sexo)-1)
          self.txb_correo.insert(0, self.sujeto_existe.correo)
          self.cb_genero.current(int(self.sujeto_existe.genero.id_genero)-1)
@@ -629,12 +629,42 @@ class RegistroSujeto():
 #endregion
 
     def verificar_correo_electronico(self): 
-        if(self.txb_correo.get() !="" or self.txb_correo.get().isspace() == False):
+        if(self.txb_correo.get() !="" and self.txb_correo.get().isspace() == False):
                patron =  r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
                resultado = re.match(patron, self.txb_correo.get())
                if(resultado):
                     return True
                else:
+                    self.txt_codigo_doc = Canvas(
+                        self.window,
+                        bg = "#FFFFFF",
+                        height = 25,
+                        width = 20,
+                        bd = 0,
+                        highlightthickness = 0,
+                        relief = "ridge"
+                    )
+                    #Posicionando el canva
+
+                    self.txt_codigo_doc.place(x = 967, y = 245)
+                    self.txt_codigo_doc.create_rectangle(
+                        0.0,
+                        0.0,
+                        20.0,
+                        25.0,
+                        fill = "#FFFFFF",
+                        outline = ""
+                    )
+                    #Asterisco
+                    self.txt_codigo_doc.create_text(
+                        2.0,
+                        0.0,
+                        anchor = "nw",
+                        fill = "red",
+                        text = "*",
+                        font = ("RobotoRoman Bold", 35 * -1),
+                        justify= 'center',
+                    )
                     messagebox.showwarning("ALERTA", "El correo electronico no es valido. \n\nPor favor ingrese un correo electronico valido.")
                     return False
         return True
@@ -654,6 +684,8 @@ class RegistroSujeto():
             sujeto.nacionalidad = self.cb_nacionalidad.current() + 1
             sujeto.provincia = self.cb_provincia.current() + 1
             sujeto.correo = self.txb_correo.get()
+            if(sujeto.correo.isspace()):
+                sujeto.correo = ""
             sujeto.registrar(sujeto.nombres, sujeto.apellidos, sujeto.fecha_nacimiento, sujeto.sexo, sujeto.genero, sujeto.orientacion_sexual, sujeto.nacionalidad, sujeto.provincia, sujeto.correo, self.obtener_condiciones_usuario())
             self.window.destroy()
             menu = MenuMed(sujeto)
