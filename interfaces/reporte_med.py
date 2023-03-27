@@ -292,18 +292,26 @@ class ReporteMed():
         )
 
         # CODIGO DOCUMENTO
+        self.canvas.create_text(
+            50.0,
+            247.0,
+            anchor="nw",
+            text= (self.sujeto.tipo_documento.descripcion) + " : ",
+            fill="#000000",
+            font=("RobotoRoman Regular", 25 * -1)
+        )
         self.lbl_cod_doc = Label(
             self.window,
-            text=(self.sujeto.tipo_documento.descripcion) + " " + self.sujeto.codigo_documento,
+            text= self.sujeto.codigo_documento,
             bd=0,
             bg="#F5F5F5",
             fg="#000716",
             font=("RobotoRoman Regular", 25 * -1)
         )
         self.lbl_cod_doc.place(
-            x=50.0,
+            x= 177.0,
             y=247.0,
-            width=515.0,
+            width=388.0,
             height=34.0
         )
         # -- PARAMETROS FISIOLOGICOS --
@@ -340,7 +348,7 @@ class ReporteMed():
             162.0,
             424.0,
             anchor="nw",
-            text="Temperatura",
+            text="Temperatura (C°)",
             fill="#000000",
             font=("RobotoRoman Regular", 25 * -1)
         )
@@ -382,10 +390,10 @@ class ReporteMed():
 
         # region SATURACION DE OXIGENO
         self.canvas.create_text(
-            56.0,
+            50.0,
             489.0,
             anchor="nw",
-            text="Saturación de Oxígeno",
+            text="Saturación de Oxígeno (%)",
             fill="#000000",
             font=("RobotoRoman Regular", 25 * -1)
         )
@@ -426,10 +434,10 @@ class ReporteMed():
 
         # region PRESION ARTERIAL
         self.canvas.create_text(
-            137.0,
+            90.0,
             549.0,
             anchor="nw",
-            text="Presión Arterial ",
+            text="Presión Arterial (mmHg) ",
             fill="#000000",
             font=("RobotoRoman Regular", 25 * -1)
         )
@@ -472,10 +480,10 @@ class ReporteMed():
 
         # region FRECUENCIA CARDIACA
         self.canvas.create_text(
-            70.0,
+            60.0,
             608.0,
             anchor="nw",
-            text="Frecuencia Cardiaca ",
+            text="Frecuencia Cardiaca (lpm)",
             fill="#000000",
             font=("RobotoRoman Regular", 25 * -1)
         )
