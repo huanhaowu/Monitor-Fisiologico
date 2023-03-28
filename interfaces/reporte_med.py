@@ -1,5 +1,4 @@
 
-
 from datetime import date
 from email import encoders
 from email.mime.base import MIMEBase
@@ -7,8 +6,7 @@ from pathlib import Path
 import re
 from tkinter import Tk, messagebox, simpledialog, ttk, Canvas, Button, PhotoImage, HORIZONTAL, Label, Text, Scrollbar, \
     RIGHT, Y, \
-    DISABLED, VERTICAL, LEFT, BOTH, TRUE
-import tkinter
+    DISABLED
 
 # Bloque de codigo para trabajar con el path de los archivos
 OUTPUT_PATH = Path(__file__).parent
@@ -24,7 +22,7 @@ class ReporteMed():
         #Arreglo - Agrupa los controles del formulario en secciones por tipo, es decir, pon todos los botones en un solo lado, todos los textos en otro. Esto con el objetivo facilitar los arreglos
         #Arreglo - Continua usando los "region" para definir las secciones de los controles
 
-        # Datos a mostrar dentro del formulario
+        # Objetos sujeto y mediciones a partir de los que se genera el reporte
         self.sujeto = sujeto
         self.mediciones = mediciones
 
@@ -40,12 +38,6 @@ class ReporteMed():
         self.nota_aclaratoria = self.crear_nota_aclaratoria()
         self.ruta_logo = relative_to_assets("logo1.png")
         self.ruta_pdf = str(relative_to_assets("Reporte_HeartBeat.pdf"))
-
-        # Iniciacion de la pantalla
-        self.window = Tk()
-        self.window.geometry("1260x725+{}+{}".format(self.window.winfo_screenwidth() // 2 - 1260 // 2,
-                                                     self.window.winfo_screenheight() // 2 - 725 // 2))
-        self.window.configure(bg="#FFFFFF")
 
 
 
@@ -84,7 +76,16 @@ class ReporteMed():
 
         # endregion
 
+        #region CREACION PANTALLA
 
+        # Iniciacion de la pantalla
+        self.window = Tk()
+        self.window.geometry("1260x725+{}+{}".format(self.window.winfo_screenwidth() // 2 - 1260 // 2,
+                                                     self.window.winfo_screenheight() // 2 - 725 // 2))
+        self.window.configure(bg="#FFFFFF")
+        self.window.title("Reporte de mediciones")
+
+        #Creacion del canvas principal de la pantalla
         self.canvas = Canvas(
             self.window,
             bg="#FFFFFF",
@@ -94,8 +95,32 @@ class ReporteMed():
             highlightthickness=0,
             relief="ridge"
         )
-
+        #Posicionamiento del canvas
         self.canvas.place(x=0, y=0)
+
+        #region LINEAS DIVISORAS (CANVAS.CREATE_RECTANGLE)
+
+        # Linea divisoria entre Logo y Titulo Informe
+        self.canvas.create_rectangle(
+            49.0,
+            95.93429565429688,
+            1196.0,
+            97.0,
+            fill="gray",
+            outline="")
+
+        # Linea divisoria entre los datos del sujeto y los datos de las mediciones
+        self.canvas.create_rectangle(
+            47.0,
+            322.0,
+            1196.0,
+            325.0,
+            fill="#000000",
+            outline="")
+        #endregion
+
+        #endregion
+
         self.img_regresar = PhotoImage(
             file=relative_to_assets("button_1.png"))
         self.btn_regresar = Button(
@@ -112,22 +137,7 @@ class ReporteMed():
             width=61.0,
             height=60.0
         )
-        # LINEA DIVISORIA ENTRE LOGO Y TITULO INFORME
-        self.canvas.create_rectangle(
-            49.0,
-            95.93429565429688,
-            1196.0,
-            97.0,
-            fill="gray",
-            outline="")
-        # LINEA DIVISORIA ENTRE DATOS SUJETO Y MEDIDAS PARAMETROS
-        self.canvas.create_rectangle(
-            47.0,
-            322.0,
-            1196.0,
-            325.0,
-            fill="#000000",
-            outline="")
+
 
         self.img_logo = PhotoImage(
             file=relative_to_assets("logo1.png"))
@@ -582,29 +592,35 @@ class ReporteMed():
 
     #Arreglo - Documenta todas tus funciones
     def crear_nota_aclaratoria(self):
+    #esta funcion retorna un string que contiene la nota aclaratoria que se muestra en el reporte
+    #se calcula en base a todas las condiciones medicas que posee el sujeto y todas las mediciones que esa condicion puede afectar
         mensaje = ""
-        if self.sujeto.condiciones_medicas != []:
-            for x in self.sujeto.condiciones_medicas:
-                if mensaje == "":
+        if self.sujeto.condiciones_medicas != []: #si el sujeto tiene alguna condicion
+            for x in self.sujeto.condiciones_medicas: #para cada condicion que el sujeto tenga
+                if mensaje == "": #si el mensaje esta vacio no se imprime salto de linea
                     mensaje += f"- La condición ({x.descripcion}) puede afectar: "
-                else:
+                else:  #si el mensaje ya tiene alguna condicion, imprime un salto de linea antes de colocar la sig
                     mensaje += f"\n\n- La condición ({x.descripcion}) puede afectar: "
-                parametros = ", ".join([y.descripcion for y in x.parametros])
+                parametros = ", ".join([y.descripcion for y in x.parametros]) #separando por comas, ve concatenando cada parametro (y) que se ve afectado por esa condicion (x)
                 mensaje += parametros
         return mensaje
 
-    def calcular_edad(self):
+    def calcular_edad(self): #retorna la edad en años del sujeto
         fecha_actual_date = date.today()
-        edad = (fecha_actual_date - self.sujeto.fecha_nacimiento)
-        edad = (edad.days) // 365
+        edad = (fecha_actual_date - self.sujeto.fecha_nacimiento) #le resto a la fecha actual la fecha de nacimiento
+        edad = (edad.days) // 365 #divido (con division entera) la cantidad de dias entre 365 para conseguir la cantidad de años
         return edad
 
-    def buscar_parametro(self, parametro_fis):
-        for x in self.mediciones.parametros_medidos:
-            if x.parametro.descripcion == parametro_fis:
+    def buscar_parametro(self, parametro_fis): #le paso el parametro que quiero revisar, retorna una lista de tres elementos, se ejecuta una vez por cada parametro
+    #el elemento en posicion [0] me dice el color para el progress bar del parametro
+    #el elemento en posicion [1] me dice si el valor esta por encima (+), por debajo(-) o dentro del estandar( )
+    #el elemento en posicion [2] me dice el valor medido
+
+        for x in self.mediciones.parametros_medidos: #para cada medicion dentro de la lista de parametros medidos
+            if x.parametro.descripcion == parametro_fis: #si encuentra el parametro llama al metodo asignar_color
                 return x.asignar_color()
 
-        return ["gris", " ", "N/A"]
+        return ["gris", " ", "N/A"] #si el parametro no se midio por defecto se asigna el color gris, el indicador " " y el valor "N/A"
 
     def crear_pdf(self):
         from modelos.reporte_pdf import ReportePdf
@@ -652,8 +668,6 @@ class ReporteMed():
         correo = MIMEMultipart()
         correo['to'] = destinatario
         correo['subject'] = f'Reporte {self.fecha_actual_str}'
-        # correo.attach(MIMEText(cuerpo_correo, 'plain'))
-
 
         # se abre el archivo pdf en binario
         binary_pdf = open(ruta_pdf, 'rb')
