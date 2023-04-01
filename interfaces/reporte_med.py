@@ -39,6 +39,12 @@ class ReporteMed():
         self.ruta_logo = relative_to_assets("logo1.png")
         self.ruta_pdf = str(relative_to_assets("Reporte_HeartBeat.pdf"))
 
+        # Iniciacion de la pantalla
+        self.window = Tk()
+        self.window.geometry("1260x725+{}+{}".format(self.window.winfo_screenwidth() // 2 - 1260 // 2,
+                                                     self.window.winfo_screenheight() // 2 - 725 // 2))
+        self.window.configure(bg="#FFFFFF")
+        self.window.title("Reporte de mediciones")
 
 
         # region ESTILOS DE PROGRESS BAR
@@ -78,12 +84,7 @@ class ReporteMed():
 
         #region CREACION PANTALLA
 
-        # Iniciacion de la pantalla
-        self.window = Tk()
-        self.window.geometry("1260x725+{}+{}".format(self.window.winfo_screenwidth() // 2 - 1260 // 2,
-                                                     self.window.winfo_screenheight() // 2 - 725 // 2))
-        self.window.configure(bg="#FFFFFF")
-        self.window.title("Reporte de mediciones")
+        
 
         #Creacion del canvas principal de la pantalla
         self.canvas = Canvas(
