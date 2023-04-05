@@ -688,7 +688,9 @@ class RegistroSujeto():
                 sujeto.correo = ""
             sujeto.registrar(sujeto.nombres, sujeto.apellidos, sujeto.fecha_nacimiento, sujeto.sexo, sujeto.genero, sujeto.orientacion_sexual, sujeto.nacionalidad, sujeto.provincia, sujeto.correo, self.obtener_condiciones_usuario())
             self.window.destroy()
-            menu = MenuMed(sujeto, [])
+            from modelos.mediciones_sujeto import MedicionesSujeto
+            medicion = MedicionesSujeto(0, None, 0, 0, None, [])
+            menu = MenuMed(sujeto, medicion)
 #endregion
 
     def abrir_login(self):  
