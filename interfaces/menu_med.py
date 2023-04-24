@@ -450,7 +450,7 @@ class MenuMed():
         from interfaces.reporte_med import ReporteMed
         import datetime
         medicion_sujeto = ms()
-        medicion_sujeto.guardar_medicion(self.sujeto, self.convertir_peso(float(self.txb_peso.get())), self.convertir_altura(float(self.txb_altura.get())), datetime.date.today(), self.mediciones.parametros_medidos)        
+        medicion_sujeto.guardar_medicion(self.sujeto, self.convertir_peso(float(self.txb_peso.get())), self.convertir_altura(float(self.txb_altura.get())), datetime.date.today(), self.mediciones.parametros_medidos, self.mediciones.id_medicion)        
         self.window.destroy()
         self.reporte = ReporteMed(self.sujeto, medicion_sujeto)
 
@@ -604,7 +604,7 @@ class MenuMed():
     #Funcion para convertir la medida del peso a unidades del sistema internacional de medidas
     def convertir_altura(self, altura_sujeto:float):
         if(self.cb_altura.get()=='Pies'):
-            conversion_altura = round((altura_sujeto)/39.37, 2)
+            conversion_altura = round((altura_sujeto)/3.281, 2)
             return conversion_altura
         else: return altura_sujeto
     
