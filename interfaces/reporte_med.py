@@ -28,7 +28,29 @@ class ReporteMed():
 
         #Rellenamos los valores de las mediciones realizadas con la funcion buscar_parametro
         self.lista_temperatura = self.buscar_parametro("Temperatura")
-        self.lista_presion = self.buscar_parametro("Presion Arterial")
+        lista_presion_sistolica = self.buscar_parametro("Presion Arterial Sistolica")
+        lista_presion_diastolica = self.buscar_parametro("Presion Arterial Diastolica")
+        self.lista_presion = ["", "", str(lista_presion_diastolica[2]) + '/' + str(lista_presion_sistolica[2])]
+        
+        if(lista_presion_sistolica[0] != "verde" and lista_presion_diastolica[0] != "verde"):
+            if(lista_presion_sistolica[0] == "rojo"):
+                self.lista_presion[0] = lista_presion_sistolica[0]
+                self.lista_presion[1] = lista_presion_sistolica[1]
+            elif((lista_presion_sistolica[0] == "amarillo")):
+                self.lista_presion[0] = lista_presion_sistolica[0]
+                self.lista_presion[1] = lista_presion_sistolica[1]
+            
+
+            if((lista_presion_diastolica[0] == "rojo")):
+                self.lista_presion[0] = lista_presion_diastolica[0]
+                self.lista_presion[1] = lista_presion_diastolica[1]
+            elif((lista_presion_diastolica[0] == "amarillo")):
+                self.lista_presion[0] = lista_presion_diastolica[0]
+                self.lista_presion[1] = lista_presion_diastolica[1]
+        else:
+            self.lista_presion[0] = "verde"
+            self.lista_presion[1] = " "
+
         self.lista_oxigeno = self.buscar_parametro("Saturacion de Oxigeno")
         self.lista_frecuencia = self.buscar_parametro("Frecuencia Cardiaca")
 
@@ -618,7 +640,7 @@ class ReporteMed():
     #el elemento en posicion [2] me dice el valor medido
 
         for x in self.mediciones.parametros_medidos: #para cada medicion dentro de la lista de parametros medidos
-            if x.parametro.descripcion == parametro_fis: #si encuentra el parametro llama al metodo asignar_color
+            if parametro_fis in x.parametro.descripcion: #si encuentra el parametro llama al metodo asignar_color
                 return x.asignar_color()
 
         return ["gris", " ", "N/A"] #si el parametro no se midio por defecto se asigna el color gris, el indicador " " y el valor "N/A"
