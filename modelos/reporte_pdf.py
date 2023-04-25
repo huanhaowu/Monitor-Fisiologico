@@ -21,22 +21,22 @@ class ReportePdf(FPDF):
                  "-------------------------------------------------------------------------------------------------------------")
 
         self.set_font("helvetica", 'B', size=13)
-        self.text(20, 66, reporte_med.sujeto.nombres + " " + reporte_med.sujeto.apellidos)
+        self.text(20, 66, reporte_med.controller.sujeto.nombres + " " + reporte_med.controller.sujeto.apellidos)
 
         self.set_font("helvetica", '', size=11)
-        self.text(20, 72, reporte_med.sujeto.tipo_documento.descripcion + ": " + reporte_med.sujeto.codigo_documento)
+        self.text(20, 72, reporte_med.controller.sujeto.tipo_documento.descripcion + ": " + reporte_med.controller.sujeto.codigo_documento)
 
         self.set_font("helvetica", '', size=11)
         self.text(20, 78, f"Edad: {reporte_med.edad}")
 
         self.set_font("helvetica", '', size=11)
-        self.text(20, 84, f"Sexo: {reporte_med.sujeto.sexo.descripcion}")
+        self.text(20, 84, f"Sexo: {reporte_med.controller.sujeto.sexo.descripcion}")
 
         self.set_font("helvetica", '', size=11)
-        self.text(20, 90, f"Peso: {reporte_med.mediciones.peso_sujeto}")
+        self.text(20, 90, f"Peso: {reporte_med.controller.medicion.peso_sujeto}")
 
         self.set_font("helvetica", '', size=11)
-        self.text(20, 96, f"Estatura: {reporte_med.mediciones.altura_sujeto}")
+        self.text(20, 96, f"Estatura: {reporte_med.controller.medicion.altura_sujeto}")
 
         self.set_font("helvetica", '', size=11)
         self.text(20, 102,
