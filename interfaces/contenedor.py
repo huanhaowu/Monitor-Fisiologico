@@ -21,13 +21,13 @@ class Contenedor(tk.Tk):
 
         # endregion
         
-        self.geometry("1260x725+{}+{}".format(self.winfo_screenwidth() // 2 - 1260 // 2, self.winfo_screenheight() // 2 - 725 // 2))
+        self.geometry("1260x725+{}+{}".format(self.winfo_screenwidth() // 2 - 1260 // 2, self.winfo_screenheight() // 2 - 755 // 2))
         
         self.configure(bg = "#FFFFFF")
 
         container = tk.Frame(self)
         container.pack(side="top", fill="both", expand=True)
-        self.state('zoomed')
+        self.state('zoomed') #Maximizar la ventana
         
         self.option_add('*TCombobox*Listbox.font', '50') #Aumentar el tamaño de las listas de los drop down 
         self.option_add('*TCombobox*Listbox.height', '50')
@@ -41,6 +41,7 @@ class Contenedor(tk.Tk):
             frame = F(parent = container, controller = self)
             self.frames[page_name] = frame
             frame.grid(row=0, column=0, sticky="nsew")
+            
 
         self.show_frame("LoginSujEstudio")
 
