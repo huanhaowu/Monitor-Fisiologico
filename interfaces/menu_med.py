@@ -450,7 +450,7 @@ class MenuMed():
         from interfaces.reporte_med import ReporteMed
         import datetime
         medicion_sujeto = ms()
-        medicion_sujeto.guardar_medicion(self.sujeto, self.convertir_peso(float(self.txb_peso.get())), self.convertir_altura(float(self.txb_altura.get())), datetime.date.today(), self.mediciones.parametros_medidos)        
+        medicion_sujeto.guardar_medicion(self.sujeto, self.convertir_peso(float(self.txb_peso.get())), self.convertir_altura(float(self.txb_altura.get())), datetime.date.today(), self.mediciones.parametros_medidos, self.mediciones.id_medicion)        
         self.window.destroy()
         self.reporte = ReporteMed(self.sujeto, medicion_sujeto)
 
@@ -604,7 +604,7 @@ class MenuMed():
     #Funcion para convertir la medida del peso a unidades del sistema internacional de medidas
     def convertir_altura(self, altura_sujeto:float):
         if(self.cb_altura.get()=='Pies'):
-            conversion_altura = round((altura_sujeto)/39.37, 2)
+            conversion_altura = round((altura_sujeto)/3.281, 2)
             return conversion_altura
         else: return altura_sujeto
     
@@ -653,27 +653,39 @@ class MenuMed():
         def case_b(): #Caso b es para las instrucciones de la  saturacion de oxigeno
             if self.confirmar_existencia_medicion("Saturacion de Oxigeno"):
                 if(messagebox.askokcancel("Comenzar medicion","¿Desea comenzar una medicion de saturacion de oxigeno?")== True):
-                    self.habilitar_botones()
-                    self.almacenar_medicion("Saturacion de Oxigeno")
-                
+                    self.tomar_medicion('Saturacion de Oxigeno') 
+
+                    if(messagebox.askokcancel("Confirmar medicion", f"¿Desea guardar la medición? saturacion de oxigeno medida: {str(self.medida)} °C")== True):
+                        self.almacenar_medicion('Saturacion de Oxigeno')
+                        self.habilitar_botones()
+                    else:
+                        self.habilitar_botones()
                 else:
-                    self.limpiar_textos_en_pantalla()
+                   self.habilitar_botones()
         def case_c(): #Caso c es para las instrucciones de la saturacion de presion arterial
             if self.confirmar_existencia_medicion("Presion Arterial"):
-                if(messagebox.askokcancel("Comenzar medicion","¿Desea comenzar una medicion de presion arterial?")== True):
-                    self.habilitar_botones()
-                    self.almacenar_medicion("Presion Arterial")
+                if(messagebox.askokcancel("Comenzar medicion","¿Desea comenzar una medicion de presion?")== True):
+                    self.tomar_medicion('Presion Arterial') 
 
+                    if(messagebox.askokcancel("Confirmar medicion", f"¿Desea guardar la medición? Presion Arterial medida: {str(self.medida)} °C")== True):
+                        self.almacenar_medicion('Presion Arterial')
+                        self.habilitar_botones()
+                    else:
+                        self.habilitar_botones()
                 else:
-                    self.limpiar_textos_en_pantalla()
+                   self.habilitar_botones()
         def case_d(): #Caso e es para las instrucciones de la frecuencia cardiaca 
             if self.confirmar_existencia_medicion("Frecuencia Cardiaca"):
-                if(messagebox.askokcancel("Comenzar medicion","¿Desea comenzar una medicion de frecuencia cardiaca?")== True):
-                    self.habilitar_botones()  
-                    self.almacenar_medicion("Frecuencia Cardiaca")
+                if(messagebox.askokcancel("Comenzar medicion","¿Desea comenzar una medicion de Frecuencia Cardiaca?")== True):
+                    self.tomar_medicion('Frecuencia Cardiaca') 
 
+                    if(messagebox.askokcancel("Confirmar medicion", f"¿Desea guardar la medición? Frecuencia Cardiaca medida: {str(self.medida)} °C")== True):
+                        self.almacenar_medicion('Frecuencia Cardiaca')
+                        self.habilitar_botones()
+                    else:
+                        self.habilitar_botones()
                 else:
-                    self.limpiar_textos_en_pantalla()
+                   self.habilitar_botones()
         def case_default():
              self.comprobar_altura_peso(self.txb_altura.get(), self.txb_peso.get())
 
@@ -714,6 +726,7 @@ class MenuMed():
         if(medicion == "Presion Arterial"):
             self.texto_parametro.set(str(self.medida[0]) + "/" +str(self.medida[1]))
             self.texto_parametro_medido.set(medicion + " Sistolica/Diastolica: ")
+            self.medida_presion_arterial = self.medida
         else:
             self.texto_parametro.set(self.medida)
             self.texto_parametro_medido.set(self.parametros_fisiologicos.descripcion + ": ")
@@ -735,6 +748,7 @@ class MenuMed():
             if(parametro == "Presion Arterial"):
                 self.parametros_fisiologicos.cargar_datos_parametro(parametro + " Sistolica")
                 self.presion_arterial_sistolica = self.parametros_fisiologicos
+                self.parametros_fisiologicos = pf()
                 self.parametros_fisiologicos.cargar_datos_parametro(parametro + " Diastolica")
                 self.presion_arterial_diastolica = self.parametros_fisiologicos
                 self.instrucciones = self.presion_arterial_diastolica.instrucciones

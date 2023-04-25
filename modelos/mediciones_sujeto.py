@@ -14,7 +14,7 @@ class MedicionesSujeto:
         self.fecha_medicion = fecha_medicion
         self.parametros_medidos = parametros_medidos
 
-    def guardar_medicion(self, sujeto:SujetosEstudio, peso_sujeto:float, altura_sujeto:float, fecha_medicion:datetime.date, parametros_medidos:list[MedicionParametro]):
+    def guardar_medicion(self, sujeto:SujetosEstudio, peso_sujeto:float, altura_sujeto:float, fecha_medicion:datetime.date, parametros_medidos:list[MedicionParametro], id_medicion:int = None):
         bd = Conexion() #Se crea un objeto de la clase Conexion
         #Se asignan los valores recibidos a los atributos de la clase
         self.sujeto = sujeto
@@ -22,14 +22,19 @@ class MedicionesSujeto:
         self.altura_sujeto = altura_sujeto
         self.fecha_medicion = fecha_medicion
         self.parametros_medidos = parametros_medidos
+        self.id_medicion = id_medicion
         
-        # Se inserta la medicion de un sujeto a la base de datos
-        bd.execute_command(
-            "INSERT INTO Mediciones_Sujeto (id_sujeto, peso_sujeto, altura_sujeto, fecha_medicion) VALUES (?,?,?,?)", 
-            [self.sujeto.id_sujeto, self.peso_sujeto, self.altura_sujeto, self.fecha_medicion])
+        if self.id_medicion: #si existe el id de la medicion
+            bd.execute_command( #actualiza los datos de la medicion
+                "UPDATE Mediciones_Sujeto SET peso_sujeto = ?, altura_sujeto = ?, fecha_medicion = ? WHERE id_medicion = ?",[self.peso_sujeto, self.altura_sujeto, self.fecha_medicion, self.id_medicion])
+        else:
+            # Se inserta la medicion de un sujeto a la base de datos
+            bd.execute_command(
+                "INSERT INTO Mediciones_Sujeto (id_sujeto, peso_sujeto, altura_sujeto, fecha_medicion) VALUES (?,?,?,?)", 
+                [self.sujeto.id_sujeto, self.peso_sujeto, self.altura_sujeto, self.fecha_medicion])
+            # Se obtiene el id de la medicion recien insertada
+            self.id_medicion = int(bd.execute_query("SELECT MAX(id_medicion) FROM Mediciones_Sujeto")[0][0]) 
         
-        # Se obtiene el id de la medicion recien insertada
-        self.id_medicion = int(bd.execute_query("SELECT MAX(id_medicion) FROM Mediciones_Sujeto")[0][0]) 
         if self.id_medicion: # Si se obtuvo el id de la medicion
             bd.execute_command("DELETE FROM Medicion_Parametro WHERE id_medicion = ?", [self.id_medicion]) # Se eliminan los parametros de la medicion en caso de que existan
             for parametro in parametros_medidos: # Se insertan los parametros de la medicion

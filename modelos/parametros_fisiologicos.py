@@ -22,7 +22,7 @@ class ParametrosFisiologicos:
         if self.descripcion == 'Temperatura':
             return 35
         elif 'Presion Arterial' in self.descripcion:
-            return (80, 60)
+            return [80, 60]
         # Retorna una tupla con los datos de la medicion (Sistolica, Diastolica)
 
         elif self.descripcion == 'Frecuencia Cardiaca':
