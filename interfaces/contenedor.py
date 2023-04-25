@@ -17,7 +17,7 @@ class Contenedor(tk.Tk):
         self.codigo_documento = ""
 
         self.sujeto = None
-        self.mediciones = None
+        self.medicion = None
 
         # endregion
         
@@ -28,11 +28,15 @@ class Contenedor(tk.Tk):
         container = tk.Frame(self)
         container.pack(side="top", fill="both", expand=True)
         self.state('zoomed')
+        
+        self.option_add('*TCombobox*Listbox.font', '50') #Aumentar el tamaño de las listas de los drop down 
+        self.option_add('*TCombobox*Listbox.height', '50')
+
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
-        for F in (LoginSujEstudio, RegistroSujeto):
+        for F in (LoginSujEstudio, RegistroSujeto, MenuMed, ReporteMed):
             page_name = F.__name__
             frame = F(parent = container, controller = self)
             self.frames[page_name] = frame

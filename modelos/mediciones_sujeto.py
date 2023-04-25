@@ -24,7 +24,7 @@ class MedicionesSujeto:
         self.parametros_medidos = parametros_medidos
         self.id_medicion = id_medicion
         
-        if self.id_medicion: #si existe el id de la medicion
+        if self.id_medicion and self.id_medicion != 0: #si existe el id de la medicion
             bd.execute_command( #actualiza los datos de la medicion
                 "UPDATE Mediciones_Sujeto SET peso_sujeto = ?, altura_sujeto = ?, fecha_medicion = ? WHERE id_medicion = ?",[self.peso_sujeto, self.altura_sujeto, self.fecha_medicion, self.id_medicion])
         else:
@@ -35,7 +35,7 @@ class MedicionesSujeto:
             # Se obtiene el id de la medicion recien insertada
             self.id_medicion = int(bd.execute_query("SELECT MAX(id_medicion) FROM Mediciones_Sujeto")[0][0]) 
         
-        if self.id_medicion: # Si se obtuvo el id de la medicion
+        if self.id_medicion and self.id_medicion != 0: # Si se obtuvo el id de la medicion
             bd.execute_command("DELETE FROM Medicion_Parametro WHERE id_medicion = ?", [self.id_medicion]) # Se eliminan los parametros de la medicion en caso de que existan
             for parametro in parametros_medidos: # Se insertan los parametros de la medicion
                 bd.execute_command(

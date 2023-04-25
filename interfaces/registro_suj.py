@@ -17,6 +17,7 @@ from modelos.provincia import Provincia
 from modelos.orientacion_sexual import OrientacionSexual
 from modelos.condiciones_medicas import CondicionesMedicas 
 from modelos.sujetos_estudio import SujetosEstudio
+from modelos.mediciones_sujeto import MedicionesSujeto
 
 # Contantes de la interfaz
 TAMANO_FUENTE = 16
@@ -719,8 +720,8 @@ class RegistroSujeto(tk.Frame):
                 self.controller.sujeto.provincia, 
                 self.controller.sujeto.correo, 
                 self.obtener_condiciones_sujeto())
-            
-            #self.controller.show_frame("MenuMediciones")
+            self.controller.medicion = MedicionesSujeto(parametros_medidos=[])
+            self.controller.show_frame("MenuMed")
 
     def abrir_login(self):  
         self.controller.tipo_documento = ""
