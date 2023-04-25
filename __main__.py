@@ -1,6 +1,6 @@
-from interfaces.login_suj import LoginSujEstudio
+from interfaces.contenedor import Contenedor
 def main():
-    login = LoginSujEstudio()
+    contenedor = Contenedor()
     
 if __name__ == "__main__":
     main()

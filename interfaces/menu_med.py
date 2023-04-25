@@ -1,38 +1,38 @@
-from pathlib import Path
-from tkinter.font import Font
+# Librerias de Tkinter
+import tkinter as tk
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, ttk, Label, StringVar, messagebox
-from modelos.parametros_fisiologicos import ParametrosFisiologicos as pf
-from modelos.medicion_parametro import MedicionParametro as mp
-from modelos.mediciones_sujeto import MedicionesSujeto as ms
-from modelos.sujetos_estudio import SujetosEstudio as se
 
-#Libreria para utilizar funciones del sistema
+# Modelos de datos
+from modelos.parametros_fisiologicos import ParametrosFisiologicos
+from modelos.medicion_parametro import MedicionParametro
+from modelos.mediciones_sujeto import MedicionesSujeto
+from modelos.sujetos_estudio import SujetosEstudio
+
+# Libreria para utilizar funciones del sistema
 import os
+from pathlib import Path
 
-OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path(r"assets/menu_med")
-
-
-def relative_to_assets(path: str) -> Path:
-    return ASSETS_PATH / Path(path)
 
 
 class MenuMed():
-    def __init__(self, sujeto:se, mediciones:ms):
-        self.sujeto = sujeto
-        self.mediciones = mediciones
-        self.window = Tk()
-        self.window.geometry("1260x725+{}+{}".format(self.window.winfo_screenwidth() // 2 - 1260 // 2, self.window.winfo_screenheight() // 2 - 725 // 2))
-        self.window.configure(bg = "#FFFFFF")
-        self.window.title("Menu de Mediciones")
+    def relative_to_assets(self, path: str) -> Path:
+        return self.ASSETS_PATH / Path(path)
+
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent, bg='#FFFFFF')
+        self.OUTPUT_PATH = Path(__file__).parent
+        self.ASSETS_PATH = self.OUTPUT_PATH / Path(r"assets/menu_med")
+        
+        self.controller = controller
+        
+        
+    def crear_elementos_formulario(self):
+        self.controller.title("Menu de Mediciones")
 
         
-
-    #region // Ventana Principal
         #Canvas de la ventana principal
-        #Dimensiones del canva
         self.canvas = Canvas(
-            self.window,
+            self,
             bg = "#FFFFFF",
             height = 725,
             width = 1260,
@@ -40,58 +40,54 @@ class MenuMed():
             highlightthickness = 0,
             relief = "ridge"
         )
-        #Localización del canvas principal
         self.canvas.place(x = 0, y = 0)
 
         #Imagen del logo (HEARTBEAT)
-        self.imagen_logo_app = PhotoImage(file=relative_to_assets("image_1.png"))
-        #Localizacion del logo
+        self.imagen_logo_app = PhotoImage(file=self.relative_to_assets("logo.png"))
+        
         self.logo_app = self.canvas.create_image(
             640.0,
             61.0,
             image=self.imagen_logo_app
         )         
-
-    #endregion 
        
-    #region // Botón Regresar
-        #-------------------- Botón Regresar -------------------
-        #Imagen del botón regresar
-        btn_imagen_regresar = PhotoImage(
-            file=relative_to_assets("button_1.png"))
-        #Propiedades del botón regresar
+        #region // Botón Regresar
+        imagen_btn_regresar = PhotoImage(
+            file=self.relative_to_assets("btn_regresar.png"))
+
         self.btn_volver = Button(
-            image=btn_imagen_regresar,
+            self,
+            image=imagen_btn_regresar,
             borderwidth=0,
             highlightthickness=0,
             command=lambda: self.confirmar_regreso(),
             relief="flat",
             bg = "White"
         )
-        #Localización del botón regresar
         self.btn_volver.place(
             x=21.0,
             y=26.0,
             width=61.0,
             height=60.0
         )
-    #endregion
+        
+        #endregion
 
-    #region // Botón Comenzar (Comienza el proceso de una medicion)
-        #-------------------- Botón Comenzar -------------------
-        #Imagen del botón comenzar
-        self.btn_imagen_comenzar = PhotoImage(
-            file=relative_to_assets("button_2.png"))
-        #Propiedades del botón comenzar
+        #region // Botón Comenzar (Comienza el proceso de una medicion)
+        
+        imagen_btn_comenzar = PhotoImage(
+            file=self.relative_to_assets("btn_comenzar.png"))
+        
         self.btn_comenzar = Button(
-            image=self.btn_imagen_comenzar,
+            self,
+            image=imagen_btn_comenzar,
             borderwidth=0,
             highlightthickness=0,
             command=lambda: self.validar(self.validar_caso),
             relief="flat",
             bg = "White"
         )
-        #Localización del botón comenzar
+
         self.btn_comenzar.place(
             x=1060.0,
             y=488.0,
@@ -99,46 +95,40 @@ class MenuMed():
             height=66.0
         )
 
-    #endregion
+        #endregion
 
-    #region // Botón Limpiar Textos en Pantalla (Limpia los datos de la medición actual y sus respectivas instrucciones)
-        #-------------------- Botón Limpiar Textos en Pantalla -------------------
-        #Imagen del botón limpiar textos en pantalla
-        self.btn_imagen_limpiar_textos_en_pantalla = PhotoImage(
-            file=relative_to_assets("button_3.png"))
-         #Propiedades del botón limpiar textos en pantalla
+        #region // Botón Limpiar Textos en Pantalla (Limpia los datos de la medición actual y sus respectivas instrucciones)
+        imagen_btn_limpiar_textos_en_pantalla = PhotoImage(
+            file=self.relative_to_assets("btn_limpiar.png"))
         self.btn_limpiar_textos_en_pantalla = Button(
-            image=self.btn_imagen_limpiar_textos_en_pantalla,
+            self,
+            image=imagen_btn_limpiar_textos_en_pantalla,
             borderwidth=0,
             highlightthickness=0,
             command=lambda: self.habilitar_botones(),
             relief="flat",
             bg = "White",  
         )
-        #Localización del botón limpiar_textos_en_pantalla
         self.btn_limpiar_textos_en_pantalla.place(
             x=1122.0,
             y=491.0,
             width=67.0,
             height=71.71826171875
         )
-    #endregion
+        #endregion
 
-    #region // Botón Temperatura (Boton para iniciar medición de temperatura)
-        #-------------------- Botón Temperatura  -------------------
-        #Imagen del botón temperatura
-        self.btn_imagen_temperatura = PhotoImage(
-            file=relative_to_assets("button_7.png"))
-        #Propiedades del botón temperatura
+        #region // Botón Temperatura (Boton para elegir la medición de temperatura)
+        imagen_btn_temperatura = PhotoImage(
+            file=self.relative_to_assets("btn_temperatura.png"))
         self.btn_temperatura = Button(
-            image=self.btn_imagen_temperatura,
+            self,
+            image=imagen_btn_temperatura,
             borderwidth=0,
             highlightthickness=0,
             command=lambda: self.elegir_parametro("Temperatura","a"),
             relief="flat",
             bg = "White", 
         )
-        #Localización del botón temperatura
         self.btn_temperatura.place(
             x=-25.0,
             y=180.0,
@@ -146,24 +136,21 @@ class MenuMed():
             height=93.0
         )
 
-    #endregion
+        #endregion
 
       
-    #region // Botón Saturación de Oxígeno (Boton para iniciar medición de saturación de oxígeno)
-        #-------------------- Botón Saturación de Oxígeno -------------------
-        #Imagen del botón saturación de oxígeno
-        self.btn_imagen_saturacion_oxigeno = PhotoImage(
-            file=relative_to_assets("button_4.png"))
-        #Propiedades del botón saturación de oxígeno
+        #region // Botón Saturación de Oxígeno (Boton para elegir la medición de saturación de oxígeno)
+        imagen_btn_saturacion_oxigeno = PhotoImage(
+            file=self.relative_to_assets("btn_sat_oxigeno.png"))
+        
         self.btn_saturacion_oxigeno = Button(
-            image=self.btn_imagen_saturacion_oxigeno,
+            image=imagen_btn_saturacion_oxigeno,
             borderwidth=0,
             highlightthickness=0,
             command=lambda: self.elegir_parametro("Saturacion de Oxigeno","b"),
             relief="flat",
             bg = "White", 
         )
-        #Localización del botón saturación de oxígeno
         self.btn_saturacion_oxigeno.place(
             x=-10.0,
             y=289.0,
@@ -171,14 +158,13 @@ class MenuMed():
             height=90.0
         )
 
-    #endregion
+        #endregion
 
-    #region // Botón Presión Arterial (Boton para iniciar medición de presión arterial)
-        #-------------------- Botón Presión Arterial -------------------
-        #Imagen del botón presión arterial
+        #continuar
+
+        #region // Botón Presión Arterial (Boton para elegir la medición de presión arterial)
         self.btn_imagen_presion_arterial = PhotoImage(
-            file=relative_to_assets("button_5.png"))
-        #Propiedades del botón presión arterial
+            file=self.relative_to_assets("button_5.png"))
         self.btn_presion_arterial = Button(
             image=self.btn_imagen_presion_arterial,
             borderwidth=0,
@@ -187,7 +173,6 @@ class MenuMed():
             relief="flat",
             bg = "White",
         )
-        #Localización del botón presión arterial
         self.btn_presion_arterial.place(
             x=-10.0,
             y=405.0,
@@ -195,9 +180,9 @@ class MenuMed():
             height=97.0
         )
     
-    #endregion
+        #endregion
 
-    #region // Botón Frecuencia Cardíaca (Boton para iniciar medición de frecuencia cardíaca)
+        #region // Botón Frecuencia Cardíaca (Boton para iniciar medición de frecuencia cardíaca)
         #-------------------- Botón Frecuencia Cardíaca -------------------
         #Imagen del botón frecuencia cardíaca
         self.btn_imagen_frecuencia_cardiaca = PhotoImage(
@@ -261,7 +246,7 @@ class MenuMed():
             relief="groove", 
             bg = "white",
             textvariable = self.texto_pantalla, 
-            anchor="nw", #se coloca el texto hacia arriba y hacia la izquierda
+            anchor="nw", #SujetosEstudio coloca el texto hacia arriba y hacia la izquierda
             justify="left", #justificar el texto a la izquierda
             font = ("Arial", 12)
             )
@@ -294,7 +279,7 @@ class MenuMed():
             font=("Arial", 16)
         )
 
-        #Enlaza la función evitar_espacio a la txb_altura cada vez que se presiona una tecla en la entrada.
+        #Enlaza la función evitar_espacio a la txb_altura cada vez que SujetosEstudio presiona una tecla en la entrada.
         self.txb_altura.bind('<Key>', self.evitar_espacio)
 
         #Localización del texbox de la altura
@@ -349,7 +334,7 @@ class MenuMed():
             font=("Arial", 16)
         )
         
-        #Enlaza la función evitar_espacio a la txb_peso cada vez que se presiona una tecla en la entrada.
+        #Enlaza la función evitar_espacio a la txb_peso cada vez que SujetosEstudio presiona una tecla en la entrada.
         self.txb_peso.bind('<Key>', self.evitar_espacio) 
 
         #Localizacion del texbox del peso
@@ -392,7 +377,7 @@ class MenuMed():
             relief="groove", 
             bg = "white",
             textvariable= self.texto_parametro, 
-            anchor="center", #se coloca el texto hacia arriba y hacia la izquierda
+            anchor="center", #SujetosEstudio coloca el texto hacia arriba y hacia la izquierda
             font = ("Arial", 18)
         )
         #Localización que muestra la medida del parametro medido
@@ -416,7 +401,7 @@ class MenuMed():
             relief="groove", 
             bg = "white",
             textvariable= self.texto_parametro_medido, 
-            anchor="center", #se coloca el texto hacia arriba y hacia la izquierda
+            anchor="center", #SujetosEstudio coloca el texto hacia arriba y hacia la izquierda
             font = ("Arial", 18)
         )
         #Localizacion del label que muestra el parametro medido 
@@ -430,7 +415,7 @@ class MenuMed():
         self.validar_medicion()
         self.window.option_add('*TCombobox*Listbox.font', '50') #Aumentar el tamaño de las listas de los drop down 
         self.window.option_add('*TCombobox*Listbox.height', '50')
-        self.validar_caso = " " #variable que funciona para validar cual es el caso que se encuentra activo, esta inicializada en " " debido a que es el caso por defecto
+        self.validar_caso = " " #variable que funciona para validar cual es el caso que SujetosEstudio encuentra activo, esta inicializada en " " debido a que es el caso por defecto
         self.deshabilitar_botones("", "")
         #Arreglo - Las funciones deben comenzar por un verbo
         self.mostrar_instrucciones("", "") #Colocar el texto por defecto al iniciar la interfaz en la pantalla
@@ -449,7 +434,7 @@ class MenuMed():
     def abrir_reporte(self):
         from interfaces.reporte_med import ReporteMed
         import datetime
-        medicion_sujeto = ms()
+        medicion_sujeto = MedicionesSujeto()
         medicion_sujeto.guardar_medicion(self.sujeto, self.convertir_peso(float(self.txb_peso.get())), self.convertir_altura(float(self.txb_altura.get())), datetime.date.today(), self.mediciones.parametros_medidos, self.mediciones.id_medicion)        
         self.window.destroy()
         self.reporte = ReporteMed(self.sujeto, medicion_sujeto)
@@ -573,7 +558,7 @@ class MenuMed():
 
     #region // Funcion para validar navegacion hacia registro
     def confirmar_regreso(self):
-        if(messagebox.askokcancel("Confirmación de navegación","¿Estás seguro de volver hacia atrás? \n\n No se conservarán las mediciones actuales.") == True):
+        if(messagebox.askokcancel("Confirmación de navegación","¿Estás seguro de volver hacia atrás? \n\n No SujetosEstudio conservarán las mediciones actuales.") == True):
             self.abrir_registro()
 
     #endregion
@@ -634,9 +619,9 @@ class MenuMed():
     
 
 
-    #region #Este switch se ejecuta al darle al boton de comentar medicion y evalua el caso de cada parametro
+    #region #Este switch SujetosEstudio ejecuta al darle al boton de comentar medicion y evalua el caso de cada parametro
     #Arreglo - Documenta mejor para que sirve la funcion (Aqui estan los problemas Pazzis)
-    def validar(self, caso): #Arreglo - se mas especifico con el nombre de la funcion
+    def validar(self, caso): #Arreglo - SujetosEstudio mas especifico con el nombre de la funcion
         def case_a(): #Caso a es para las instrucciones de temperatura 
             if self.confirmar_existencia_medicion('Temperatura'):
                 if(messagebox.askokcancel("Comenzar medicion","¿Desea comenzar una medicion de temperatura?")== True):
@@ -736,56 +721,56 @@ class MenuMed():
     
 
     #Arreglo - Documenta mejor el funcionamiento del metodo 
-    #region // Funcion para cargar los datos del parametro fisiologico segun se seleccione el parametro a medir
+    #region // Funcion para cargar los datos del parametro fisiologico segun SujetosEstudio seleccione el parametro a medir
     def elegir_parametro(self,parametro:str,caso:str):
         
         if self.confirmar_existencia_medicion(parametro):
-            self.validar_caso = caso # se le asigna un valor a la variable validar caso para determinar cual es el caso activo al presionaro un  boton
-            self.parametros_fisiologicos = pf()
+            self.validar_caso = caso # SujetosEstudio le asigna un valor a la variable validar caso para determinar cual es el caso activo al presionaro un  boton
+            self.parametros_fisiologicos = ParametrosFisiologicos()
             self.instrucciones = " "
             self.deshabilitar_botones(parametro,self.instrucciones)
             
             if(parametro == "Presion Arterial"):
                 self.parametros_fisiologicos.cargar_datos_parametro(parametro + " Sistolica")
                 self.presion_arterial_sistolica = self.parametros_fisiologicos
-                self.parametros_fisiologicos = pf()
+                self.parametros_fisiologicos = ParametrosFisiologicos()
                 self.parametros_fisiologicos.cargar_datos_parametro(parametro + " Diastolica")
                 self.presion_arterial_diastolica = self.parametros_fisiologicos
                 self.instrucciones = self.presion_arterial_diastolica.instrucciones
-                self.mostrar_instrucciones(caso,self.instrucciones) #se toman las instrucciones de la diastolica porque son las mismas que la sistolica
+                self.mostrar_instrucciones(caso,self.instrucciones) #SujetosEstudio toman las instrucciones de la diastolica porque son las mismas que la sistolica
                 self.deshabilitar_botones(parametro,self.instrucciones)
                 
                 
             else:
                 self.parametros_fisiologicos.cargar_datos_parametro(parametro)
                 self.instrucciones = self.parametros_fisiologicos.instrucciones
-                self.mostrar_instrucciones(caso,self.instrucciones) #se toman las instrucciones de la diastolica porque son las mismas que la sistolica
+                self.mostrar_instrucciones(caso,self.instrucciones) #SujetosEstudio toman las instrucciones de la diastolica porque son las mismas que la sistolica
     #endregion           
                 
 
     #region// Funcion para limpiar los textos en pantalla
     def limpiar_textos_en_pantalla(self): 
-        self.texto_parametro.set("") #Se eliminan los textos de las medidas de los parametros 
-        self.texto_pantalla.set("") #Se eliminan las instrucciones (Pazzis te hablo a ti, las instrucciones nunca se deben limpiar del todo, se deberian sustituir segun cada caso)
-        self.texto_parametro_medido.set("Parametro medido: ") #Se coloca texto por defecto en el label que muestra los parametros
+        self.texto_parametro.set("") #SujetosEstudio eliminan los textos de las medidas de los parametros 
+        self.texto_pantalla.set("") #SujetosEstudio eliminan las instrucciones (Pazzis te hablo a ti, las instrucciones nunca SujetosEstudio deben limpiar del todo, SujetosEstudio deberian sustituir segun cada caso)
+        self.texto_parametro_medido.set("Parametro medido: ") #SujetosEstudio coloca texto por defecto en el label que muestra los parametros
     #endregion
       
     #region //Funcion para guardar la medicion en la lista de mediciones por parametro
     def almacenar_medicion(self, medicion:str):
 
         if(medicion == "Presion Arterial"):
-            medicion_presion_sistolica = mp(self.presion_arterial_sistolica, self.medida_presion_arterial[0])
-            medicion_presion_diastolica = mp(self.presion_arterial_diastolica, self.medida_presion_arterial[1])
+            medicion_presion_sistolica = MedicionParametro(self.presion_arterial_sistolica, self.medida_presion_arterial[0])
+            medicion_presion_diastolica = MedicionParametro(self.presion_arterial_diastolica, self.medida_presion_arterial[1])
             self.mediciones.parametros_medidos.append(medicion_presion_sistolica)
             self.mediciones.parametros_medidos.append(medicion_presion_diastolica)
 
         else:
-            medicion_parametro = mp(self.parametros_fisiologicos, self.medida)
+            medicion_parametro = MedicionParametro(self.parametros_fisiologicos, self.medida)
             self.mediciones.parametros_medidos.append(medicion_parametro)
 
     #endregion
 
-    #region// Funcion para validar si hay mediciones desde que se cargue la pantalla, para colocar lo valores por defecto del peso y la altura de la medicion que haya y desabilitar esos campos
+    #region// Funcion para validar si hay mediciones desde que SujetosEstudio cargue la pantalla, para colocar lo valores por defecto del peso y la altura de la medicion que haya y desabilitar esos campos
     def validar_medicion(self):
         if self.mediciones.id_medicion != 0:
             self.txb_altura.insert(0, str(self.mediciones.altura_sujeto))   
