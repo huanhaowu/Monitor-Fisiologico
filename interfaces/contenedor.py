@@ -27,7 +27,7 @@ class Contenedor(tk.Tk):
 
         container = tk.Frame(self)
         container.pack(side="top", fill="both", expand=True)
-        self.state('zoomed') #Maximizar la ventana
+        # self.state('zoomed') #Maximizar la ventana
         
         self.option_add('*TCombobox*Listbox.font', '50') #Aumentar el tamaño de las listas de los drop down 
         self.option_add('*TCombobox*Listbox.height', '50')
